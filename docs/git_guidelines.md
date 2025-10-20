@@ -2,7 +2,7 @@
 
 Our git guidelines are based on [GitHub Flow](https://githubflow.github.io/). This git branching strategy is simpler than gitflow, and encourages continuous delivery.
 
-## Process
+## Overview
 
 - Anything in the main branch is deployable
    - Make sure to only merge stable branch
