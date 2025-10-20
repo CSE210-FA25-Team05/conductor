@@ -18,32 +18,32 @@ Our git guidelines are based on [GitHub Flow](https://githubflow.github.io/). Th
 
 ## Merging
 
-Each merge into main should be reviewed, and signed off by team leads and QA.
+Each merge into main should be reviewed, and signed off by team leads and QA. Aditionally, make sure to connect each merge with its relevant issue. 
 
 Each  merge into main should be complete with a detailed message in the following form: 
 
 ```
-## <feature_name>: <feature_description (short)>
+### <feature_name>: <feature_description (short)>
 
-**Related Issue:** [Issue #](Issue link)
+### Related Issue: [Issue #](Issue link)
 
-**Context (Why):**
+### Context (Why):
 
-**Changes (What):**
+### Changes (What):
 
 - **Change 1:** 
 - **Change 2:** 
 
-**Testing:**
+### Testing:
 
 - **Automated:**
 - **Manual:**
 
-** For Reviewers:**
+### For Reviewers:
 
 Add notes for reviewers, tag reviewers here
 
-**Checklist:**
+### Checklist:
 
 - [x] Code follows project style guidelines (`prettier`, `eslint`).
 - [x] Documentation updated.
@@ -54,6 +54,36 @@ Add notes for reviewers, tag reviewers here
 ```
 
 ## Issues:
+
+Issues should be categoriezed as Feature, Task, or Bug. Complex issues, like features, should be further broken down into sub-tasks. 
+
+Each issue should be complete with assignees, relevant tags, label (feature, bug, or task), and should be added to the kanban board (Projects tab). Aditionally, tag any relevent teams or people. 
+
+Issue messages should be clear, consise, and informational. Bug Issues should be formatted as follows:   
+
+```
+### Description  
+(Provide a clear and concise description of the problem.)  
+
+### Steps to Reproduce  
+1. [Step 1]  
+2. [Step 2]  
+
+### Expected Behavior  
+(Explain what you expected to happen.)  
+
+### Actual Behavior  
+(Explain what actually happened.)  
+
+### Environment  
+- OS:  
+- Browser/Version:  
+
+### Additional Information  
+(Add screenshots, logs, or other helpful details.)
+```
+
+
 
 
 
