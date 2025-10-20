@@ -20,7 +20,7 @@ Our git guidelines are based on [GitHub Flow](https://githubflow.github.io/). Th
 
 Each merge into main should be reviewed, and signed off by team leads and QA. Aditionally, make sure to connect each merge with its relevant issue. 
 
-Each  merge into main should be complete with a detailed message in the following form: 
+Each merge into main should be complete with a detailed message in the following form: 
 
 ```
 ### <feature_name>: <feature_description (short)>
@@ -55,7 +55,7 @@ Add notes for reviewers, tag reviewers here
 
 ## Issues:
 
-Issues should be categoriezed as Feature, Task, or Bug. Complex issues, like features, should be further broken down into sub-tasks. 
+Issues should be categoriezed as Feature, Task, or Bug. Complex issues (like big features) should be further broken down into sub-tasks. 
 
 Each issue should be complete with assignees, relevant tags, label (feature, bug, or task), and should be added to the kanban board (Projects tab). Aditionally, tag any relevent teams or people. 
 
