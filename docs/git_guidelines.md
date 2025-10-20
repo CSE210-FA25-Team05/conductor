@@ -7,7 +7,8 @@ Our git guidelines are based on [GitHub Flow](https://githubflow.github.io/). Th
 - Anything in the main branch is deployable
    - Make sure to only merge stable branch
 - To work on something new, create a descriptively named branch off of main (ie: new-oauth2-scopes)
-- Commit to that branch locally and regularly push your work to the same named branch on the server
+   - Connect branch to relevant issues
+- Commit to that branch locally and regularly push your work
 - When you need feedback or help, or you think the branch is ready for merging, open a pull request
    - If branch has been open for too long, and your scared of merge conflicts, you can periodically merge main into feature branch
 -  After someone else has reviewed and signed off on the feature, you can merge it into main
