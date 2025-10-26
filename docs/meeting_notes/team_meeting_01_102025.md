@@ -1,0 +1,49 @@
+# Team Meeting 01 - 10/25/25
+
+# Attendance
+- Everyone is present.
+
+# Questions
+- **Do we need a separate team for documentation?**  
+  - No, the project probably won't need this.
+
+# Overview
+## Project Logistics
+- This will be similar to the last project, but more structured.  
+- We'll be doing CI/CD pipelines to maintain consistency.  
+- **GitHub Flow** will be the primary CI/CD pipeline tool.  
+- **GitHub Issues** will be the main method of bug/issue/progress tracking:
+  - Every feature/bug/task will be made into an issue and will feed into the main branch.
+- **Kanban board** will be used to track the project (oversight by PMs).
+- When you are assigned an issue, branch off `main`, work on that feature.
+- Most commits should be non-breaking — all tests should work and be integrable into the main branch.
+- When you finish a feature, make a pull request and confirm that no breakage occurs.
+
+## When Creating an Issue
+- Make sure to assign people (groups) to it.
+
+## Pull Requests
+- Follow the template for all pull requests.
+- When you finish a feature:
+  - Make a pull request and confirm that no breakage occurs.
+  - Tag both PMs (only one approval required).
+  - Tag the rest of the team as well.
+  - Make any documentation updates.
+  - GitHook will automatically format the code when it pushes.
+  - Once approved, it will be merged into `main`.
+
+## Possible TODOs
+- Create a template for all pull requests.
+- Might use the **Projects** feature in GitHub.
+
+## Due Date
+- **Code Freeze:** Last Thursday of instruction.  
+- **Presentation:** Finals week.
+
+## Project Options
+- Interested in doing **Option #2 – Semi-Structured.**
+
+## Group Logistics
+- Likely to have a quick sub-meeting after every lecture.
+- Keep Git-related issues in the Git tracker.
+- Use the Issues feature for documentation.
