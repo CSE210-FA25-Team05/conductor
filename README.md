@@ -12,6 +12,8 @@ npm run dev
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:3001
 
+See [specs/SETUP.md](specs/SETUP.md) for detailed setup instructions.
+
 ## Running Servers
 
 ### Run Both (Recommended)
@@ -30,6 +32,12 @@ Opens on http://localhost:3000
 npm run dev:backend
 ```
 Opens on http://localhost:3001
+
+## Technology Versions
+
+### Runtime
+- **Node.js**: v22.12.0 (minimum v14+)
+- **npm**: 8.19.4 (minimum v6+)
 
 ## Development Tools
 
