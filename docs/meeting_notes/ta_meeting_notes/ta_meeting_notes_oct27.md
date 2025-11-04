@@ -1,46 +1,52 @@
-# TA Meeting Notes - October 27
+# TA Meeting Notes
 
-## User Story Clarifications
+## October 27, 2025
 
-### Professor Stories
-- **Hand Feature (Prof-2)**
-  - Status: Incomplete, needs clarification
-  
-- **External Dependencies (Prof-3)**
-  - Can integrate third-party apps (GitHub, Slack, etc.)
-  - Must justify each integration's necessity
+### Questions & Answers
 
-### TA Stories
-- **Incident Tracking (TA-5)**
-  - JIRA-style board functionality
-  - Shows GitHub issues per person
+**Prof(2)** - Feature incomplete, will get back
 
-- **Activity Scorecard (TA-6)**
-  - Tracks: Communication, Work Effort, Code
-  - TBD: Manual vs Automatic tracking
+**Prof(3)** - External Dependencies
+- Open to interpretation
+- Justify usage if 3rd party tool required
 
-### Other Roles
-- **Tutor Support (Tutor-3)**
-  - Requires FAQ page implementation
-  
-- **Team Leader Scorecard (TL-6)**
-  - Effort & Sentiment tracking
-  - Implementation details needed
+**TA(5)** - Incident Information
+- Jira-like board
+- Pass name, shows GitHub issues
 
-## System Requirements
+**TA(6)** - Activity Scorecard
+- Track communication, work effort, code
+- Answered above (similar to incident tracking)
 
-### Security
-- Authentication required
-- FERPA compliance needed
-- Logging requirements TBD
+**Tutors(3)** - Support Format
+- FAQ page required
+- Can include live interactions
 
-### Access Levels
-- Professor: Full admin access
-- TAs: Configurable access by professor
-- Grading system: Optional feature
+**Team Leader(6)** - Effort & Sentiment Scorecard
+- Similar to TA(6), will get back
 
-## Implementation Notes
-- One consultation with professor needed
+**Student(6)** - Story incomplete, will get back
+
+**Requirements(6)** - Will get back
+
+**FERPA** - What to look out for?
+
+**Logging & Auditing** - Which actions need logging?
+
+### TA Meeting Discussion
+
+**Biggest Pain Point**
+- Consolidated team view needed
+- TA must track everyone individually in a group
+
+**Key Points**
 - Features open to interpretation
-- Must include consolidated team view
-- Individual tracking within groups required
+- Assignment pitch: overview of user stories, layout, implementation
+- Security baseline: authentication
+- Meet prof once to understand viewpoint
+- Grading system: optional, up to us
+
+**Role Differences**
+- Professor: all access admin
+- TA: access level set by professor (grades, updates, etc.)
+- Tutor: question/answer support
