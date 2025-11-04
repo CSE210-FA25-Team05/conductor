@@ -33,16 +33,17 @@
 
 ## Development
 
-- **Frontend:** Vite dev server on port 3000
+- **Frontend:** Node.js HTTP server on port 3000
 - **Backend:** API server on port 3001
-- **API Proxy:** Frontend proxies `/api/*` to backend
+- **Frontend calls backend API directly** at `http://localhost:3001/api`
 
 ## Project Structure
 
 ```
 conductor/
-├── frontend/          # Frontend (Vite)
+├── frontend/          # Frontend (HTML/CSS/JS)
 │   ├── index.html
+│   ├── server.js
 │   └── src/
 │       ├── js/
 │       └── styles/
@@ -57,5 +58,5 @@ conductor/
 - `npm run dev` - Start both frontend and backend
 - `npm run dev:frontend` - Frontend only (port 3000)
 - `npm run dev:backend` - Backend only (port 3001)
-- `npm run start:frontend` - Build and preview frontend
+- `npm run start:frontend` - Start frontend server
 - `npm run start:backend` - Start backend API
