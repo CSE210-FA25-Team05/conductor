@@ -26,6 +26,16 @@ const server = http.createServer((req, res) => {
     res.end('Not found');
 });
 
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use. Please free the port or use a different one.`);
+        process.exit(1);
+    } else {
+        console.error('Server error:', err);
+        process.exit(1);
+    }
+});
+
 server.listen(PORT, () => {
     console.log(`Backend API running on http://localhost:${PORT}`);
 });

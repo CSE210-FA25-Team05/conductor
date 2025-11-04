@@ -1,6 +1,6 @@
 // Frontend JavaScript
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'http://localhost:3001/api';
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('App loaded');
