@@ -1,4 +1,4 @@
-# ADR V1: Selection of JavaScript Testing Framework for Full-Stack Project
+# ADR V1: Selection of JavaScript Testing Framework
 
 ## Context
 The full-stack web application under development will serve as a student–professor portal enabling users to view grades, assignments, announcements, and other course-related information. The architecture comprises a frontend implemented using **native Web Components** (with minimal framework dependencies) and a backend implemented with **Fastify**, a high-performance Node.js web framework.
@@ -64,3 +64,19 @@ Continuous Integration will be structured so that unit and integration tests run
 - `npm run test:e2e` for Cypress  
 
 The repository will maintain a clear directory structure:
+
+/backend/tests → Jest backend tests using Fastify’s injection interface
+/frontend/tests → Jest DOM and Web Component tests
+/e2e → Cypress workflow and regression tests
+
+
+All testing conventions and setup steps will be documented in `CONTRIBUTING.md` to ensure consistent onboarding for all contributors.
+
+---
+
+## Consequences
+This decision enables a balanced and scalable test pyramid. The Fastify backend can be tested rapidly and deterministically without launching servers, while Web Component logic and rendering can be verified in isolation using Jest’s lightweight DOM environment. Cypress provides high-confidence validation of real browser workflows, ensuring that end users experience the intended functionality.
+
+The main trade-off is the need to configure and maintain two distinct frameworks, which slightly increases the project’s setup complexity. Additionally, E2E tests will take longer to execute and should therefore be limited to critical user paths.
+
+Overall, this decision improves reliability, developer confidence, and maintainability while aligning with the team’s technical stack and learning goals. The combination of Jest and Cypress provides a future-proof testing foundation compatible with both Fastify and Web Components, ensuring that the project can evolve without major changes to its testing infrastructure.
