@@ -3,6 +3,7 @@ const fastify = require('fastify')({ logger: true });
 
 const PORT = process.env.PORT || 3001;
 const TOKEN_NAME = "token"
+const TOKEN_VALUE = "randomToken"
 
 
 
@@ -21,14 +22,15 @@ fastify.register(require("@fastify/static"), {
 
 fastify.register(require('@fastify/cookie'));
 
+
 // placeholder authentication logic
 async function authenticate(request, reply) {
-    console.log("REQUEST: ", request);
     const token = request.cookies[TOKEN_NAME];
-    reply.log.info("TOKEN: ", token, request);
-    if (!token) {
+    reply.log.info({ cookies: request.cookies }, "Received cookies for protected route.");
+    reply.log.info({ token: token }, "TOKENSSS");
+    if (!token || token != TOKEN_VALUE) {
         reply.log.warn('No token found for protected route.');
-        return reply.status(401).send('Unauthorized: No token provided.');
+        return reply.redirect('/error', 302);
     }
     reply.log.info("AUTHENTICATED TOKEN: ", token);
 }
@@ -38,32 +40,39 @@ fastify.get("/", (request, reply) => {
     reply.sendFile("index.html");
 });
 
+fastify.get("/error", (request, reply) => {
+    reply.sendFile("src/pages/error.html");
+});
+
 fastify.get("/protected", { preHandler: authenticate }, (request, reply) => {
     reply.sendFile("src/pages/dummy.html");
 });
 
+fastify.setNotFoundHandler((request, reply) => {
+    reply.log.warn(`404 Not Found: ${request.method} ${request.url}`);
+    return reply.status(404).sendFile("index.html");
+});
 
 // placeholder login logout functinality
 fastify.post('/api/logout', async (request, reply) => {
     reply.clearCookie(TOKEN_NAME, { path: '/' });
-    reply.send({ message: 'Logout successful!' });
+    return reply.redirect('/', 302);
 });
 
 fastify.post('/api/login', async (request, reply) => {
-    const token = 'randomToken'
 
     // Set the token as an HttpOnly cookie
     // HttpOnly: Prevents client-side JS from accessing the cookie
     // Secure: Only send over HTTPS
     // SameSite: Protects against CSRF
-    reply.setCookie(TOKEN_NAME, token, {
+    reply.setCookie(TOKEN_NAME, TOKEN_VALUE, {
         httpOnly: true,
         secure: false, // Change for PROD!
         path: '/',
         maxAge: 3600,
         sameSite: 'lax',
     });
-    reply.send({ message: 'Login successful!', token });
+    reply.send({ message: 'Login successful!' });
 });
 
 fastify.get('/api/health', async (request, reply) => {

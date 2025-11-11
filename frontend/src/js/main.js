@@ -30,8 +30,11 @@ async function login() {
 async function logout() {
     try {
         const request = await fetch(`${API_BASE_URL}/logout`, { method: 'POST' })
-        data = await request.json()
-        console.log("DATA LOGOUT: ", data)
+        if (request.ok) {
+            window.location.href = '/';
+        } else {
+            console.error("Logout request failed with status:", response.status);
+        }
     } catch (e) {
         console.log("failed to login: ", e)
     }
@@ -39,8 +42,8 @@ async function logout() {
 
 function setup() {
     document.querySelector("#check-health-button").addEventListener('click', getHealth);
-    document.querySelector("#login-button").addEventListener('click', login);
     document.querySelector("#logout-button").addEventListener('click', logout);
+    document.querySelector("#login-button").addEventListener('click', login);
 }
 
 document.addEventListener('DOMContentLoaded', setup);
