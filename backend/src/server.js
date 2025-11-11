@@ -9,7 +9,7 @@ const TOKEN_NAME = "token"
 
 // Register 
 fastify.register(require("@fastify/cors"), {
-    origin: "http://127.0.0.1:3001",
+    origin: "http://localhost:3001",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
 });
@@ -61,7 +61,7 @@ fastify.post('/api/login', async (request, reply) => {
         secure: false, // Change for PROD!
         path: '/',
         maxAge: 3600,
-        sameSite: 'strict',
+        sameSite: 'lax',
     });
     reply.send({ message: 'Login successful!', token });
 });
@@ -70,7 +70,7 @@ fastify.get('/api/health', async (request, reply) => {
     return { ok: true, time: new Date().toISOString() };
 });
 
-fastify.listen({ port: PORT, host: '0.0.0.0' }, (err) => {
+fastify.listen({ port: PORT, host: 'localhost' }, (err) => {
     if (err) {
         fastify.log.error(err);
         process.exit(1);
