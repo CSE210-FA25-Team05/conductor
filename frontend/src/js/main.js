@@ -15,8 +15,32 @@ async function getHealth() {
     }
 }
 
+async function login() {
+    try {
+        const request = await fetch(`${API_BASE_URL}/login`, {
+            method: 'POST',
+            credentials: 'include',
+        })
+        data = await request.json()
+        console.log("DATA LOGIN: ", data)
+    } catch (e) {
+        console.log("failed to login: ", e)
+    }
+}
+async function logout() {
+    try {
+        const request = await fetch(`${API_BASE_URL}/logout`, { method: 'POST' })
+        data = await request.json()
+        console.log("DATA LOGOUT: ", data)
+    } catch (e) {
+        console.log("failed to login: ", e)
+    }
+}
+
 function setup() {
     document.querySelector("#check-health-button").addEventListener('click', getHealth);
+    document.querySelector("#login-button").addEventListener('click', login);
+    document.querySelector("#logout-button").addEventListener('click', logout);
 }
 
 document.addEventListener('DOMContentLoaded', setup);

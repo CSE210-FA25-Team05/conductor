@@ -10,6 +10,7 @@
     "nodemon": "^3.0.1"
   },
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.1.0",
     "@fastify/static": "^8.3.0",
     "fastify": "^5.6.2"
