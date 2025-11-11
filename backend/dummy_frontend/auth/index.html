@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, Arial; max-width: 640px; margin: 64px auto; padding: 0 16px; }
+    .btn { display:inline-block; padding:10px 16px; border:1px solid #ccc; border-radius:8px; text-decoration:none; }
+    .err { margin:16px 0; padding:12px; border-radius:8px; background:#fee; color:#900; border:1px solid #f99; display:none; }
+  </style>
+</head>
+<body>
+  <h1>Sign in</h1>
+  <div id="error" class="err"></div>
+
+  <p><a class="btn" href="http://localhost:3001/auth/oauth/google">Sign in with Google</a></p>
+  <p>After signing in you can open <a href="/app.html">/app.html</a>.</p>
+
+  <script>
+    // Show any error returned via ?error=... (from the backend redirect)
+    const p = new URLSearchParams(location.search);
+    const err = p.get('error');
+    if (err) {
+      const box = document.getElementById('error');
+      box.textContent = decodeURIComponent(err.replace(/\+/g, ' '));
+      box.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
