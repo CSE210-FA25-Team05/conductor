@@ -53,3 +53,4 @@ We use **nodemon** for development. It automatically restarts the server when yo
 **Commands:**
 - `npm run dev` - Uses nodemon (auto-restart on changes)
 - `npm start` - Uses plain node (manual restart required)
+
