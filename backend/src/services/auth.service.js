@@ -13,14 +13,13 @@ const { request } = require('undici');
 const { OAuth2Client } = require('google-auth-library');
 const oauthRepo = require('../repos/oauth.repo');
 
-// Load config from environment variables
+// Config
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const ALLOWED_EMAIL_SUFFIXES = (process.env.ALLOWED_EMAIL_SUFFIXES || '@ucsd.edu,@eng.ucsd.edu')
   .split(',')
   .map((s) => s.trim().toLowerCase());
 
-// Must exactly match your Google Cloud Console redirect URI
 const REDIRECT_URI = 'http://localhost:3001/auth/oauth/google/callback';
 
 // Google OAuth client
