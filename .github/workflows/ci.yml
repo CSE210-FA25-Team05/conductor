@@ -24,7 +24,13 @@ jobs:
         run: |
           npm ci || npm install    # use npm ci if package-lock.json exists
 
-      - name: Run lint (if defined)
+      - name: Run ESLint # code linting
+        run: npm run lint
+      
+      - name: Check Prettier formatting # code formatting
+        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+
+      - name: Run lint (if defined) # What is this linting step for?
         run: |
           npm run lint --if-present
 
