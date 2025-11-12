@@ -54,11 +54,13 @@ Conductor uses ES2021+ syntax and may adopt **TypeScript** for future iterations
 ESLint integrates across the entire development pipeline:
 
 #### **Editor Integration**
+
 - Real-time error highlighting in **VS Code**, **WebStorm**, and **Vim**
 - Auto-fix on save for formatting issues
 - Inline documentation for rule violations
 
 #### **CI/CD Pipeline**
+
 - GitHub Actions can run `eslint .` to block PRs with linting violations
 - Generates actionable error reports with file paths and line numbers
 - Integrates with **Codeclimate** for trend analysis and code quality metrics
@@ -71,7 +73,7 @@ This level of integration is not available for **JSLint**.
 
 ### JSLint
 
-- **Pros:** Zero configuration, fast.  
+- **Pros:** Zero configuration, fast.
 - **Cons:** Non-configurable, overly strict, rejects common patterns like `==` and `++`. Incompatible with Fastify's async/await and modern Node.js idioms.
 
 ---

@@ -67,7 +67,7 @@ But `eslint-plugin-prettier` allows ESLint to run Prettier as a rule, reporting 
 
 ### StandardJS
 
-- **Pros:** Zero configuration, combined linting and formatting.  
+- **Pros:** Zero configuration, combined linting and formatting.
 - **Cons:** Non-configurable (incompatible with single quotes preference), cannot integrate with ESLint, opinionated style may conflict with Fastify conventions.
 
 ---

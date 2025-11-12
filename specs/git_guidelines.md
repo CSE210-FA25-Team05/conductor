@@ -5,23 +5,23 @@ Our git guidelines are based on [GitHub Flow](https://githubflow.github.io/). Th
 ## Overview
 
 - Anything in the main branch is deployable
-   - Make sure to only merge stable branch
+  - Make sure to only merge stable branch
 - To work on something new, create a descriptively named branch off of main (ie: new-oauth2-scopes)
-   - Connect branch to relevant issues
+  - Connect branch to relevant issues
 - Commit to that branch locally and regularly push your work
 - When you need feedback or help, or you think the branch is ready for merging, open a pull request
-   - If branch has been open for too long, and your scared of merge conflicts, you can periodically merge main into feature branch
--  After someone else has reviewed and signed off on the feature, you can merge it into main
-   - This commit message should be very descriptive
-   - Make sure it passes CI
+  - If branch has been open for too long, and your scared of merge conflicts, you can periodically merge main into feature branch
+- After someone else has reviewed and signed off on the feature, you can merge it into main
+  - This commit message should be very descriptive
+  - Make sure it passes CI
 - Once it is merged and pushed to main, you can and should deploy immediately
 - Delete feature branch
 
 ## Merging
 
-Each merge into main should be reviewed, and signed off by team leads and QA. Aditionally, make sure to connect each merge with its relevant issue. 
+Each merge into main should be reviewed, and signed off by team leads and QA. Aditionally, make sure to connect each merge with its relevant issue.
 
-Each merge into main should be complete with a detailed message in the following form: 
+Each merge into main should be complete with a detailed message in the following form:
 
 ```
 ### <feature_name>: <feature_description (short)>
@@ -32,8 +32,8 @@ Each merge into main should be complete with a detailed message in the following
 
 ### Changes (What):
 
-- **Change 1:** 
-- **Change 2:** 
+- **Change 1:**
+- **Change 2:**
 
 ### Testing:
 
@@ -56,41 +56,30 @@ Add notes for reviewers, tag reviewers here
 
 ## Issues:
 
-Issues should be categoriezed as Feature, Task, or Bug. Complex issues (like big features) should be further broken down into sub-tasks. 
+Issues should be categoriezed as Feature, Task, or Bug. Complex issues (like big features) should be further broken down into sub-tasks.
 
-Each issue should be complete with assignees, relevant tags, label (feature, bug, or task), and should be added to the kanban board (Projects tab). Aditionally, tag any relevent teams or people. 
+Each issue should be complete with assignees, relevant tags, label (feature, bug, or task), and should be added to the kanban board (Projects tab). Aditionally, tag any relevent teams or people.
 
-Issue messages should be clear, consise, and informational. Bug Issues should be formatted as follows:   
+Issue messages should be clear, consise, and informational. Bug Issues should be formatted as follows:
 
 ```
-### Description  
-(Provide a clear and concise description of the problem.)  
+### Description
+(Provide a clear and concise description of the problem.)
 
-### Steps to Reproduce  
-1. [Step 1]  
-2. [Step 2]  
+### Steps to Reproduce
+1. [Step 1]
+2. [Step 2]
 
-### Expected Behavior  
-(Explain what you expected to happen.)  
+### Expected Behavior
+(Explain what you expected to happen.)
 
-### Actual Behavior  
-(Explain what actually happened.)  
+### Actual Behavior
+(Explain what actually happened.)
 
-### Environment  
-- OS:  
-- Browser/Version:  
+### Environment
+- OS:
+- Browser/Version:
 
-### Additional Information  
+### Additional Information
 (Add screenshots, logs, or other helpful details.)
 ```
-
-
-
-
-
-
-
-
-
-
-

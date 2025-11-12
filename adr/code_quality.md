@@ -79,7 +79,7 @@ Codeclimate includes security-focused checks:
 
 ### Codacy
 
-- **Pros:** Similar feature set to Codeclimate, good PR integration, supports multiple languages.  
+- **Pros:** Similar feature set to Codeclimate, good PR integration, supports multiple languages.
 - **Cons:** Less technical debt estimation, weaker trend analysis UI, and smaller community.
 
 ---
@@ -113,8 +113,9 @@ Codeclimate includes security-focused checks:
 2. **Create configuration file**
 
 **`.codeclimate.yml`** (project root):
+
 ```yaml
-version: "2"
+version: '2'
 
 # Maintainability checks
 checks:
@@ -122,32 +123,32 @@ checks:
     enabled: true
     config:
       threshold: 4
-  
+
   complex-logic:
     enabled: true
     config:
       threshold: 4
-  
+
   file-lines:
     enabled: true
     config:
       threshold: 250
-  
+
   method-complexity:
     enabled: true
     config:
       threshold: 5
-  
+
   method-lines:
     enabled: true
     config:
       threshold: 25
-  
+
   similar-code:
     enabled: true
     config:
       threshold: 50
-  
+
   identical-code:
     enabled: true
     config:
@@ -160,7 +161,7 @@ plugins:
 
 # Exclude patterns
 exclude_patterns:
-  - "node_modules/"
-  - "tests/"
-  - "**/*.test.js"
+  - 'node_modules/'
+  - 'tests/'
+  - '**/*.test.js'
 ```
