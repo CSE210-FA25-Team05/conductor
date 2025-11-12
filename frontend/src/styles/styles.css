@@ -166,6 +166,13 @@ p {
 small {
     font-size: var(--fs-50);
 }
+article {
+    margin: var(--spacing-small);
+    padding: var(--spacing-medium);
+    border-radius: 0.5em;
+    line-height: 1.6;
+    box-shadow: 0.2em 0.3em;
+}
 
 
 /* Classes */
