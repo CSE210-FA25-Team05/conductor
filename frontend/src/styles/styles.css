@@ -9,8 +9,8 @@
     --color-primary-100: lightblue;
     --color-primary-600: darkblue;
     --color-secondary-100: lightpink;
-    --color-secondary-600: darkpink;
-    --color-error-100: lightred;
+    --color-secondary-600: darkmagenta;
+    --color-error-100: lightcoral;
     --color-error-600: darkred;
     --color-success-100: lightgreen;
     --color-success-600: darkgreen;
@@ -33,6 +33,11 @@
     --fs-500: 2em;
     --fs-600: 2.25em;
     --fs-700: 2.5em;
+
+    --spacing-large: 2em;
+    --spacing-medium: 1em;
+    --spacing-small: 0.5em;
+    --spacing-extra-small: 0.25em;
 }
 
 @media (max-width: 576px) {
@@ -177,4 +182,41 @@ small {
     background-color: var(--color-secondary-100);
     color: var(--color-secondary-600);
 }
+.error {
+    background-color: var(--color-error-100);
+    color: var(--color-error-600);
+}
+.success {
+    background-color: var(--color-success-100);
+    color: var(--color-success-600);
+}
 
+/* Google Icons from https://developers.google.com/fonts/docs/material_icons#setup_method_2_self_hosting */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/src/fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
