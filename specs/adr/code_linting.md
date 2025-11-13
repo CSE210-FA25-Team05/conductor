@@ -1,9 +1,7 @@
 # ADR: Code Linting Tool Selection — ESLint
 
 **Date:** 2025-11-10  
-**Author:** Yifei Wang
-**Reviewer(s):** TBD
-**Status:** Pending Review
+**Status:** Accepted
 
 ---
 
