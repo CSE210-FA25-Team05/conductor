@@ -10,6 +10,9 @@ async function routes(fastify) {
     fastify.get("/", { preHandler: authenticate }, (request, reply) => {
         reply.sendFile("index.html");
     });
+    fastify.get("/protected", { preHandler: authenticate }, (request, reply) => {
+        reply.sendFile("pages/protected.html");
+    });
 
     fastify.get("/404", (request, reply) => {
         reply.sendFile("pages/404.html");
