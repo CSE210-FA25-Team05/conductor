@@ -3,7 +3,7 @@ const {
   isStrongPassword,
   sanitizeInput,
   hasRequiredRole,
-} = require('../src/security');
+} = require('../src/auth/security');
 
 describe('isStrongPassword', () => {
   test('rejects short passwords', () => {
