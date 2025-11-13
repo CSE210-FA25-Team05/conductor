@@ -21,7 +21,7 @@ async function routes(fastify) {
             maxAge: 3600,
             sameSite: 'lax',
         });
-        reply.send({ message: 'Login successful!' });
+        return reply.redirect('/', 302);
     });
 
 }

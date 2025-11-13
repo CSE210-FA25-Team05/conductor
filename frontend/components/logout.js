@@ -32,8 +32,17 @@ class LogoutButton extends HTMLElement {
 
     }
 
-    logout() {
-        console.log("logout");
+    async logout() {
+        try {
+            const response = await fetch('http://localhost:3001/api/logout', { method: 'POST' })
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                console.error("Logout response failed with status:", response.status);
+            }
+        } catch (e) {
+            console.log("failed to login: ", e)
+        }
     }
 }
 

@@ -34,8 +34,18 @@ class GoogleOAuthButton extends HTMLElement {
 
     }
 
-    login() {
-        console.log("login");
+    async login() {
+        try {
+            const response = await fetch('http://localhost:3001/api/login', {
+                method: 'POST',
+                credentials: 'include',
+            })
+            if (response.ok) {
+                window.location.href = '/';
+            }
+        } catch (e) {
+            console.log("failed to login: ", e)
+        }
     }
 }
 
