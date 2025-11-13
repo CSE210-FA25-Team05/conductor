@@ -1,9 +1,7 @@
 # ADR: Code Formatting Tool Selection — Prettier
 
 **Date:** 2025-11-10  
-**Author:** Yifei Wang
-**Reviewer(s):** TBD
-**Status:** Pending Review
+**Status:** Accepted
 
 ---
 
