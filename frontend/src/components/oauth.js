@@ -1,17 +1,16 @@
 class OAuth extends HTMLButtonElement {
-    constructor() {
-        super();
-    }
+  constructor() {
+    super();
+  }
 
-    connectedCallback() {
-        this.addEventListener("click", this.handleClick);
-    }
+  connectedCallback() {
+    this.addEventListener('click', this.handleClick);
+  }
 
-    handleClick() {
-        console.log("Google OAuth button clicked!");
-        // TODO: do something
-    }
+  handleClick() {
+    console.log('Google OAuth button clicked!');
+    // TODO: do something
+  }
 }
 
-customElements.define("google-oauth", OAuth, { extends: "button" });
-
+customElements.define('google-oauth', OAuth, { extends: 'button' });
