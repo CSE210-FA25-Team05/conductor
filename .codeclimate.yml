@@ -1,0 +1,34 @@
+version: "2"
+
+checks:
+  argument-count:
+    enabled: true
+    config:
+      threshold: 4
+  complex-logic:
+    enabled: true
+    config:
+      threshold: 4
+  file-lines:
+    enabled: true
+    config:
+      threshold: 250
+  method-complexity:
+    enabled: true
+    config:
+      threshold: 5
+  method-lines:
+    enabled: true
+    config:
+      threshold: 25
+
+plugins:
+  eslint:
+    enabled: true
+    channel: eslint-8
+  
+exclude_patterns:
+  - "tests/"
+  - "**/*.test.js"
+  - "node_modules/"
+  - "*.md"

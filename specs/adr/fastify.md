@@ -1,7 +1,7 @@
 # ADR: Backend Framework Selection — Fastify
 
 **Date:** 2025-11-08  
-**Status:** Accepted  
+**Status:** Accepted
 
 ---
 
@@ -81,13 +81,13 @@ This level of integration and control over security layers is **cleaner and more
 
 ### 3.5. Alignment with Project Requirements
 
-| **Requirement** | **Fastify Fit** |
-|------------------|-----------------|
-| **Accessibility & internationalization** | Built-in content-type negotiation and schema-based encoding ensures UTF-8 and multi-language safety. |
-| **Moderate concurrency (500–1000 sessions)** | Optimized routing and serialization pipeline handle concurrent I/O efficiently. |
+| **Requirement**                               | **Fastify Fit**                                                                                                                   |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Accessibility & internationalization**      | Built-in content-type negotiation and schema-based encoding ensures UTF-8 and multi-language safety.                              |
+| **Moderate concurrency (500–1000 sessions)**  | Optimized routing and serialization pipeline handle concurrent I/O efficiently.                                                   |
 | **Research-oriented, “moldable” development** | Modular plugin system enables evolutionary addition of new components (e.g., analytics, journaling) without refactoring the core. |
-| **Long-term maintainability** | Active LTS release cycle; backward compatibility guarantees; compatible with pure Node.js ES modules. |
-| **Security & FERPA compliance** | Lifecycle hooks, structured logging, and schema validation provide strong data-integrity guarantees. |
+| **Long-term maintainability**                 | Active LTS release cycle; backward compatibility guarantees; compatible with pure Node.js ES modules.                             |
+| **Security & FERPA compliance**               | Lifecycle hooks, structured logging, and schema validation provide strong data-integrity guarantees.                              |
 
 ---
 
@@ -97,10 +97,10 @@ While Fastify’s ecosystem is smaller than Express’s, it is **modern**, **sta
 
 Plugins such as:
 
-- `@fastify/postgres` – PostgreSQL integration  
-- `@fastify/helmet` – HTTP header security  
-- `@fastify/static` – Static file serving  
-- `@fastify/jwt` – JWT-based authentication  
+- `@fastify/postgres` – PostgreSQL integration
+- `@fastify/helmet` – HTTP header security
+- `@fastify/static` – Static file serving
+- `@fastify/jwt` – JWT-based authentication
 
 integrate seamlessly with minimal configuration overhead.
 
@@ -112,17 +112,17 @@ The maintainers also actively support **Node.js core compatibility**, ensuring l
 
 ### Express
 
-- **Pros:** Mature, largest community, many tutorials.  
+- **Pros:** Mature, largest community, many tutorials.
 - **Cons:** Synchronous middleware model, lack of type safety, weaker plugin encapsulation, and poor out-of-box performance. Would require multiple third-party libraries for validation, logging, and rate limiting — increasing technical debt.
 
 ### Hono
 
-- **Pros:** Very lightweight, Cloudflare Worker-friendly, modern API.  
+- **Pros:** Very lightweight, Cloudflare Worker-friendly, modern API.
 - **Cons:** Small community, limited documentation for OAuth and PostgreSQL integrations. Lacks mature plugin ecosystem for security and schema validation. Would increase development time for essential middleware.
 
 ### NestJS
 
-- **Pros:** Highly structured, opinionated architecture with built-in Dependency Injection and decorator-based routes.  
+- **Pros:** Highly structured, opinionated architecture with built-in Dependency Injection and decorator-based routes.
 - **Cons:** Heavyweight, complex for short-lifecycle academic projects. The learning curve and boilerplate make it unsuitable for fast iteration or “moldable development.” Overkill for our current scale.
 
 ---
@@ -131,16 +131,16 @@ The maintainers also actively support **Node.js core compatibility**, ensuring l
 
 ### Positive Outcomes
 
-- Improved throughput and stability under concurrent load  
-- Stronger guarantees for data integrity through schema validation  
-- Simplified plugin isolation and modular growth  
-- Enhanced auditability and observability  
-- Easier developer onboarding with familiar syntax but better patterns  
+- Improved throughput and stability under concurrent load
+- Stronger guarantees for data integrity through schema validation
+- Simplified plugin isolation and modular growth
+- Enhanced auditability and observability
+- Easier developer onboarding with familiar syntax but better patterns
 
 ### Negative Outcomes / Trade-offs
 
-- Smaller ecosystem than Express (fewer community plugins)  
-- Slightly steeper learning curve for plugin encapsulation patterns  
-- Potential compatibility adjustments for older Node.js utilities expecting Express middleware signatures  
+- Smaller ecosystem than Express (fewer community plugins)
+- Slightly steeper learning curve for plugin encapsulation patterns
+- Potential compatibility adjustments for older Node.js utilities expecting Express middleware signatures
 
 ---
