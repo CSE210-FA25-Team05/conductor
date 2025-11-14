@@ -28,8 +28,8 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      - name: Check and write Prettier formatting
-        run: npx prettier --write "**/*.{js,jsx,ts,tsx,css}"
+      - name: Check Prettier formatting
+        run: npx prettier --check "**/*.{js,jsx,ts,tsx,css}"
 
       - name: Run tests
         run: npm test
