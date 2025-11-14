@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS oauth_accounts (
     UNIQUE (user_id, auth_provider)
 );
 
--- CREDENTIALS TABLE (for email/password)
+-- CREDENTIALS TABLE 
 CREATE TABLE IF NOT EXISTS credentials (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
     UNIQUE (user_id, course_id)
 );
 
--- TA_TEAMS TABLE (Many-to-many TA → Course → Team)
+-- TA_TEAMS TABLE 
 CREATE TABLE IF NOT EXISTS ta_teams (
     id SERIAL PRIMARY KEY,
     ta_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
