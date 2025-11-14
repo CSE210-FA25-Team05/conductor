@@ -2,7 +2,7 @@ const fastify = require('fastify')({ logger: true });
 
 const PORT = process.env.PORT || 3001;
 
-fastify.get('/api/health', async (request, reply) => {
+fastify.get('/api/health', async () => {
   return { ok: true, time: new Date().toISOString() };
 });
 
