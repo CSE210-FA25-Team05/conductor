@@ -13,7 +13,7 @@
     "docs": "jsdoc -c jsdoc.json",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
-    "prepare": "husky"
+    "prepare": "if [ \"$CI\" != \"true\" ]; then husky install; fi"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
