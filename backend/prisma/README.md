@@ -42,7 +42,18 @@ If you modify `schema.prisma` and want to update the database:
 ```bash
 npm run prisma:push
 ```
-Note: For production, use migrations instead.
+
+**Important:** `prisma:push` does NOT destroy all tables. It's safe for most operations:
+- Adding new tables or columns - safe, no data loss
+- Modifying existing columns (nullable, defaults, etc.) - safe, no data loss
+- Adding indexes - safe, no data loss
+
+Data loss only occurs in these specific cases:
+- Removing a column deletes that column's data (but other columns remain)
+- Removing a table deletes that table and its data (but other tables remain)
+- Changing column types incompatibly may lose data
+
+**For production:** Use `prisma:migrate` instead, which creates migration files you can review and version control before applying.
 
 ### Create Migration
 For production-ready schema changes:
