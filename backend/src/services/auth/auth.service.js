@@ -41,7 +41,7 @@ const oauthClient = new OAuth2Client(
 
 /**
  * Build the Google OAuth login URL and set the CSRF state cookie.
- * @param {import('fastify').FastifyReply} reply
+ * @param {fastify.FastifyReply} reply
  * @returns {string} Google OAuth consent screen URL
  */
 function buildGoogleLoginUrl(reply) {
@@ -132,7 +132,7 @@ async function createSessionForUser(user) {
 
 /**
  * Handle the standard OAuth callback flow (query string).
- * @param {import('fastify').FastifyRequest} req
+ * @param {fastify.FastifyRequest} req
  * @returns {Promise<string>} sessionId to be stored in cookie
  */
 async function handleGoogleCallback(req) {
@@ -162,7 +162,7 @@ async function handleGoogleCallback(req) {
 
 /**
  * Optional: handle SPA/PKCE-style flows where the code is in the request body.
- * @param {import('fastify').FastifyRequest} req
+ * @param {fastify.FastifyRequest} req
  * @returns {Promise<string>} sessionId
  */
 async function handleCodeExchangeFromBody(req) {
