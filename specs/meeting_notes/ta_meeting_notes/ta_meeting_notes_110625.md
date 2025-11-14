@@ -1,4 +1,5 @@
 # TA Meeting Notes
+
 **Date:** Today
 
 ---

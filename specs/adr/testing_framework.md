@@ -1,6 +1,7 @@
 # ADR V1: Selection of JavaScript Testing Framework
 
 ## Context
+
 The full-stack web application under development will serve as a student–professor portal enabling users to view grades, assignments, announcements, and other course-related information. The architecture comprises a frontend implemented using **native Web Components** (with minimal framework dependencies) and a backend implemented with **Fastify**, a high-performance Node.js web framework.
 
 Because both layers rely on JavaScript and TypeScript, selecting an appropriate testing framework is essential to maintain reliability, correctness, and developer productivity. The testing setup must support three distinct levels of assurance.
@@ -16,6 +17,7 @@ The primary challenge is finding a toolchain that is consistent across both serv
 ---
 
 ## Decision
+
 The team will adopt a **hybrid testing strategy**: **Jest** will serve as the main framework for unit and integration tests across both frontend and backend, and **Cypress** will be used for full end-to-end browser testing.
 
 Jest will handle backend route and logic tests as well as Web Component unit and DOM tests using the `@testing-library/dom` utilities. Fastify endpoints will be tested in isolation through its built-in `inject()` method combined with `supertest` for integration verification.
@@ -27,6 +29,7 @@ This approach ensures quick, deterministic feedback during development while sti
 ---
 
 ## Rationale
+
 **Jest** remains the de facto standard for JavaScript testing, offering strong community adoption, active maintenance by Meta, and compatibility with both Node and browser environments. Its zero-configuration setup, built-in mocking capabilities, snapshot testing, and parallel execution make it ideal for large student teams. For the backend, Jest integrates cleanly with **Fastify’s `inject()` testing API**, enabling in-memory route testing without spinning up a live server. On the frontend, Jest works seamlessly with **DOM Testing Library**, allowing fine-grained validation of Web Component behavior in a jsdom environment.
 
 **Cypress** is chosen for E2E testing because it executes in a real browser, reproducing authentic user interactions such as navigation, input, and asynchronous rendering. It provides automatic waiting, time-travel debugging, and clear visibility into network requests—features that make it easier for new contributors to understand failures. Cypress also integrates directly into CI pipelines and supports headless runs for continuous integration.
@@ -36,6 +39,7 @@ This pairing follows modern testing best practices: a majority of fast, low-leve
 ---
 
 ## Alternatives
+
 A number of alternatives were considered.
 
 **Jest-only approach:** Using Jest for all tests, including E2E simulations, would simplify tooling but would not realistically capture browser-level interactions or rendering nuances specific to Web Components.
@@ -51,6 +55,7 @@ After evaluation, the Jest + Cypress combination provided the best balance betwe
 ---
 
 ## Implementation
+
 Jest will be installed and configured for both the backend and frontend workspaces.
 
 For the **Fastify backend**, tests will use Jest with TypeScript and leverage Fastify’s native `inject()` utility to send requests directly to routes without network overhead. Complex API scenarios will use `supertest` for higher-level integration validation. Coverage reports will be generated through `jest --coverage` and integrated into the CI pipeline to enforce code quality.
@@ -60,8 +65,9 @@ For the **Web Components frontend**, tests will rely on Jest together with `@tes
 **Cypress** will be configured in a dedicated `/e2e` directory to validate entire user flows such as authentication, assignment submission, and grade viewing. The tests will run in headless mode within GitHub Actions and can also be executed interactively during local development.
 
 Continuous Integration will be structured so that unit and integration tests run first, followed by E2E tests. The workflow commands will be standardized as:
-- `npm run test` for Jest  
-- `npm run test:e2e` for Cypress  
+
+- `npm run test` for Jest
+- `npm run test:e2e` for Cypress
 
 The repository will maintain a clear directory structure:
 
@@ -69,12 +75,12 @@ The repository will maintain a clear directory structure:
 /frontend/tests → Jest DOM and Web Component tests
 /e2e → Cypress workflow and regression tests
 
-
 All testing conventions and setup steps will be documented in `CONTRIBUTING.md` to ensure consistent onboarding for all contributors.
 
 ---
 
 ## Consequences
+
 This decision enables a balanced and scalable test pyramid. The Fastify backend can be tested rapidly and deterministically without launching servers, while Web Component logic and rendering can be verified in isolation using Jest’s lightweight DOM environment. Cypress provides high-confidence validation of real browser workflows, ensuring that end users experience the intended functionality.
 
 The main trade-off is the need to configure and maintain two distinct frameworks, which slightly increases the project’s setup complexity. Additionally, E2E tests will take longer to execute and should therefore be limited to critical user paths.
