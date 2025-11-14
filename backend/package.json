@@ -5,15 +5,22 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest"
+    "test": "jest",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio",
+    "prisma:push": "prisma db push",
+    "prisma:migrate": "prisma migrate dev",
+    "test:prisma": "node test-prisma.js"
   },
   "devDependencies": {
     "jest": "^30.2.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "prisma": "^6.19.0"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.1.0",
+    "@prisma/client": "^6.19.0",
     "dotenv": "^17.2.3",
     "fastify": "^5.6.2",
     "google-auth-library": "^10.5.0"
