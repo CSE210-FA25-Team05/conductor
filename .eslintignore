@@ -4,3 +4,4 @@ build/
 coverage/
 *.config.js 
 specs
+docs/
