@@ -1,3 +1,9 @@
-TRUNCATE TABLE users CASCADE;
-TRUNCATE TABLE oauth_accounts;
-TRUNCATE TABLE credentials;
+TRUNCATE TABLE
+    ta_teams,
+    enrollments,
+    teams,
+    courses,
+    oauth_accounts,
+    credentials,
+    users
+RESTART IDENTITY CASCADE;
