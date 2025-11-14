@@ -13,6 +13,7 @@ meeting_notes/
 ## Format Guidelines
 
 ### File Naming
+
 - Use format: `meeting_type_MMDDYY.md` or `meeting_type_MMMdd.md`
 - Examples:
   - `ta_meeting_notes_102025.md`
@@ -27,19 +28,23 @@ meeting_notes/
 ## Meeting # (Date)
 
 ### Topic 1
+
 - Point 1
 - Point 2
 
 ### Topic 2
+
 - Discussion point
 - Action item
 
 ### Action Items
+
 - [ ] Task 1
 - [ ] Task 2
 ```
 
 ### Required Information
+
 - Date of meeting
 - Attendees (optional but recommended)
 - Main topics discussed
@@ -57,4 +62,3 @@ meeting_notes/
 ## Examples
 
 - See `ta_meeting_notes/ta_meeting_notes_102025.md` for a well-formatted example
-

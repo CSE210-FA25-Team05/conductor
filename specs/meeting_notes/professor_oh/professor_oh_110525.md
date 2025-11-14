@@ -1,0 +1,42 @@
+November 5, 2025
+- Attendance:
+  - Zerlina, Justin, Omair
+
+- Frontend Notes:
+  - Keyword:
+    - "Walking Skeleton"
+  - We aren't required to use any of the specific names that are being used by the Professor.
+    - This includes things like "Conductor" or "Pulse", etc.
+  - Responsive Design
+    - The app must be responsive.
+    - However the instructional staff is not expected to be using the mobile versions of the app (phone/tablet) for any "serious work".
+    - Students may be using it to log "Pulses" or doing attendance, so their use case requirement may vary and would need to be evaluated in future sprints.
+    - The instructional staff is more concerned with recording "signals" — this is their term for an interaction with a student that happens in a nonconventional way.
+      - Talking with the professor after a lecture
+      - Speaking up during class and identifying yourself via team number, and personal name.
+  - "Pulses"
+    - The professor indicated that the emotional status of the student is more important to the teaching staff than the work journal.
+      - It is more valuable to know what it is that the student is thinking.
+    - In discussions with Zerlina and Justin we propose to shift the "Pulse" feature to a more prominent part of the user interface.
+      - Similar to how Android/Google uses a "+" button that is constantly present within their mobile apps, the "Pulse" button will be present at the bottom of most of the app pages and allow the student to record their feelings via a small/restricted set of emoji at any time.
+      - The teaching staff can mandate a "pulse check" at any time (i.e. "do a quick pulse check while we're starting the lecture")
+      - There can also be required intervals where a pulse check is required.
+        - When taking attendance.
+        - When submitting an assignment.
+        - At predesignated intervals throughout a quarter.
+        - If a pulse check hasn't been done within a certain amount of time.
+    - The work journal would become more of a "brag document"
+      - Something a student would enter their "this is what I did" for a feature/submission/assignment.
+      - If the TA's are attempting to make a decision for an individual's course grade they can opt to look at this if present and attempt to use the work journal as part of their evaluation criteria.
+        - A student is between an A and A-, the TA can look at a work journal if present and get some more insight into whether the student deserves a higher grade.
+      - The student would be entirely responsible for their work journal/brag document.
+      - The student's motivation for this would be to keep a log of things they did so they can later add it to their resume when they discuss what they did in class.
+
+- Backend Notes:
+  - For submitting the project the TA's will be looking at the repo, but it may make sense to create a docker image of the project so they do not get hung up with any dependency installs/makes the installation of the app easier.
+    - The professor does not expect us to host a live service version of the app — it would probably cost money and we would have to shut it down at some point.
+    - It should be deployable locally.
+  - There will need to be a fallback for non-UCSD logins (i.e. Extension Students).
+  - The assumption is that there will be multiple instances of the main app being used for different classes (i.e. CSE110 (undergrad), CSE210 (grad), CSE134 (WebDev)) etc.
+    - Keyword: tenancy management
+    - Whether we implement this or not is a stretch goal, but it is something he is keeping in mind that the app cannot be for just CSE 210.
