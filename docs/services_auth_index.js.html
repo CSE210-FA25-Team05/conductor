@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: services/auth/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,40 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: services/auth/index.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
 
+/**
+ * Auth Service Plugin
+ *
+ * This plugin wires the auth routes into the Fastify instance.
+ */
 
-    <h3> </h3>
+const authRoutes = require('./auth.routes');
+const authRepo = require('./auth.repo');
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+module.exports = async function authServicePlugin(fastify, opts) {
+  fastify.register(authRoutes);
+  fastify.get(
+    '/me',
+    { preHandler: fastify.authenticate },
+    async (req, reply) => {
+      // req.user is set in decorators/auth.js based on the sid cookie.
+      return req.user;
+    }
+  );
+};
+</code></pre>
+        </article>
+    </section>
 
 
 

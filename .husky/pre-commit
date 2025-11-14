@@ -1,3 +1,5 @@
-echo "Generating JSDoc..."
+echo "Generating JSDoc and fixing formatting and style..."
 npx jsdoc -c jsdoc.json
+npm run lint:fix
+npx prettier --write "**/*.{js,jsx,ts,tsx,css}"
 git add docs

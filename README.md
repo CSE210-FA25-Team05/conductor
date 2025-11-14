@@ -9,7 +9,7 @@ npm run install:all
 npm run dev
 ```
 
-- Frontend: http://localhost:3000
+- Frontend: http://localhost:5173
 - Backend API: http://localhost:3001
 
 See [specs/SETUP.md](specs/SETUP.md) for detailed setup instructions.
@@ -27,8 +27,7 @@ npm run dev
 ```bash
 npm run dev:frontend
 ```
-
-Opens on http://localhost:3000
+Opens on http://localhost:5173
 
 ### Run Only Backend
 

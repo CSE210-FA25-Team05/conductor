@@ -1,7 +1,9 @@
 Attendance
+
 - Justin, Omair, Peter, Zerlina
 
 Presentation Format
+
 - There are two kinds of stakeholders (that the Prof/TA will be roleplaying)
 - Business Stakeholder
   - They want to see progress/activity
@@ -21,7 +23,7 @@ Presentation Format
   - Do not get into the weeds in either end as well - getting too specific about one thing will cause another stakeholder to get bored.
   - They might feel like you're ignoring them because you can't explain what it is that they're doing.
 - This class is about doing three kinds of presentations
-  - Starting Something 
+  - Starting Something
     - This was the "Warmup Project"
   - Showing Progress
     - This will be the "Sprint Review"
@@ -31,14 +33,16 @@ Presentation Format
   - Presenting earlier will mean that you have a more permissive grading structure, presenting later means you need to have your act together because you had opportunities to learn from other groups.
 
 ADR Granularity
+
 - You can group them together at some point
 - ADRs are mostly about creating a written trail for understanding a decision you made and validating it when someone asks you about it.
-  - You're protecting against a "time traveler" 
+  - You're protecting against a "time traveler"
   - Someone from the future who's in love with a tech stack asking "Why did you choose what you did, mine is better"
   - Or if something goes wrong in the future and someone says "why did you choose this" you'll have a rationale.
 
 Justin's Question
-- Question: 
+
+- Question:
   - Does it make sense to split the frontend/backend?
 - You can split it but it might make things complicated.
 - The assumption here is that microservices are preferred - this is a relatively new development in WebDev.
@@ -46,6 +50,7 @@ Justin's Question
 - There are frameworks that can do sessionization like Larval and Symphony (in PHP).
 
 UI Comments
+
 - Largely moving in the right direction.
 - The point of concern is prioritization - what do you want the user that you're targeting to see.
 - As it stands the UI is making no suggestions or push - the user is presented with every option which would cause a large cognitive load.
@@ -67,10 +72,11 @@ UI Comments
 - Make sure you think about hierarchy of what the user is using the app for (students will have a different set of rankings than TA).
 
 Comprehensive Exam Review
-- Based out of the SWEBOK (https://www.computer.org/education/bodies-of-knowledge/software-engineering) categories. 
+
+- Based out of the SWEBOK (https://www.computer.org/education/bodies-of-knowledge/software-engineering) categories.
   - Ignores the last three.
 - Before the last week of class (Week 10) we will be provided a bank of questions (approximately 1-3 questions per section, approx. 45 questions) that we will have to research and write up answers for covering the topics that are discussed.
-- This writeup must be submitted the day before an oral interview. 
+- This writeup must be submitted the day before an oral interview.
   - You are allowed to bring these answers to refer to during the oral interview.
 - The assessment will be a 30 minute oral exam in which you have a conversation with Powell based on a selection of questions of his choice.
   - There will be approximately 8 questions (mostly time based).

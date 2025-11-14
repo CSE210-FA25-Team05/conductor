@@ -1,10 +1,30 @@
+'use strict';
+
+require('dotenv').config();
+
 const fastify = require('fastify')({ logger: true });
+const cors = require('@fastify/cors');
+const cookie = require('@fastify/cookie');
 
-const PORT = process.env.PORT || 3001;
+//ecosystem plugins
+fastify.register(cors, {
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+});
+fastify.register(cookie);
 
+//decorators
+fastify.register(require('./decorators/auth'));
+
+//services
+fastify.register(require('./services/auth'));
+
+//health check
 fastify.get('/api/health', async () => {
   return { ok: true, time: new Date().toISOString() };
 });
+
+const PORT = process.env.PORT || 3001;
 
 fastify.listen({ port: PORT, host: '0.0.0.0' }, (err) => {
   if (err) {

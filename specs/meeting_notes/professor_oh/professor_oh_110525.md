@@ -1,4 +1,5 @@
 November 5, 2025
+
 - Attendance:
   - Zerlina, Justin, Omair
 

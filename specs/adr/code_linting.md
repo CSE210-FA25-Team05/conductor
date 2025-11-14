@@ -7,7 +7,7 @@
 
 ## 1. Context
 
-The full-stack web application name **Conduntor** under development will serve as a student–professor portal enabling users to view grades, assignments, announcements, and other course-related information.The **Conductor** backend is built with **Node.js and Fastify**.
+The full-stack web application name **Conductor** under development will serve as a student–professor portal enabling users to view grades, assignments, announcements, and other course-related information.The **Conductor** backend is built with **Node.js and Fastify**.
 
 The codebase must:
 
