@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: decorators/auth.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,46 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: decorators/auth.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
 
+/**
+ * Auth decorators
+ *
+ * - fastify.authenticate(req, reply)
+ *      Reads the "sid" cookie, resolves the current user from the session
+ *      repository, and attaches it to req.user. Sends 401 if unauthenticated.
+ */
 
-    <h3> </h3>
+const fp = require('fastify-plugin');
+const authRepo = require('../services/auth/auth.repo');
 
+module.exports = fp(async function authDecorators(fastify, opts) {
+  fastify.decorate('authenticate', async function (req, reply) {
+    const sessionId = req.cookies?.sid;
+    if (!sessionId) {
+      return reply.code(401).send({ error: 'Not authenticated' });
+    }
 
+    const user = await authRepo.getUserBySessionId(sessionId);
+    if (!user) {
+      return reply.code(401).send({ error: 'Session expired or invalid' });
+    }
 
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    req.user = user;
+  });
+});
+</code></pre>
+        </article>
+    </section>
 
 
 
