@@ -1,13 +1,12 @@
 class GoogleOAuth extends HTMLElement {
-    constructor() {
-        super();
-    }
+  constructor() {
+    super();
+  }
 
+  connectedCallback() {
+    this.attachShadow({ mode: 'open' });
 
-    connectedCallback() {
-        this.attachShadow({ mode: 'open' });
-
-        this.shadowRoot.innerHTML = `
+    this.shadowRoot.innerHTML = `
         <button class="gsi-material-button"> 
             <div class="gsi-material-button-state"></div>
             <div class="gsi-material-button-content-wrapper">
@@ -24,27 +23,27 @@ class GoogleOAuth extends HTMLElement {
                 <span style="display: none;">Sign in with Google</span>
             </div>
         </button>
-        `
-        const linkElem = document.createElement('link');
-        linkElem.setAttribute('rel', 'stylesheet');
-        linkElem.setAttribute('href', './src/components/oauth/google-oauth.css') // IMP: relative to html file using this WebComponent
-        this.shadowRoot.appendChild(linkElem);
+        `;
+    const linkElem = document.createElement('link');
+    linkElem.setAttribute('rel', 'stylesheet');
+    linkElem.setAttribute('href', './src/components/oauth/google-oauth.css'); // IMP: relative to html file using this WebComponent
+    this.shadowRoot.appendChild(linkElem);
 
-        this.shadowRoot
-            .querySelector('button')
-            .addEventListener('click', this.handleClick);
-    }
+    this.shadowRoot
+      .querySelector('button')
+      .addEventListener('click', this.handleClick);
+  }
 
-    disconnectedCallback() {
-        this.shadowRoot
-            .querySelector('button')
-            .removeEventListener('click', this.handleClick);
-    }
+  disconnectedCallback() {
+    this.shadowRoot
+      .querySelector('button')
+      .removeEventListener('click', this.handleClick);
+  }
 
-    handleClick() {
-        console.log('Google OAuth button clicked!');
-        // TODO: do something
-    }
+  handleClick() {
+    console.log('Google OAuth button clicked!');
+    // TODO: do something
+  }
 }
 
 customElements.define('google-oauth', GoogleOAuth);
