@@ -7,7 +7,7 @@ Prisma is the ORM (Object-Relational Mapping) tool for this project. It provides
 1. Install dependencies: `npm install`
 2. Set up database connection in `.env` file:
    ```
-   DATABASE_URL="postgresql://postgres@localhost:5432/conductor?schema=public"
+   DATABASE_URL="postgresql://postgres:<password>@localhost:5432/conductor?schema=public"
    ```
 3. Generate Prisma Client: `npm run prisma:generate`
 
