@@ -1,4 +1,44 @@
-INSERT INTO users(first_name, last_name, email, pronouns, global_role) VALUES ('Professor','Mathematics', 'mathprof@ucsd.edu', 'She/Her/Hers', 'professor');
-INSERT INTO users(first_name, last_name, email, pronouns, global_role) VALUES ('TA','Genius', 'genius_ta@ucsd.edu', 'He/Him/His', 'student');
-INSERT INTO users(first_name, last_name, email, pronouns, global_role) VALUES ('John','Doe', 'jdoe@ucsd.edu', 'He/Him/His', 'student');
-INSERT INTO users(first_name, last_name, email, pronouns, global_role) VALUES ('Jane','Doe', 'jd563@ucsd.edu', 'She/Her/Hers', 'student');
+-- Seed users
+INSERT INTO users (first_name, last_name, email, pronouns, global_role) VALUES
+    ('Professor', 'Mathematics', 'mathprof@ucsd.edu', 'She/Her/Hers', 'professor'),
+    ('TA',        'Genius',      'genius_ta@ucsd.edu', 'He/Him/His',   'student'),
+    ('John',      'Doe',         'jdoe@ucsd.edu',      'He/Him/His',   'student'),
+    ('Jane',      'Doe',         'jd563@ucsd.edu',     'She/Her/Hers', 'student');
+
+-- Seed courses
+INSERT INTO courses (course_code, course_name, term, section, start_date, end_date) VALUES
+    ('CSE210', 'Software Engineering',  'FA25', 'A00', '2025-09-23', '2025-12-12'),
+    ('CSE110', 'Intro to Programming',  'FA25', 'A00', '2025-09-23', '2025-12-12');
+
+INSERT INTO teams (course_id, name, description) VALUES
+    (1, 'Team 1',     'Project Team 1 for CSE210'),
+    (1, 'Team 2',     'Project Team 2 for CSE210'),
+    (1, 'Team 3',     'Project Team 3 for CSE210'),
+    (2, 'Lab Team A', 'Lab team A for CSE110'),
+    (2, 'Lab Team B', 'Lab team B for CSE110');
+
+-- Professor enrollments 
+INSERT INTO enrollments (user_id, course_id, role) VALUES
+    (1, 1, 'professor'),
+    (1, 2, 'professor');
+
+-- TA enrollments 
+INSERT INTO enrollments (user_id, course_id, role) VALUES
+    (2, 1, 'ta'),
+    (2, 2, 'ta');
+
+-- Student enrollments for CSE210 
+INSERT INTO enrollments (user_id, course_id, team_id, role) VALUES
+    (3, 1, 1, 'student'),  
+    (4, 1, 2, 'student');  
+
+-- Student enrollments for CSE110 
+INSERT INTO enrollments (user_id, course_id, team_id, role) VALUES
+    (3, 2, 4, 'student'),  
+    (4, 2, 5, 'student');  
+
+-- TA team assignments
+INSERT INTO ta_teams (ta_user_id, course_id, team_id) VALUES
+    (2, 1, 1),
+    (2, 1, 2),
+    (2, 2, 4);
