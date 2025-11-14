@@ -9,8 +9,8 @@
  */
 
 // In-memory stores (replace with DB when ready)
-const users = new Map();      // email -> user
-const sessions = new Map();   // sessionId -> { userId, createdAt, expiresAt }
+const users = new Map(); // email -> user
+const sessions = new Map(); // sessionId -> { userId, createdAt, expiresAt }
 
 /**
  * Upsert a user from a Google ID token payload.
