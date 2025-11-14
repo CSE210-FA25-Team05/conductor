@@ -23,7 +23,6 @@ jobs:
       - name: Install dependencies (root + frontend + backend)
         run: |
           npm ci || npm install
-          npm run install:all
 
       - name: Run ESLint
         run: npm run lint
