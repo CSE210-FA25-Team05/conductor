@@ -1,28 +1,32 @@
 # Setup Guide
 
 ## Prerequisites
+
 - Node.js (v14 or higher)
 - npm
 
 ## Quick Start
 
 1. **Install dependencies:**
+
    ```bash
    npm run install:all
    ```
-   
+
    (Installs root, frontend, and backend dependencies)
 
 2. **Start both servers:**
+
    ```bash
    npm run dev
    ```
-   
+
    Or run independently:
+
    ```bash
    # Terminal 1 - Backend API
    npm run dev:backend
-   
+
    # Terminal 2 - Frontend
    npm run dev:frontend
    ```
