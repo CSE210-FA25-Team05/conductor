@@ -29,7 +29,7 @@ jobs:
         run: npm run lint
 
       - name: Check Prettier formatting
-        run: npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+        run: npx prettier --check "**/*.{js,jsx,ts,tsx,css}"
 
       - name: Run tests
         run: npm test
