@@ -13,18 +13,18 @@
     "docs": "jsdoc -c jsdoc.json",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
-    "prepare": "if [ \"$CI\" != \"true\" ]; then husky install; fi"
+    "prepare": "if [ \"$CI\" != \"true\" ]; then husky install; fi", 
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "test": "cd backend && npm test"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "husky": "^9.1.7",
-    "prettier": "^3.6.2",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "test": "cd backend && npm test"
+    "prettier": "^3.6.2"
   }
 }
