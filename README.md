@@ -1,4 +1,3 @@
-````markdown
 # Conductor
 
 Monorepo with HTML/CSS/JavaScript frontend and backend.
