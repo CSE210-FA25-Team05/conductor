@@ -1,9 +1,7 @@
 # ADR: Code Quality Monitoring Tool Selection — Codeclimate
 
 **Date:** 2025-11-10  
-**Author:** Yifei Wang
-**Reviewer(s):** TBD
-**Status:** Pending Approval
+**Status:** Accepted
 
 ---
 

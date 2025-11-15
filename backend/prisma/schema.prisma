@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  uuid          String         @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstName     String?        @map("first_name") @db.VarChar
+  lastName      String?        @map("last_name") @db.VarChar
+  email         String         @unique @db.VarChar
+  pronouns      String?        @db.VarChar
+  globalRole    String?        @default("student") @map("global_role") @db.VarChar
+  lastLogin     DateTime?      @map("last_login") @db.Timestamp(6)
+  createdAt     DateTime?      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt     DateTime?      @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  deletedAt     DateTime?      @map("deleted_at") @db.Timestamp(6)
+  credentials   Credential[]
+  oauthAccounts OAuthAccount[]
+
+  @@map("users")
+}
+
+model OAuthAccount {
+  id             Int       @id @default(autoincrement())
+  userId         Int?      @map("user_id")
+  authProvider   String    @map("auth_provider") @db.VarChar
+  authProviderId String    @map("auth_provider_id") @db.VarChar
+  accessToken    String?   @map("access_token")
+  refreshToken   String?   @map("refresh_token")
+  expiresAt      DateTime? @map("expires_at") @db.Timestamp(6)
+  createdAt      DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamp(6)
+  user           User?     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([authProvider, authProviderId])
+  @@unique([userId, authProvider])
+  @@map("oauth_accounts")
+}
+
+model Credential {
+  id           Int       @id @default(autoincrement())
+  userId       Int?      @map("user_id")
+  passwordHash String    @map("password_hash")
+  createdAt    DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamp(6)
+  user         User?     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("credentials")
+}

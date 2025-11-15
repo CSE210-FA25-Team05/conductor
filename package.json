@@ -10,18 +10,21 @@
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
+    "docs": "jsdoc -c jsdoc.json",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
+    "prepare": "if [ \"$CI\" != \"true\" ]; then husky install; fi",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format": "prettier --check \"**/*.{js,jsx,ts,tsx,css}\"",
     "test": "cd backend && npm test"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
     "prettier": "^3.6.2"
   }
 }

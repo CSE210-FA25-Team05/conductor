@@ -1,6 +1,310 @@
-/* Styles */
+/* 
+* CSS Style for CSE 210 Group 5 (P5ych) | Fall 2025
+* Typography/Breakpoint sizes from https://picocss.com/docs/typography 
+* */
 
+:root {
+  --color-bg: #fffff;
+  --color-primary-100: lightblue;
+  --color-primary-600: darkblue;
+  --color-secondary-100: lightpink;
+  --color-secondary-600: darkmagenta;
+  --color-error-100: lightcoral;
+  --color-error-600: darkred;
+  --color-success-100: lightgreen;
+  --color-success-600: darkgreen;
+  --color-border: lightgray;
+  --color-neutral-100: #f2f3f5;
+  --color-neutral-600: darkgray;
+  --typography-padding-vertical: 1rem;
+  --font-weight-bold: 700;
+
+  font-family: Inter, Roboto, system-ui, sans-serif;
+  line-height: 1.6;
+
+  text-underline-offset: 0.1rem;
+
+  --fs-50: 0.875em;
+  --fs-100: 1em;
+  --fs-200: 1.125em;
+  --fs-300: 1.5em;
+  --fs-400: 1.75em;
+  --fs-500: 2em;
+  --fs-600: 2.25em;
+  --fs-700: 2.5em;
+
+  --spacing-large: 2em;
+  --spacing-medium: 1em;
+  --spacing-small: 0.5em;
+  --spacing-extra-small: 0.25em;
+}
+
+@media (max-width: 576px) {
+  :root {
+    font-size: 16px;
+  }
+}
+@media (min-width: 576px) and (max-width: 768px) {
+  :root {
+    font-size: 17px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    font-size: 18px;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1280px) {
+  :root {
+    font-size: 19px;
+  }
+}
+@media (min-width: 1280px) and (max-width: 1536px) {
+  :root {
+    font-size: 20px;
+  }
+}
+@media (min-width: 1536px) {
+  :root {
+    font-size: 21px;
+  }
+}
+
+/* 
+   START RESET FROM https://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
 body {
-  font-family: sans-serif;
-  margin: 2rem;
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* 
+   END RESET 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+i,
+em,
+cite {
+  font-style: italic;
+}
+
+b,
+strong,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--font-weight-bold);
+  padding-bottom: var(--typography-padding-vertical);
+}
+
+h1 {
+  font-size: var(--fs-700);
+}
+h2 {
+  font-size: var(--fs-600);
+}
+h3 {
+  font-size: var(--fs-500);
+}
+h4 {
+  font-size: var(--fs-400);
+}
+h5 {
+  font-size: var(--fs-300);
+}
+h6 {
+  font-size: var(--fs-200);
+}
+p {
+  font-size: var(--fs-100);
+}
+small {
+  font-size: var(--fs-50);
+}
+article {
+  margin: var(--spacing-small);
+  padding: var(--spacing-medium);
+  border-radius: 0.5em;
+  line-height: 1.6;
+  box-shadow: 0.2em 0.3em;
+}
+
+/* Classes */
+/* Colors */
+.neutral {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+}
+.primary {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-600);
+}
+.secondary {
+  background-color: var(--color-secondary-100);
+  color: var(--color-secondary-600);
+}
+.error {
+  background-color: var(--color-error-100);
+  color: var(--color-error-600);
+}
+.success {
+  background-color: var(--color-success-100);
+  color: var(--color-success-600);
+}
+
+/* Google Icons from https://developers.google.com/fonts/docs/material_icons#setup_method_2_self_hosting */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/src/fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px; /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+  /* Support for IE. */
+  font-feature-settings: 'liga';
 }

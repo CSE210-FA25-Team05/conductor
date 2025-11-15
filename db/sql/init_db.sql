@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS oauth_accounts (
     UNIQUE (user_id, auth_provider)
 );
 
--- CREDENTIALS TABLE (for email/password)
+-- CREDENTIALS TABLE 
 CREATE TABLE IF NOT EXISTS credentials (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -37,4 +37,56 @@ CREATE TABLE IF NOT EXISTS credentials (
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
     deleted_at TIMESTAMP
+);
+
+-- COURSES TABLE
+CREATE TABLE IF NOT EXISTS courses (
+    id SERIAL PRIMARY KEY,
+    course_code VARCHAR NOT NULL,
+    course_name VARCHAR NOT NULL,
+    term VARCHAR NOT NULL,
+    section VARCHAR,
+    start_date DATE,
+    end_date DATE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    deleted_at TIMESTAMP,
+    UNIQUE (course_code, term, section)
+);
+
+-- TEAMS TABLE
+CREATE TABLE IF NOT EXISTS teams (
+    id SERIAL PRIMARY KEY,
+    course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    name VARCHAR NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    deleted_at TIMESTAMP,
+    UNIQUE (course_id, name)
+);
+
+-- ENROLLMENTS TABLE
+CREATE TABLE IF NOT EXISTS enrollments (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    team_id INTEGER REFERENCES teams(id) ON DELETE SET NULL,
+    role VARCHAR NOT NULL DEFAULT 'student',
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    deleted_at TIMESTAMP,
+    UNIQUE (user_id, course_id)
+);
+
+-- TA_TEAMS TABLE 
+CREATE TABLE IF NOT EXISTS ta_teams (
+    id SERIAL PRIMARY KEY,
+    ta_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    team_id INTEGER NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    deleted_at TIMESTAMP,
+    UNIQUE (ta_user_id, course_id, team_id)
 );
