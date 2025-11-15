@@ -21,6 +21,9 @@ services:
       NODE_ENV: development
     ports:
       - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
 
   frontend:
     build:
