@@ -9,10 +9,13 @@ const fp = require('fastify-plugin');
  * users with incomplete profiles can only access a small set of allowed routes
  * (OAuth endpoints, profile setup endpoints, etc.).
  */
-module.exports = fp(async function profileCompleteHook(fastify, opts) {
+module.exports = fp(async function profileCompleteHook(fastify) {
   fastify.addHook('preHandler', async (req, reply) => {
 
-    req.log.info({ url: req.raw.url }, 'profileCompleteHook: preHandler reached');
+    req.log.info(
+      { url: req.raw.url },
+      'profileCompleteHook: preHandler reached',
+    );
 
     // If the request is unauthenticated, let other logic handle it (e.g., the auth decorator or route-level auth requirements)
     const user = req.user;
@@ -29,9 +32,9 @@ module.exports = fp(async function profileCompleteHook(fastify, opts) {
       '/auth/oauth/google',
       '/auth/oauth/google/callback',
       '/auth/logout',
-      '/me/profile',  // retrieve/submit profile data
-      '/health',      // health check endpoint (if your project has one)
-      '/',            // root path (optional, keep/remove depending on use case)
+      '/me/profile', // retrieve/submit profile data
+      '/health', // health check endpoint (if your project has one)
+      '/', // root path (optional, keep/remove depending on use case)
     ]);
 
     if (allowedPaths.has(url)) {
@@ -41,7 +44,9 @@ module.exports = fp(async function profileCompleteHook(fastify, opts) {
 
     // Block all other requests if the user’s profile is incomplete
     if (!user.is_profile_complete) {
-      req.log.warn(`profileCompleteHook: blocked due to incomplete profile: ${user.email}`);
+      req.log.warn(
+        `profileCompleteHook: blocked due to incomplete profile: ${user.email}`,
+      );
       return reply.code(403).send({
         error: 'PROFILE_INCOMPLETE',
       });

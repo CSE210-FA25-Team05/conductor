@@ -68,8 +68,6 @@ function buildGoogleLoginUrl(reply) {
   return authUrl;
 }
 
-
-
 /**
  * Build the input object for insertUser() from a Google ID token payload.
  *
