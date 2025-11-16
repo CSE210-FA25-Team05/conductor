@@ -26,6 +26,9 @@ fastify.get('/api/health', async () => {
 
 const PORT = process.env.PORT || 3001;
 
+// I cannot write any unit tests for this file due to the server starts immediately upon import.
+// It is only possible to write integration tests that start the server and make requests to it.
+// Otherwaise, there has to be some structural changes to allow testability. - Yifei Wang
 fastify.listen({ port: PORT, host: '0.0.0.0' }, (err) => {
   if (err) {
     fastify.log.error(err);
