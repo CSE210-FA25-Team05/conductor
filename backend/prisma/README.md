@@ -22,6 +22,41 @@ npm run prisma:generate
 ```
 This creates the TypeScript types and query functions you use in your code.
 
+## Adding New Tables
+
+When you need to add a new table to the database:
+
+### Step 1: Add Model to Schema
+Edit `prisma/schema.prisma` and add your new model:
+
+```prisma
+model NewTable {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar
+  created_at DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updated_at DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  deleted_at DateTime? @map("deleted_at") @db.Timestamp(6)
+
+  @@map("new_table")
+}
+```
+
+### Step 2: Push to Database
+Create the table in the database:
+```bash
+npm run prisma:push
+```
+
+### Step 3: Generate Client
+Update Prisma Client with the new model:
+```bash
+npm run prisma:generate
+```
+
+That's it! The new table is created and ready to use.
+
+**For production:** Use `npm run prisma:migrate` instead of `prisma:push` to create version-controlled migration files.
+
 ## Optional Commands
 
 ### View Database in Browser
@@ -36,6 +71,20 @@ Quick test to verify Prisma is working:
 ```bash
 npm run test:prisma
 ```
+
+### Seed Database
+Populate the database with sample data:
+```bash
+npm run prisma:seed
+```
+
+This will:
+- Clear existing data (users, courses, teams, enrollments, etc.)
+- Insert sample users (professor, TA, students)
+- Create sample courses (CSE210, CSE110)
+- Set up teams, enrollments, lectures, and attendance records
+
+**Note:** The seed script clears all existing data before inserting. Edit `prisma/seed.js` to customize the seed data.
 
 ### Push Schema Changes
 If you modify `schema.prisma` and want to update the database:
@@ -61,6 +110,11 @@ For production-ready schema changes:
 npm run prisma:migrate
 ```
 This creates migration files that can be version controlled and applied to production.
+
+**Where SQL is generated:**
+- Migration files are saved to: `prisma/migrations/YYYYMMDDHHMMSS_migration_name/migration.sql`
+- Each migration contains the SQL code to apply that change
+- These files are version controlled and can be reviewed before applying
 
 ## Using Prisma in Your Code
 
