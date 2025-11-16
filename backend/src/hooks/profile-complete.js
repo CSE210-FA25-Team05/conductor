@@ -11,10 +11,9 @@ const fp = require('fastify-plugin');
  */
 module.exports = fp(async function profileCompleteHook(fastify) {
   fastify.addHook('preHandler', async (req, reply) => {
-
     req.log.info(
       { url: req.raw.url },
-      'profileCompleteHook: preHandler reached',
+      'profileCompleteHook: preHandler reached'
     );
 
     // If the request is unauthenticated, let other logic handle it (e.g., the auth decorator or route-level auth requirements)
@@ -45,7 +44,7 @@ module.exports = fp(async function profileCompleteHook(fastify) {
     // Block all other requests if the user’s profile is incomplete
     if (!user.is_profile_complete) {
       req.log.warn(
-        `profileCompleteHook: blocked due to incomplete profile: ${user.email}`,
+        `profileCompleteHook: blocked due to incomplete profile: ${user.email}`
       );
       return reply.code(403).send({
         error: 'PROFILE_INCOMPLETE',
