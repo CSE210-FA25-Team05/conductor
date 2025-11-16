@@ -64,6 +64,22 @@ async function createSession(sessionId, userId, expiresAt) {
 }
 
 /**
+ * Get a user by email.
+ *
+ * @param {string} email
+ * @returns {Promise<object|null>} user or null if not found
+ */
+async function getUserByEmail(email) {
+  if (!email) {
+    return null;
+  }
+
+  return await prisma.users.findUnique({
+    where: { email },
+  });
+}
+
+/**
  * Look up the current user by session id.
  * Returns null if the session is missing, expired, or the user no longer exists.
  *
@@ -117,23 +133,32 @@ async function deleteSession(sessionId) {
 }
 
 /**
- * Update user profile fields and mark profile as complete.
+ * Update user profile fields (partial update supported).
+ * Only updates fields that are explicitly provided (not undefined).
  *
  * @param {number} userId
- * @param {object} profileData - { first_name, last_name, pronouns }
+ * @param {object} profileData - { first_name?, last_name?, pronouns? }
  * @returns {Promise<object>} updated user
  */
 async function updateUserProfile(userId, profileData) {
   const { first_name, last_name, pronouns } = profileData;
 
+  // Build update data object, only including fields that are explicitly provided
+  const updateData = {};
+
+  if (first_name !== undefined) {
+    updateData.first_name = first_name;
+  }
+  if (last_name !== undefined) {
+    updateData.last_name = last_name;
+  }
+  if (pronouns !== undefined) {
+    updateData.pronouns = pronouns;
+  }
+  updateData.is_profile_complete = true;
   const user = await prisma.users.update({
     where: { id: userId },
-    data: {
-      first_name,
-      last_name,
-      pronouns,
-      is_profile_complete: true,
-    },
+    data: updateData,
   });
 
   return user;
@@ -142,6 +167,7 @@ async function updateUserProfile(userId, profileData) {
 module.exports = {
   insertUser,
   createSession,
+  getUserByEmail,
   getUserBySessionId,
   deleteSession,
   updateUserProfile,

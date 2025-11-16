@@ -53,27 +53,6 @@ async function routes(fastify) {
     }
   });
 
-  // Optional: SPA/PKCE-style code exchange
-  fastify.post('/auth/oauth/google/add_token', async (req, reply) => {
-    try {
-      const sessionId = await authService.handleCodeExchangeFromBody(req);
-
-      reply.setCookie('sid', sessionId, {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
-        maxAge: 7 * 24 * 60 * 60,
-      });
-
-      reply.clearCookie('oauth_state', { path: '/' });
-      reply.send({ ok: true });
-    } catch (e) {
-      req.log.error(e);
-      reply.code(400).send({ error: e.message || 'Token exchange failed' });
-    }
-  });
-
   // Logout: delete session + clear cookie
   fastify.post('/auth/logout', async (req, reply) => {
     const sessionId = req.cookies?.sid;
@@ -90,7 +69,7 @@ async function routes(fastify) {
     {
       preHandler: fastify.authenticate,
     },
-    async (req, reply) => {
+    async (req) => {
       const profile = authService.buildProfileResponse(req.user);
       return profile;
     }
@@ -102,7 +81,7 @@ async function routes(fastify) {
     {
       preHandler: fastify.authenticate,
     },
-    async (req, reply) => {
+    async (req) => {
       const user = req.user;
       const body = req.body || {};
 
