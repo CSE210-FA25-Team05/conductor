@@ -69,6 +69,46 @@ function buildGoogleLoginUrl(reply) {
 }
 
 /**
+ * Find or create a user based on the Google payload and UCSD/non-UCSD rules.
+ *
+ * - UCSD email:
+ *    - existing user → return it
+ *    - no user       → auto-create via insertUser()
+ * - non-UCSD email:
+ *    - existing user → return it (allowed to log in)
+ *    - no user       → throw error (must be added by professor first)
+ *
+ * @param {object} payload - Google ID token payload
+ * @returns {Promise<object>} user
+ */
+async function resolveUserFromGooglePayload(payload) {
+  const email = (payload.email || '').toLowerCase();
+  if (!email) {
+    throw new Error('Google payload does not contain an email');
+  }
+
+  enforceEmailRules(payload);
+
+  // see if a user already exists
+  const existing = await authRepo.getUserByEmail(email);
+
+  if (existing) {
+    return existing;
+  }
+
+  // decide by UCSD vs non-UCSD
+  if (isUcsdEmail(email)) {
+    // ucsd email → auto-create if needed
+    return await authRepo.insertUser(buildInsertUserInputFromGooglePayload(payload));
+  }
+
+  // non-UCSD + no existing user in DB → reject login
+  throw new Error(
+    'Your email is not registered in the system. Please ask your professor to add you to a class first.'
+  );
+}
+
+/**
  * Build the input object for insertUser() from a Google ID token payload.
  *
  * @param {object} payload - Google ID token payload
@@ -129,14 +169,6 @@ function enforceEmailRules(payload) {
   if (!payload.email_verified) {
     throw new Error('Your Google email is not verified');
   }
-
-  const email = (payload.email || '').toLowerCase();
-  const allowed = ALLOWED_EMAIL_SUFFIXES.some((suffix) =>
-    email.endsWith(suffix)
-  );
-  if (!allowed) {
-    throw new Error('Only UCSD emails are allowed');
-  }
 }
 
 /**
@@ -173,45 +205,13 @@ async function handleGoogleCallback(req) {
 
   const tokens = await exchangeCodeForTokens(code);
   const payload = await verifyIdToken(tokens.id_token);
-  enforceEmailRules(payload);
 
-  const insertParams = buildInsertUserInputFromGooglePayload(payload);
-  const user = await authRepo.insertUser(insertParams);
+  const user = await resolveUserFromGooglePayload(payload);
   const sessionId = await createSessionForUser(user);
 
   return sessionId;
 }
 
-/**
- * Optional: handle SPA/PKCE-style flows where the code is in the request body.
- * @param {fastify.FastifyRequest} req
- * @returns {Promise<string>} sessionId
- */
-async function handleCodeExchangeFromBody(req) {
-  const { code, state } = req.body || {};
-
-  if (!code || typeof code !== 'string') {
-    throw new Error('Missing authorization code');
-  }
-  if (!state || typeof state !== 'string') {
-    throw new Error('Missing OAuth state');
-  }
-
-  const stateCookie = req.cookies?.oauth_state;
-  if (!stateCookie || stateCookie !== state) {
-    throw new Error('Invalid OAuth state (possible CSRF)');
-  }
-
-  const tokens = await exchangeCodeForTokens(code);
-  const payload = await verifyIdToken(tokens.id_token);
-  enforceEmailRules(payload);
-
-  const insertParams = buildInsertUserInputFromGooglePayload(payload);
-  const user = await authRepo.insertUser(insertParams);
-  const sessionId = await createSessionForUser(user);
-
-  return sessionId;
-}
 
 /**
  * Logout: delete the session record (if any).
@@ -253,28 +253,49 @@ function buildProfileResponse(user) {
 }
 
 /**
- * Update current user's profile and mark it as complete.
+ * Update current user's profile (supports partial updates).
+ * Only fields explicitly provided in the request body will be updated.
  * @param {object} user - current user (from req.user)
- * @param {object} body - request body with profile fields
+ * @param {object} body - request body with profile fields (first_name?, last_name?, pronouns?)
  * @returns {Promise<object>} normalized profile response
  */
 async function updateCurrentUserProfile(user, body) {
   const { first_name, last_name, pronouns } = body || {};
 
-  const updated = await authRepo.updateUserProfile(user.id, {
-    first_name,
-    last_name,
-    pronouns,
-  });
+  // Build profile data object, only including fields that are explicitly provided
+  const profileData = {};
+  if (first_name !== undefined) {
+    profileData.first_name = first_name;
+  }
+  if (last_name !== undefined) {
+    profileData.last_name = last_name;
+  }
+  if (pronouns !== undefined) {
+    profileData.pronouns = pronouns;
+  }
+
+  const updated = await authRepo.updateUserProfile(user.id, profileData);
 
   return buildProfileResponse(updated);
+}
+
+/**
+ * Check whether an email belongs to the "UCSD student" group.
+ * By default we treat emails with allowed suffixes as UCSD.
+ *
+ * @param {string} email
+ * @returns {boolean}
+ */
+function isUcsdEmail(email) {
+  const lower = (email || '').toLowerCase();
+  return ALLOWED_EMAIL_SUFFIXES.some((suffix) => lower.endsWith(suffix));
 }
 
 module.exports = {
   buildGoogleLoginUrl,
   handleGoogleCallback,
-  handleCodeExchangeFromBody,
   logout,
   buildProfileResponse,
   updateCurrentUserProfile,
+  enforceEmailRules,
 };
