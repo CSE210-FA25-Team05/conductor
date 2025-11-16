@@ -10,7 +10,11 @@
  * - POST /auth/oauth/google/add_token
  *       → Optional SPA/PKCE flow, same behavior as callback
  * - POST /auth/logout
- *       → Clear session cookie
+ *       → Delete session + clear session cookie
+ * - GET  /me/profile
+ *       → Get current user's profile
+ * - POST /me/profile
+ *       → Update current user's profile and mark it complete
  */
 
 const authService = require('./auth.service');
@@ -70,12 +74,49 @@ async function routes(fastify) {
     }
   });
 
-  // Logout: clear session cookie
+  // Logout: delete session + clear cookie
   fastify.post('/auth/logout', async (req, reply) => {
-    // We only clear the cookie here; you can also delete the session in repo if needed.
+    const sessionId = req.cookies?.sid;
+
+    await authService.logout(sessionId, req.log);
+
     reply.clearCookie('sid', { path: '/' });
     reply.send({ ok: true });
   });
+
+  // Get current user's profile
+  fastify.get(
+    '/me/profile',
+    {
+      preHandler: fastify.authenticate,
+    },
+    async (req, reply) => {
+      const profile = authService.buildProfileResponse(req.user);
+      return profile;
+    }
+  );
+
+  // Set current user's profile
+  fastify.post(
+    '/me/profile',
+    {
+      preHandler: fastify.authenticate,
+    },
+    async (req, reply) => {
+      const user = req.user;
+      const body = req.body || {};
+
+      const updatedProfile = await authService.updateCurrentUserProfile(
+        user,
+        body
+      );
+
+      return {
+        ok: true,
+        user: updatedProfile,
+      };
+    }
+  );
 }
 
 module.exports = routes;

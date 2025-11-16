@@ -3,22 +3,17 @@
 /**
  * Auth Repository
  *
- * - User storage (backed by Prisma/PostgreSQL)
- * - Session storage (sessionId → userId mapping, currently in-memory)
+ * - User storage (Prisma / PostgreSQL)
+ * - Session storage
  */
 
 const prisma = require('../../prisma');
 
-// In-memory session store (can be moved to DB later if needed)
-const sessions = new Map(); // sessionId -> { userId, createdAt, expiresAt }
-
 /**
  * Upsert a user from a Google ID token payload.
- * If the user does not exist yet, we create a new row in the users table.
- * If the user already exists, we lightly update their profile fields.
  *
  * @param {object} payload - Google ID token payload
- * @returns {Promise<object>} user - Prisma users record
+ * @returns {Promise<object>} user - Prisma `users` record
  */
 async function upsertUserFromGooglePayload(payload) {
   const email = (payload.email || '').toLowerCase();
@@ -30,18 +25,18 @@ async function upsertUserFromGooglePayload(payload) {
   const lastName = payload.family_name || null;
   const now = new Date();
 
+  // Prisma model is named `users` (plural, lowercase)
   const user = await prisma.users.upsert({
     where: { email },
     create: {
       email,
       first_name: firstName,
       last_name: lastName,
-      // global_role has a default of "student" in the DB
+      // global_role defaults to "student"
       last_login: now,
-      // is_profile_complete has a default of false
+      // is_profile_complete defaults to false
     },
     update: {
-      // Keep profile roughly in sync with Google data
       first_name: firstName,
       last_name: lastName,
       last_login: now,
@@ -53,22 +48,21 @@ async function upsertUserFromGooglePayload(payload) {
 
 /**
  * Create a new session for a given user id.
- * This is currently stored in-memory and keyed by a random sessionId.
+ * Sessions are stored in the `sessions` table.
  *
  * @param {string} sessionId - randomly generated UUID
  * @param {number} userId - id of the authenticated user (users.id)
  * @param {Date}   expiresAt - session expiration time
- * @returns {Promise<object>} session object
+ * @returns {Promise<object>} session record
  */
 async function createSession(sessionId, userId, expiresAt) {
-  const now = new Date();
-  const session = {
-    id: sessionId,
-    userId,
-    createdAt: now,
-    expiresAt,
-  };
-  sessions.set(sessionId, session);
+  const session = await prisma.sessions.create({
+    data: {
+      session_id: sessionId,
+      user_id: userId,
+      expires_at: expiresAt,
+    },
+  });
   return session;
 }
 
@@ -80,26 +74,33 @@ async function createSession(sessionId, userId, expiresAt) {
  * @returns {Promise<object|null>} user or null if not found/expired
  */
 async function getUserBySessionId(sessionId) {
-  const session = sessions.get(sessionId);
+  const session = await prisma.sessions.findUnique({
+    where: { session_id: sessionId },
+  });
+
   if (!session) {
     return null;
   }
 
   const now = new Date();
-  if (session.expiresAt && session.expiresAt <= now) {
+  if (session.expires_at && session.expires_at <= now) {
     // Session expired, clean it up.
-    sessions.delete(sessionId);
+    await prisma.sessions.delete({
+      where: { session_id: sessionId },
+    });
     return null;
   }
 
   // Resolve the user associated with this session from the database.
   const user = await prisma.users.findUnique({
-    where: { id: session.userId },
+    where: { id: session.user_id },
   });
 
   if (!user) {
-    // If the user row was deleted, we can also clean up the session.
-    sessions.delete(sessionId);
+    // If the user row was deleted, also clean up the session.
+    await prisma.sessions.delete({
+      where: { session_id: sessionId },
+    });
     return null;
   }
 
@@ -107,13 +108,38 @@ async function getUserBySessionId(sessionId) {
 }
 
 /**
- * Optional helper to invalidate a session, e.g. on logout.
+ * Invalidate a session, e.g. on logout.
  *
  * @param {string} sessionId
  * @returns {Promise<void>}
  */
 async function deleteSession(sessionId) {
-  sessions.delete(sessionId);
+  await prisma.sessions.deleteMany({
+    where: { session_id: sessionId },
+  });
+}
+
+/**
+ * Update user profile fields and mark profile as complete.
+ *
+ * @param {number} userId
+ * @param {object} profileData - { first_name, last_name, pronouns }
+ * @returns {Promise<object>} updated user
+ */
+async function updateUserProfile(userId, profileData) {
+  const { first_name, last_name, pronouns } = profileData;
+
+  const user = await prisma.users.update({
+    where: { id: userId },
+    data: {
+      first_name,
+      last_name,
+      pronouns,
+      is_profile_complete: true,
+    },
+  });
+
+  return user;
 }
 
 module.exports = {
@@ -121,4 +147,5 @@ module.exports = {
   createSession,
   getUserBySessionId,
   deleteSession,
+  updateUserProfile,
 };

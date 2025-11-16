@@ -8,6 +8,7 @@
  * - Exchange authorization code for tokens
  * - Verify Google ID token and email rules
  * - Create a session (UUID) and store it in the repository
+ * - Handle logout and profile-related logic
  */
 
 const { randomUUID } = require('crypto');
@@ -190,8 +191,68 @@ async function handleCodeExchangeFromBody(req) {
   return sessionId;
 }
 
+/**
+ * Logout: delete the session record (if any).
+ * Route is responsible for clearing the cookie.
+ *
+ * @param {string | undefined} sessionId
+ * @param {object} logger - fastify logger (req.log)
+ */
+async function logout(sessionId, logger) {
+  if (!sessionId) {
+    return;
+  }
+
+  try {
+    await authRepo.deleteSession(sessionId);
+  } catch (e) {
+    // Do not block logout if session deletion fails.
+    logger?.error(e, 'Failed to delete session during logout');
+  }
+}
+
+/**
+ * Build a standardized profile response object from a user record.
+ * @param {object} user
+ * @returns {object}
+ */
+function buildProfileResponse(user) {
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    email: user.email,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    pronouns: user.pronouns,
+    global_role: user.global_role,
+    is_profile_complete: user.is_profile_complete,
+  };
+}
+
+/**
+ * Update current user's profile and mark it as complete.
+ * @param {object} user - current user (from req.user)
+ * @param {object} body - request body with profile fields
+ * @returns {Promise<object>} normalized profile response
+ */
+async function updateCurrentUserProfile(user, body) {
+  const { first_name, last_name, pronouns } = body || {};
+
+  const updated = await authRepo.updateUserProfile(user.id, {
+    first_name,
+    last_name,
+    pronouns,
+  });
+
+  return buildProfileResponse(updated);
+}
+
 module.exports = {
   buildGoogleLoginUrl,
   handleGoogleCallback,
   handleCodeExchangeFromBody,
+  logout,
+  buildProfileResponse,
+  updateCurrentUserProfile,
 };
