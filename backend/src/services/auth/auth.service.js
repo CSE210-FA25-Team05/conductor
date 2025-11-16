@@ -99,7 +99,9 @@ async function resolveUserFromGooglePayload(payload) {
   // decide by UCSD vs non-UCSD
   if (isUcsdEmail(email)) {
     // ucsd email → auto-create if needed
-    return await authRepo.insertUser(buildInsertUserInputFromGooglePayload(payload));
+    return await authRepo.insertUser(
+      buildInsertUserInputFromGooglePayload(payload)
+    );
   }
 
   // non-UCSD + no existing user in DB → reject login
@@ -211,7 +213,6 @@ async function handleGoogleCallback(req) {
 
   return sessionId;
 }
-
 
 /**
  * Logout: delete the session record (if any).

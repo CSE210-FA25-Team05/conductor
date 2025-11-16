@@ -145,7 +145,7 @@ async function updateUserProfile(userId, profileData) {
 
   // Build update data object, only including fields that are explicitly provided
   const updateData = {};
-  
+
   if (first_name !== undefined) {
     updateData.first_name = first_name;
   }

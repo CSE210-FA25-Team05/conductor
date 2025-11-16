@@ -69,7 +69,7 @@ async function routes(fastify) {
     {
       preHandler: fastify.authenticate,
     },
-    async (req, reply) => {
+    async (req) => {
       const profile = authService.buildProfileResponse(req.user);
       return profile;
     }
@@ -81,7 +81,7 @@ async function routes(fastify) {
     {
       preHandler: fastify.authenticate,
     },
-    async (req, reply) => {
+    async (req) => {
       const user = req.user;
       const body = req.body || {};
 
