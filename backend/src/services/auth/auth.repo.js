@@ -10,36 +10,33 @@
 const prisma = require('../../prisma');
 
 /**
- * Upsert a user from a Google ID token payload.
+ * Insert or update a user record by email.
  *
- * @param {object} payload - Google ID token payload
- * @returns {Promise<object>} user - Prisma `users` record
+ * @param {object} params
+ * @param {string} params.email
+ * @param {string|null} params.first_name
+ * @param {string|null} params.last_name
+ * @param {Date} params.last_login
+ * @returns {Promise<object>} user - Prisma users record
  */
-async function upsertUserFromGooglePayload(payload) {
-  const email = (payload.email || '').toLowerCase();
+async function insertUser({ email, first_name, last_name, last_login }) {
   if (!email) {
-    throw new Error('Google payload does not contain an email');
+    throw new Error('Email is required for insertUser');
   }
 
-  const firstName = payload.given_name || null;
-  const lastName = payload.family_name || null;
-  const now = new Date();
-
-  // Prisma model is named `users` (plural, lowercase)
   const user = await prisma.users.upsert({
     where: { email },
     create: {
       email,
-      first_name: firstName,
-      last_name: lastName,
-      // global_role defaults to "student"
-      last_login: now,
-      // is_profile_complete defaults to false
+      first_name,
+      last_name,
+      last_login,
+      // global_role and is_profile_complete use DB defaults
     },
     update: {
-      first_name: firstName,
-      last_name: lastName,
-      last_login: now,
+      first_name,
+      last_name,
+      last_login,
     },
   });
 
@@ -143,7 +140,7 @@ async function updateUserProfile(userId, profileData) {
 }
 
 module.exports = {
-  upsertUserFromGooglePayload,
+  insertUser,
   createSession,
   getUserBySessionId,
   deleteSession,

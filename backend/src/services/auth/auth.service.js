@@ -68,6 +68,47 @@ function buildGoogleLoginUrl(reply) {
   return authUrl;
 }
 
+
+
+/**
+ * Build the input object for insertUser() from a Google ID token payload.
+ *
+ * @param {object} payload - Google ID token payload
+ * @returns {object} insertUser params
+ */
+function buildInsertUserInputFromGooglePayload(payload) {/**
+* Build the input object for insertUser() from a Google ID token payload.
+*
+* @param {object} payload - Google ID token payload
+* @returns {object} insertUser params
+*/
+function buildInsertUserInputFromGooglePayload(payload) {
+ const email = (payload.email || '').toLowerCase();
+ if (!email) {
+   throw new Error('Google payload does not contain an email');
+ }
+
+ return {
+   email,
+   first_name: payload.given_name || null,
+   last_name: payload.family_name || null,
+   last_login: new Date(),
+ };
+}
+  const email = (payload.email || '').toLowerCase();
+  if (!email) {
+    throw new Error('Google payload does not contain an email');
+  }
+
+  return {
+    email,
+    first_name: payload.given_name || null,
+    last_name: payload.family_name || null,
+    last_login: new Date(),
+  };
+}
+
+
 /**
  * Exchange an authorization code for tokens.
  * @param {string} code
@@ -155,7 +196,8 @@ async function handleGoogleCallback(req) {
   const payload = await verifyIdToken(tokens.id_token);
   enforceEmailRules(payload);
 
-  const user = await authRepo.upsertUserFromGooglePayload(payload);
+  const insertParams = buildInsertUserInputFromGooglePayload(payload);
+  const user = await authRepo.insertUser(insertParams);
   const sessionId = await createSessionForUser(user);
 
   return sessionId;
@@ -185,7 +227,8 @@ async function handleCodeExchangeFromBody(req) {
   const payload = await verifyIdToken(tokens.id_token);
   enforceEmailRules(payload);
 
-  const user = await authRepo.upsertUserFromGooglePayload(payload);
+  const insertParams = buildInsertUserInputFromGooglePayload(payload);
+  const user = await authRepo.insertUser(insertParams);
   const sessionId = await createSessionForUser(user);
 
   return sessionId;
