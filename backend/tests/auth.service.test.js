@@ -5,11 +5,11 @@ jest.mock('../src/services/auth/auth.repo');
 jest.mock('google-auth-library');
 
 const { 
-  describe, 
-  test, 
-  expect, 
-  beforeEach, 
-  afterEach
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
 } = require('@jest/globals');
 const authService = require('../src/services/auth/auth.service');
 const authRepo = require('../src/services/auth/auth.repo');
@@ -26,7 +26,7 @@ beforeEach(() => {
   process.env.GOOGLE_CLIENT_ID = 'test-client-id';
   process.env.GOOGLE_CLIENT_SECRET = 'test-client-secret';
   process.env.GOOGLE_REDIRECT_URI =
-   'http://localhost:3001/auth/oauth/google/callback';
+    'http://localhost:3001/auth/oauth/google/callback';
   process.env.ALLOWED_EMAIL_SUFFIXES = '@ucsd.edu';
 
   // Mock OAuth2Client instance
@@ -70,7 +70,7 @@ afterEach(() => {
 describe('buildGoogleLoginUrl', () => {
   test('should generate Google OAuth URL', () => {
     const mockAuthUrl =
-     'https://accounts.google.com/o/oauth2/v2/auth?client_id=test';
+      'https://accounts.google.com/o/oauth2/v2/auth?client_id=test';
     mockOAuthClient.generateAuthUrl.mockReturnValue(mockAuthUrl);
 
     const url = authService.buildGoogleLoginUrl(mockReply);

@@ -12,19 +12,22 @@ describe('Auth Decorators', () => {
 
   beforeEach(async () => {
     jest.clearAllMocks();
+
     app = Fastify();
+
     await app.register(require('@fastify/cookie'));
     await app.register(authDecorators);
+
     app.get(
-      '/protected', 
-    {
-        preHandler: app.authenticate
-    }, 
-    async (req, reply) => {
+      '/protected',
+      {
+        preHandler: app.authenticate,
+      },
+      async (req, reply) => {
         return { user: req.user };
-    }
-  );
-    
+      }
+    );
+
     await app.ready();
   });
 
