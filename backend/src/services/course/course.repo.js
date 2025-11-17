@@ -35,7 +35,7 @@ async function getCourseById(fastify, courseId) {
  */
 async function getUsersInCourse(fastify, courseId) {
   const users = await fastify.db.enrollments.findMany({
-    where: { courses: { some: { id: courseId } } },
+    where: {  course_id: courseId  },
   });
   return users;
 }
@@ -48,8 +48,8 @@ async function getUsersInCourse(fastify, courseId) {
 async function getUserDetailsInCourse(fastify, courseId, userId) {
   const user = await fastify.db.enrollments.findFirst({
     where: {
-      id: userId,
-      courses: { some: { id: courseId } },
+      user_id: userId,
+      course_id: courseId,
     },
   });
   return user;

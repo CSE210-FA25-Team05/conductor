@@ -11,10 +11,10 @@ function headers() {
 
 async function addCourseTest() {
   const course = {
-    course_code: 'CSE240',
-    course_name: 'Computer Architecture',
-    term: '25SP',
-    section: 'A',
+    course_code: 'CSE291',
+    course_name: 'AI Agent',
+    term: 'SP25',
+    section: 'A00',
     start_date: '2025-03-31T00:00:00.000Z',
     end_date: '2025-06-15T00:00:00.000Z',
   };
@@ -121,9 +121,70 @@ async function getAllCoursesTest() {
   }
 }
 
+// get all user in a course test
+async function getAllUsersInCourseTest(courseId) {
+  console.log(`→ Fetching all users in course id=${courseId}...`);
+  const res = await fetch(`${BASE_URL}/courses/${courseId}/users`, {
+    method: 'GET',
+    headers: headers(),
+  });
+
+  console.log('Status:', res.status);
+  const text = await res.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = text;
+  }
+  console.log('Response:', data);
+
+  if (res.ok) {
+    console.log(`✅ Fetched ${data.length} users in course id=${courseId} successfully`);
+  } else {
+    console.error(`❌ Failed to fetch users in course id=${courseId}`);
+  }
+}
+
+//get specific user in a course test
+async function getUserDetailsInCourseTest(courseId, userId) {
+  console.log(`→ Fetching user id=${userId} in course id=${courseId}...`);
+  const res = await fetch(`${BASE_URL}/courses/${courseId}/users/${userId}`, {
+    method: 'GET',
+    headers: headers(),
+  });
+
+  console.log('Status:', res.status);
+  const text = await res.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = text;
+  }
+  console.log('Response:', data);
+
+  if (res.ok) {
+    console.log(`✅ Fetched user id=${userId} in course id=${courseId} successfully`);
+  } else {
+    console.error(`❌ Failed to fetch user id=${userId} in course id=${courseId}`);
+  }
+}
+
 // Run tests
 
-addCourseTest();
-// updateCourseTest(11, { course_name: 'Updated Course Name' })
+// addCourseTest();
+// updateCourseTest(16, {
+//     course_code: 'CSE291',
+//     course_name: 'AI Agent Updated',
+//     term: 'SP25',
+//     section: 'A00',
+//     start_date: '2025-03-31T00:00:00.000Z',
+//     end_date: '2025-06-15T00:00:00.000Z',
+//   });
 // getAllCoursesTest()
-// deleteCourse(11)
+// deleteCourse(16)
+// getAllUsersInCourseTest(14);
+// getUserDetailsInCourseTest(14, 8);
+
+
