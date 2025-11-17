@@ -46,7 +46,7 @@ async function routes(fastify) {
     } catch (e) {
       req.log.error(e);
       reply.redirect(
-        `${process.env.FRONTEND_URL || 'http://localhost:3000/index.html'}?error=${encodeURIComponent(
+        `${process.env.FRONTEND_URL || 'http://localhost:3000'}/login?error=${encodeURIComponent(
           e.message
         )}`
       );
