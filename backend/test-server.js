@@ -140,7 +140,9 @@ async function getAllUsersInCourseTest(courseId) {
   console.log('Response:', data);
 
   if (res.ok) {
-    console.log(`✅ Fetched ${data.length} users in course id=${courseId} successfully`);
+    console.log(
+      `✅ Fetched ${data.length} users in course id=${courseId} successfully`
+    );
   } else {
     console.error(`❌ Failed to fetch users in course id=${courseId}`);
   }
@@ -165,9 +167,13 @@ async function getUserDetailsInCourseTest(courseId, userId) {
   console.log('Response:', data);
 
   if (res.ok) {
-    console.log(`✅ Fetched user id=${userId} in course id=${courseId} successfully`);
+    console.log(
+      `✅ Fetched user id=${userId} in course id=${courseId} successfully`
+    );
   } else {
-    console.error(`❌ Failed to fetch user id=${userId} in course id=${courseId}`);
+    console.error(
+      `❌ Failed to fetch user id=${userId} in course id=${courseId}`
+    );
   }
 }
 
@@ -186,5 +192,3 @@ async function getUserDetailsInCourseTest(courseId, userId) {
 // deleteCourse(16)
 // getAllUsersInCourseTest(14);
 // getUserDetailsInCourseTest(14, 8);
-
-
