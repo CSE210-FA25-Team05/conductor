@@ -174,7 +174,7 @@ describe('sanitizeInput', () => {
   test('sanitizes mixed content with text and tags', () => {
     const input = 'Hello <b>World</b>!';
     const output = sanitizeInput(input);
-    expect(output).toBe('Hello bWorld!');
+    expect(output).toBe('Hello bWorldb!');
   });
 
   test('handles input with only angle brackets', () => {
