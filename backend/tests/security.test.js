@@ -43,7 +43,7 @@ describe('isStrongPassword', () => {
   });
 
   test('accepts very long password', () => {
-    expect(isStrongPassword('LongP@ssw0rd' + "!".repeat(1024))).toBe(true);
+    expect(isStrongPassword('LongP@ssw0rd' + '!'.repeat(1024))).toBe(true);
   });
 
   test('rejects empty string', () => {
@@ -320,11 +320,11 @@ describe('hasRequiredRole', () => {
   });
 
   test('works when user has additional properties', () => {
-    const user = { 
-      id: 123, 
-      name: 'John', 
+    const user = {
+      id: 123,
+      name: 'John',
       roles: ['admin'],
-      email: 'john@example.com'
+      email: 'john@example.com',
     };
     expect(hasRequiredRole(user, 'admin')).toBe(true);
   });

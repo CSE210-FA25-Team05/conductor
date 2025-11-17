@@ -154,12 +154,12 @@ describe('createSession', () => {
 
   test('should set createdAt to current time', async () => {
     const before = new Date();
-    
     const session = await createSession('session-abc', 'user-123', new Date());
-    
     const after = new Date();
 
-    expect(session.createdAt.getTime()).toBeGreaterThanOrEqual(before.getTime());
+    expect(session.createdAt.getTime()).toBeGreaterThanOrEqual(
+      before.getTime()
+    );
     expect(session.createdAt.getTime()).toBeLessThanOrEqual(after.getTime());
   });
 
@@ -310,7 +310,7 @@ describe('getUserBySessionId', () => {
     await createSession(sessionId, user.id, now);
 
     // Slight delay to ensure expiration
-    await new Promise(resolve => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 10));
 
     const retrievedUser = await getUserBySessionId(sessionId);
     expect(retrievedUser).toBeNull();

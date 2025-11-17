@@ -12,16 +12,18 @@ describe('Auth Decorators', () => {
 
   beforeEach(async () => {
     jest.clearAllMocks();
-    
     app = Fastify();
     await app.register(require('@fastify/cookie'));
     await app.register(authDecorators);
-    
-    app.get('/protected', {
-      preHandler: app.authenticate
-    }, async (req, reply) => {
-      return { user: req.user };
-    });
+    app.get(
+      '/protected', 
+    {
+        preHandler: app.authenticate
+    }, 
+    async (req, reply) => {
+        return { user: req.user };
+    }
+  );
     
     await app.ready();
   });
@@ -33,7 +35,7 @@ describe('Auth Decorators', () => {
   test('should return 401 when sid cookie is missing', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: '/protected'
+      url: '/protected',
     });
 
     expect(response.statusCode).toBe(401);
@@ -46,12 +48,12 @@ describe('Auth Decorators', () => {
     const response = await app.inject({
       method: 'GET',
       url: '/protected',
-      cookies: { sid: 'invalid-session-id' }
+      cookies: { sid: 'invalid-session-id' },
     });
 
     expect(response.statusCode).toBe(401);
-    expect(JSON.parse(response.body)).toEqual({ 
-      error: 'Session expired or invalid' 
+    expect(JSON.parse(response.body)).toEqual({
+      error: 'Session expired or invalid',
     });
   });
 
@@ -59,7 +61,7 @@ describe('Auth Decorators', () => {
     const mockUser = {
       id: 'user-123',
       email: 'test@ucsd.edu',
-      name: 'Test User'
+      name: 'Test User',
     };
 
     authRepo.getUserBySessionId.mockResolvedValue(mockUser);
@@ -67,7 +69,7 @@ describe('Auth Decorators', () => {
     const response = await app.inject({
       method: 'GET',
       url: '/protected',
-      cookies: { sid: 'valid-session-id' }
+      cookies: { sid: 'valid-session-id' },
     });
 
     expect(response.statusCode).toBe(200);
@@ -77,13 +79,13 @@ describe('Auth Decorators', () => {
   test('should call getUserBySessionId with correct session ID', async () => {
     authRepo.getUserBySessionId.mockResolvedValue({
       id: 'user-123',
-      email: 'test@ucsd.edu'
+      email: 'test@ucsd.edu',
     });
 
     await app.inject({
       method: 'GET',
       url: '/protected',
-      cookies: { sid: 'my-session-123' }
+      cookies: { sid: 'my-session-123' },
     });
 
     expect(authRepo.getUserBySessionId).toHaveBeenCalledWith('my-session-123');
@@ -97,7 +99,7 @@ describe('Auth Decorators', () => {
     const response = await app.inject({
       method: 'GET',
       url: '/protected',
-      cookies: { sid: 'session-123' }
+      cookies: { sid: 'session-123' },
     });
 
     // Should return 500 (Fastify's default error handling)
