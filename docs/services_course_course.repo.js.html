@@ -83,6 +83,11 @@ async function getUserDetailsInCourse(fastify, courseId, userId) {
   return user;
 }
 
+/** Add a new course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {Object} courseData - Data for the new course
+ * @returns {Promise&lt;Object>} Created course object
+ */
 async function addCourse(fastify, courseData) {
   const {
     course_code,
@@ -110,6 +115,12 @@ async function addCourse(fastify, courseData) {
   return created;
 }
 
+/** Update course details.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course to update
+ * @param {Object} updateData - Data to update
+ * @returns {Promise&lt;Object>} Updated course object
+ */
 async function updateCourse(fastify, courseId, updateData) {
   const updatedCourse = await fastify.db.courses.update({
     where: { id: courseId },
@@ -118,11 +129,81 @@ async function updateCourse(fastify, courseId, updateData) {
   return updatedCourse;
 }
 
+/** Delete a course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course to delete
+ * @returns {Promise&lt;Object>} Deleted course object
+ */
 async function deleteCourse(fastify, courseId) {
   const deletedCourse = await fastify.db.courses.delete({
     where: { id: courseId },
   });
   return deletedCourse;
+}
+
+/** Get the join code for a course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course
+ * @returns {Promise&lt;string>} Join code of the course
+ */
+async function getCourseJoinCode(fastify, courseId) {
+  const course = await fastify.db.courses.findUnique({
+    where: { id: courseId },
+    select: { join_code: true },
+  });
+  return course ? course.join_code : null;
+}
+
+/** Add an enrollment of a user into a course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course
+ * @param {number} userId - ID of the user
+ * @returns {Promise&lt;Object>} Created enrollment object
+ */
+async function addEnrollment(fastify, courseId, userId) {
+  const enrollment = await fastify.db.enrollments.create({
+    data: {
+      course_id: courseId,
+      user_id: userId,
+    },
+  });
+  return enrollment;
+}
+
+/** Update the role of a user in a course enrollment.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course
+ * @param {number} userId - ID of the user
+ * @param {string} role - New role to assign
+ * @returns {Promise&lt;Object>} Updated enrollment object
+ */
+async function updateEnrollmentRole(fastify, courseId, userId, role) {
+  const updatedEnrollment = await fastify.db.enrollments.updateMany({
+    where: {
+      course_id: courseId,
+      user_id: userId,
+    },
+    data: {
+      role: role,
+    },
+  });
+  return updatedEnrollment;
+}
+
+/** Delete an enrollment of a user from a course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course
+ * @param {number} userId - ID of the user
+ * @returns {Promise&lt;Object>} Deleted enrollment object
+ */
+async function deleteEnrollment(fastify, courseId, userId) {
+  const deletedEnrollment = await fastify.db.enrollments.deleteMany({
+    where: {
+      course_id: courseId,
+      user_id: userId,
+    },
+  });
+  return deletedEnrollment;
 }
 
 module.exports = {
@@ -133,6 +214,10 @@ module.exports = {
   addCourse,
   updateCourse,
   deleteCourse,
+  getCourseJoinCode,
+  addEnrollment,
+  updateEnrollmentRole,
+  deleteEnrollment,
 };
 </code></pre>
         </article>
@@ -144,13 +229,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authRoutes">authRoutes</a></li><li><a href="global.html#authService">authService</a></li><li><a href="global.html#buildGoogleLoginUrl">buildGoogleLoginUrl</a></li><li><a href="global.html#buildInsertUserInputFromGooglePayload">buildInsertUserInputFromGooglePayload</a></li><li><a href="global.html#buildProfileResponse">buildProfileResponse</a></li><li><a href="global.html#createSession">createSession</a></li><li><a href="global.html#createSessionForUser">createSessionForUser</a></li><li><a href="global.html#deleteSession">deleteSession</a></li><li><a href="global.html#enforceEmailRules">enforceEmailRules</a></li><li><a href="global.html#exchangeCodeForTokens">exchangeCodeForTokens</a></li><li><a href="global.html#fp">fp</a></li><li><a href="global.html#getAllCourse">getAllCourse</a></li><li><a href="global.html#getCourseById">getCourseById</a></li><li><a href="global.html#getUserByEmail">getUserByEmail</a></li><li><a href="global.html#getUserBySessionId">getUserBySessionId</a></li><li><a href="global.html#getUserDetailsInCourse">getUserDetailsInCourse</a></li><li><a href="global.html#getUsersInCourse">getUsersInCourse</a></li><li><a href="global.html#handleGoogleCallback">handleGoogleCallback</a></li><li><a href="global.html#insertUser">insertUser</a></li><li><a href="global.html#isUcsdEmail">isUcsdEmail</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#prisma">prisma</a></li><li><a href="global.html#resolveUserFromGooglePayload">resolveUserFromGooglePayload</a></li><li><a href="global.html#updateCurrentUserProfile">updateCurrentUserProfile</a></li><li><a href="global.html#updateUserProfile">updateUserProfile</a></li><li><a href="global.html#verifyIdToken">verifyIdToken</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addCourse">addCourse</a></li><li><a href="global.html#addEnrollment">addEnrollment</a></li><li><a href="global.html#authRoutes">authRoutes</a></li><li><a href="global.html#authService">authService</a></li><li><a href="global.html#buildGoogleLoginUrl">buildGoogleLoginUrl</a></li><li><a href="global.html#buildInsertUserInputFromGooglePayload">buildInsertUserInputFromGooglePayload</a></li><li><a href="global.html#buildProfileResponse">buildProfileResponse</a></li><li><a href="global.html#checkCourseJoinCode">checkCourseJoinCode</a></li><li><a href="global.html#courseRepo">courseRepo</a></li><li><a href="global.html#createSession">createSession</a></li><li><a href="global.html#createSessionForUser">createSessionForUser</a></li><li><a href="global.html#deleteCourse">deleteCourse</a></li><li><a href="global.html#deleteEnrollment">deleteEnrollment</a></li><li><a href="global.html#deleteSession">deleteSession</a></li><li><a href="global.html#enforceEmailRules">enforceEmailRules</a></li><li><a href="global.html#exchangeCodeForTokens">exchangeCodeForTokens</a></li><li><a href="global.html#fp">fp</a></li><li><a href="global.html#getAllCourse">getAllCourse</a></li><li><a href="global.html#getCourseById">getCourseById</a></li><li><a href="global.html#getCourseJoinCode">getCourseJoinCode</a></li><li><a href="global.html#getUserByEmail">getUserByEmail</a></li><li><a href="global.html#getUserBySessionId">getUserBySessionId</a></li><li><a href="global.html#getUserDetailsInCourse">getUserDetailsInCourse</a></li><li><a href="global.html#getUsersInCourse">getUsersInCourse</a></li><li><a href="global.html#handleGoogleCallback">handleGoogleCallback</a></li><li><a href="global.html#insertUser">insertUser</a></li><li><a href="global.html#isUcsdEmail">isUcsdEmail</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#prisma">prisma</a></li><li><a href="global.html#resolveUserFromGooglePayload">resolveUserFromGooglePayload</a></li><li><a href="global.html#updateCourse">updateCourse</a></li><li><a href="global.html#updateCurrentUserProfile">updateCurrentUserProfile</a></li><li><a href="global.html#updateEnrollmentRole">updateEnrollmentRole</a></li><li><a href="global.html#updateUserProfile">updateUserProfile</a></li><li><a href="global.html#verifyIdToken">verifyIdToken</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Nov 16 2025 19:23:11 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Nov 17 2025 01:13:03 GMT-0800 (Pacific Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

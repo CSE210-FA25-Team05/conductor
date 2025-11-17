@@ -17,6 +17,7 @@ function mapAndReply(e, reply) {
     return reply.badRequest('Invalid relation (foreign key)');
 
   // Fallback for other errors
+  console.error(e);
   reply.internalServerError();
 }
 

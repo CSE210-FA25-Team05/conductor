@@ -55,6 +55,11 @@ async function getUserDetailsInCourse(fastify, courseId, userId) {
   return user;
 }
 
+/** Add a new course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {Object} courseData - Data for the new course
+ * @returns {Promise<Object>} Created course object
+ */
 async function addCourse(fastify, courseData) {
   const {
     course_code,
@@ -82,6 +87,12 @@ async function addCourse(fastify, courseData) {
   return created;
 }
 
+/** Update course details.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course to update
+ * @param {Object} updateData - Data to update
+ * @returns {Promise<Object>} Updated course object
+ */
 async function updateCourse(fastify, courseId, updateData) {
   const updatedCourse = await fastify.db.courses.update({
     where: { id: courseId },
@@ -90,11 +101,81 @@ async function updateCourse(fastify, courseId, updateData) {
   return updatedCourse;
 }
 
+/** Delete a course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course to delete
+ * @returns {Promise<Object>} Deleted course object
+ */
 async function deleteCourse(fastify, courseId) {
   const deletedCourse = await fastify.db.courses.delete({
     where: { id: courseId },
   });
   return deletedCourse;
+}
+
+/** Get the join code for a course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course
+ * @returns {Promise<string>} Join code of the course
+ */
+async function getCourseJoinCode(fastify, courseId) {
+  const course = await fastify.db.courses.findUnique({
+    where: { id: courseId },
+    select: { join_code: true },
+  });
+  return course ? course.join_code : null;
+}
+
+/** Add an enrollment of a user into a course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course
+ * @param {number} userId - ID of the user
+ * @returns {Promise<Object>} Created enrollment object
+ */
+async function addEnrollment(fastify, courseId, userId) {
+  const enrollment = await fastify.db.enrollments.create({
+    data: {
+      course_id: courseId,
+      user_id: userId,
+    },
+  });
+  return enrollment;
+}
+
+/** Update the role of a user in a course enrollment.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course
+ * @param {number} userId - ID of the user
+ * @param {string} role - New role to assign
+ * @returns {Promise<Object>} Updated enrollment object
+ */
+async function updateEnrollmentRole(fastify, courseId, userId, role) {
+  const updatedEnrollment = await fastify.db.enrollments.updateMany({
+    where: {
+      course_id: courseId,
+      user_id: userId,
+    },
+    data: {
+      role: role,
+    },
+  });
+  return updatedEnrollment;
+}
+
+/** Delete an enrollment of a user from a course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course
+ * @param {number} userId - ID of the user
+ * @returns {Promise<Object>} Deleted enrollment object
+ */
+async function deleteEnrollment(fastify, courseId, userId) {
+  const deletedEnrollment = await fastify.db.enrollments.deleteMany({
+    where: {
+      course_id: courseId,
+      user_id: userId,
+    },
+  });
+  return deletedEnrollment;
 }
 
 module.exports = {
@@ -105,4 +186,8 @@ module.exports = {
   addCourse,
   updateCourse,
   deleteCourse,
+  getCourseJoinCode,
+  addEnrollment,
+  updateEnrollmentRole,
+  deleteEnrollment,
 };

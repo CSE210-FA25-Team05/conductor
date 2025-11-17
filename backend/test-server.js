@@ -177,6 +177,105 @@ async function getUserDetailsInCourseTest(courseId, userId) {
   }
 }
 
+// add user to course test
+async function addUserToCourseTest(courseId, userId) {
+  console.log('→ Adding user to course...');
+  const res = await fetch(`${BASE_URL}/courses/${courseId}/users`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify({ user_id: userId }),
+  });
+
+  console.log('Status:', res.status);
+  const text = await res.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = text;
+  }
+  console.log('Response:', data);
+
+  if (res.ok) {
+    console.log(`✅ User added to course successfully`);
+  } else {
+    console.error(`❌ Failed to add user to course`);
+  }
+} 
+
+// join course test
+async function joinCourseTest(courseId, userId, joinCode) {
+  console.log('→ Joining course...');
+  const res = await fetch(`${BASE_URL}/courses/${courseId}/join`, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify({ join_code: joinCode, user_id: userId }),
+  });
+  console.log('Status:', res.status);
+  const text = await res.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = text;
+  }
+  console.log('Response:', data);
+
+  if (res.ok) {
+    console.log(`✅ Joined course successfully`);
+  } else {
+    console.error(`❌ Failed to join course`);
+  }
+}
+
+async function updateRoleTest(courseId, userId, role) {
+  console.log('→ Updating user role in course...');
+  const res = await fetch(`${BASE_URL}/courses/${courseId}/users/${userId}`, {
+    method: 'PATCH',
+    headers: headers(),
+    body: JSON.stringify({ role }),
+  });
+  console.log('Status:', res.status);
+  const text = await res.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = text;
+  }
+  console.log('Response:', data);
+
+  if (res.ok) {
+    console.log(`✅ Updated user role in course successfully`);
+  } else {
+    console.error(`❌ Failed to update user role in course`);
+  }
+}
+
+async function removeUserFromCourseTest(courseId, userId) {
+  console.log('→ Removing user from course...');
+  const res = await fetch(`${BASE_URL}/courses/${courseId}/users/${userId}`, {
+    method: 'DELETE',
+    headers: headers(),
+    body: JSON.stringify({}),
+  });
+  console.log('Status:', res.status);
+  const text = await res.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = text;
+  }
+  console.log('Response:', data);
+
+  if (res.ok) {
+    console.log(`✅ Removed user from course successfully`);
+  } else {
+    console.error(`❌ Failed to remove user from course`);
+  }
+}
+
 // Run tests
 
 // addCourseTest();
@@ -192,3 +291,7 @@ async function getUserDetailsInCourseTest(courseId, userId) {
 // deleteCourse(16)
 // getAllUsersInCourseTest(14);
 // getUserDetailsInCourseTest(14, 8);
+// addUserToCourseTest(17, 16);
+// joinCourseTest(17, 16, 'ABCDEF');
+// updateRoleTest(17,16,'TA');
+// removeUserFromCourseTest(17,16);

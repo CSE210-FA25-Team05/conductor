@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: services/course/course.service.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,41 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: services/course/course.service.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
 
+/**
+ * course service module
+ * This module provides business logic for course-related operations.
+ */
 
-    <h3> </h3>
+const courseRepo = require('./course.repo');
 
+/**
+ * Check the join code for a course.
+ * @param {FastifyInstance} fastify - Fastify instance with Prisma client
+ * @param {number} courseId - ID of the course
+ * @param {string} joinCode - Join code to verify
+ * @returns {Promise&lt;boolean>} True if join code matches, false otherwise
+ */
+async function checkCourseJoinCode(fastify, courseId, joinCode) {
+  const storedJoinCode = await courseRepo.getCourseJoinCode(fastify, courseId);
+  return storedJoinCode === joinCode;
+}
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+module.exports = {
+  checkCourseJoinCode,
+};</code></pre>
+        </article>
+    </section>
 
 
 
