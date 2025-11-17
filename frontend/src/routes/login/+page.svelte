@@ -8,24 +8,8 @@ async function signin() {
     }
 }
 
-async function me() {
-    try {
-        const backendUrl = 'http://localhost:3001';
-
-        let checkAuth = await fetch(`${backendUrl}/me`, {
-            credentials: 'include'
-        });
-
-        console.log(await checkAuth.json())
-
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 </script>
 
-<button on:click={me}>CLICK FOR ME</button>
 <button on:click={signin} class="gsi-material-button"> 
     <div class="gsi-material-button-state"></div>
     <div class="gsi-material-button-content-wrapper">
