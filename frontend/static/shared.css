@@ -252,7 +252,7 @@ main {
   margin: var(--spacing-large);
 }
 article {
-  margin: var(--spacing-small);
+  margin: var(--spacing-medium) 0;
   padding: var(--spacing-medium);
   border-radius: 0.5em;
   line-height: 1.6;
@@ -287,7 +287,7 @@ article {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(/src/fonts/MaterialIcons-Regular.ttf) format('truetype');
+  src: url(/fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
 .material-icons {
   font-family: 'Material Icons';

@@ -9,6 +9,7 @@
     <nav>
         <li><a href="/">Home</a></li>
         <li><a href="/profile">Profile</a></li>
+        <li><a href="/atoms">Atoms</a></li>
         <li><LogoutButton/></li>
     </nav>
 {/if}
