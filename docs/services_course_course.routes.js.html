@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: services/course/course.routes.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: services/course/course.routes.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+const { mapAndReply } = require('../../utils/error-map');
+
+/**
+ * Course Routes Plugin
+ *
+ * /api/courses - get all courses
+ * /api/courses/:course_id - get specific course data
+ * /api/courses/:course_id/users - get all users in class
+ * /api/courses/:course_id/users/:user_id - get specific user details in context of course
+ */
+
+module.exports = async function courseRoutes(fastify, options) {
+    const courseRepo = require('./course.repo');
+    fastify.get('/courses', async (request, reply) => {
+        try {
+            const res = await courseRepo.getAllCourse(fastify);
+            return res;
+        } catch (error) {
+            console.error(error);
+            return mapAndReply(error, reply);
+        }
+    });
+    
+    fastify.get('/courses/:course_id', async (request, reply) => {
+        try {
+            const res = await courseRepo.getCourseById(fastify, parseInt(request.params.course_id, 10));
+            return res;
+        } catch (error) {
+            return mapAndReply(error, reply);
+        }
+    });
+
+    fastify.get('/courses/:course_id/users', async (request, reply) => {
+        try {
+            const res = await courseRepo.getUsersInCourse(fastify, parseInt(request.params.course_id, 10));
+            return res;
+        } catch (error) {
+            return mapAndReply(error, reply);
+        }
+    });
+    
+    fastify.get('/courses/:course_id/users/:user_id', async (request, reply) => {
+        try {
+            const res = await courseRepo.getUserDetailsInCourse(fastify, parseInt(request.params.course_id, 10), parseInt(request.params.user_id, 10));
+            return res;
+        } catch (error) {
+            return mapAndReply(error, reply);
+        }
+    });
+
+    fastify.post('/courses', async (request, reply) => {
+        try {
+            const course = await courseRepo.addCourse(fastify, request.body);
+            reply.code(201).header('Location', `/courses/${course.id}`).send();
+        } catch (error) {
+            return mapAndReply(error, reply);
+        }
+    });
+
+    fastify.patch('/courses/:course_id', async (request, reply) => {;
+        try {
+            await courseRepo.updateCourse(fastify, parseInt(request.params.course_id, 10), request.body);
+            reply.send();
+        } catch (error) {
+            return mapAndReply(error, reply);
+        }
+    });
+    fastify.delete('/courses/:course_id', async (request, reply) => {
+        try {
+            await courseRepo.deleteCourse(fastify, parseInt(request.params.course_id, 10));
+            reply.code(204).send();
+        } catch (error) {
+            return mapAndReply(error, reply);
+        }
+    });
+
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authRoutes">authRoutes</a></li><li><a href="global.html#authService">authService</a></li><li><a href="global.html#buildGoogleLoginUrl">buildGoogleLoginUrl</a></li><li><a href="global.html#createSession">createSession</a></li><li><a href="global.html#createSessionForUser">createSessionForUser</a></li><li><a href="global.html#deleteSession">deleteSession</a></li><li><a href="global.html#enforceEmailRules">enforceEmailRules</a></li><li><a href="global.html#exchangeCodeForTokens">exchangeCodeForTokens</a></li><li><a href="global.html#fp">fp</a></li><li><a href="global.html#getAllCourse">getAllCourse</a></li><li><a href="global.html#getCourseById">getCourseById</a></li><li><a href="global.html#getUserBySessionId">getUserBySessionId</a></li><li><a href="global.html#getUserDetailsInCourse">getUserDetailsInCourse</a></li><li><a href="global.html#getUsersInCourse">getUsersInCourse</a></li><li><a href="global.html#handleCodeExchangeFromBody">handleCodeExchangeFromBody</a></li><li><a href="global.html#handleGoogleCallback">handleGoogleCallback</a></li><li><a href="global.html#upsertUserFromGooglePayload">upsertUserFromGooglePayload</a></li><li><a href="global.html#users">users</a></li><li><a href="global.html#verifyIdToken">verifyIdToken</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Nov 16 2025 16:54:58 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

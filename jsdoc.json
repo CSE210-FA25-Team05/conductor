@@ -1,6 +1,7 @@
 {
   "source": {
-    "include": ["backend", "frontend"],
+    "include": ["backend/src", "frontend/src"],
+    "exclude": ["**/node_modules/**", "backend/prisma","**/@prisma/**"],
     "includePattern": ".+\\.jsx?$",
     "excludePattern": "(^|\\/|\\\\)_"
   },

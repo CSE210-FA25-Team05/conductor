@@ -5,6 +5,7 @@ require('dotenv').config();
 const fastify = require('fastify')({ logger: true });
 const cors = require('@fastify/cors');
 const cookie = require('@fastify/cookie');
+const sensible = require('@fastify/sensible');
 
 //ecosystem plugins
 fastify.register(cors, {
@@ -12,12 +13,21 @@ fastify.register(cors, {
   credentials: true,
 });
 fastify.register(cookie);
+fastify.register(sensible);
 
 //decorators
 fastify.register(require('./decorators/auth'));
 
 //services
 fastify.register(require('./services/auth'));
+
+//db connection
+fastify.register(require('./prisma'));
+
+//course routes
+fastify.register(require('./services/course/course.routes'), {
+  prefix: '/api',
+});
 
 //health check
 fastify.get('/api/health', async () => {
