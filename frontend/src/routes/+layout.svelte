@@ -1,16 +1,15 @@
 <script>
-    import LogoutButton from '$lib/components/LogoutButton.svelte';
-	let { children } = $props();
+    import NavMenu from '$lib/components/NavMenu.svelte'
+    let { children } = $props();
 </script>
 
 <svelte:head>
 </svelte:head>
 
-<nav>
-    <li> <a href="/">Home</a> </li>
-    <li> <LogoutButton/> </li>
-<script>
-</script>
-</nav>
+<aside>
+    <NavMenu/>
+</aside>
 
-{@render children()}
+<main>
+    {@render children()}
+</main>
