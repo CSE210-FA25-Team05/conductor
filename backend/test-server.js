@@ -201,7 +201,7 @@ async function addUserToCourseTest(courseId, userId) {
   } else {
     console.error(`❌ Failed to add user to course`);
   }
-} 
+}
 
 // join course test
 async function joinCourseTest(courseId, userId, joinCode) {

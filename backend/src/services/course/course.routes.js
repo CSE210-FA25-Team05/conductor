@@ -9,21 +9,21 @@ const { mapAndReply } = require('../../utils/error-map');
  * /api/courses/:course_id - get specific course data
  * /api/courses/:course_id/users - get all users in class
  * /api/courses/:course_id/users/:user_id - get specific user details in context of course
- * 
+ *
  * POST
  * /api/courses - create a new course
- * 
+ *
  * PATCH
  * /api/courses/:course_id - update course details
- * 
+ *
  * DELETE
  * /api/courses/:course_id - delete a course
- * 
+ *
  * POST
  * /api/courses/:course_id/users - enroll a user into a course
  * /api/courses/:course_id/join - join a course with join code
- * 
- * 
+ *
+ *
  */
 
 module.exports = async function courseRoutes(fastify, options) {
@@ -113,7 +113,7 @@ module.exports = async function courseRoutes(fastify, options) {
       await courseRepo.addEnrollment(
         fastify,
         parseInt(request.params.course_id, 10),
-        request.body.user_id,
+        request.body.user_id
       );
       reply.code(201).send();
     } catch (error) {
@@ -125,7 +125,7 @@ module.exports = async function courseRoutes(fastify, options) {
       const isValid = await courseService.checkCourseJoinCode(
         fastify,
         parseInt(request.params.course_id, 10),
-        request.body.join_code,
+        request.body.join_code
       );
       if (!isValid) {
         return reply.code(400).send({ error: 'Invalid join code' });
@@ -133,7 +133,7 @@ module.exports = async function courseRoutes(fastify, options) {
       await courseRepo.addEnrollment(
         fastify,
         parseInt(request.params.course_id, 10),
-        request.body.user_id,
+        request.body.user_id
       );
       reply.code(201).send();
     } catch (error) {
@@ -141,31 +141,36 @@ module.exports = async function courseRoutes(fastify, options) {
     }
   });
 
-  fastify.patch('/courses/:course_id/users/:user_id', async (request, reply) => {
-    try {
-      await courseRepo.updateEnrollmentRole(
-        fastify,
-        parseInt(request.params.course_id, 10),
-        parseInt(request.params.user_id, 10),
-        request.body.role,
-      );
-      reply.send();
-    } catch (error) {
-      return mapAndReply(error, reply);
+  fastify.patch(
+    '/courses/:course_id/users/:user_id',
+    async (request, reply) => {
+      try {
+        await courseRepo.updateEnrollmentRole(
+          fastify,
+          parseInt(request.params.course_id, 10),
+          parseInt(request.params.user_id, 10),
+          request.body.role
+        );
+        reply.send();
+      } catch (error) {
+        return mapAndReply(error, reply);
+      }
     }
-  });
+  );
 
-  fastify.delete('/courses/:course_id/users/:user_id', async (request, reply) => {
-    try {
-      await courseRepo.deleteEnrollment(
-        fastify,
-        parseInt(request.params.course_id, 10),
-        parseInt(request.params.user_id, 10),
-      );
-      reply.code(204).send();
-    } catch (error) {
-      return mapAndReply(error, reply);
+  fastify.delete(
+    '/courses/:course_id/users/:user_id',
+    async (request, reply) => {
+      try {
+        await courseRepo.deleteEnrollment(
+          fastify,
+          parseInt(request.params.course_id, 10),
+          parseInt(request.params.user_id, 10)
+        );
+        reply.code(204).send();
+      } catch (error) {
+        return mapAndReply(error, reply);
+      }
     }
-  });
-
+  );
 };
