@@ -45,7 +45,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      VITE_BACKEND_URL: http://localhost:3001
+      VITE_BACKEND_URL: http://backend:3001
     depends_on:
       - backend
 
