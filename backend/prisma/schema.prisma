@@ -53,6 +53,7 @@ model users {
   ta_teams          ta_teams[]       @relation("TaUser")
   attendances       attendances[]    @relation("Student")
   attendances_updated attendances[]  @relation("UpdatedBy")
+  sessions          sessions[]
 }
 
 model courses {
@@ -133,6 +134,21 @@ model lectures {
   attendances attendances[]
 
   @@map("lectures")
+  @@unique([ta_user_id, course_id, team_id])
+}
+
+model lectures {
+  id          Int       @id @default(autoincrement())
+  course_id   Int       @map("course_id")
+  lecture_date DateTime @map("lecture_date") @db.Date
+  code        String?   @db.VarChar
+  created_at  DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @map("updated_at") @db.Timestamp(6)
+  deleted_at DateTime? @map("deleted_at") @db.Timestamp(6)
+  courses     courses   @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  attendances attendances[]
+
+  @@map("lectures")
 }
 
 model attendances {
@@ -152,4 +168,14 @@ model attendances {
 
   @@unique([lecture_id, student_id])
   @@map("attendances")
+}
+
+model sessions {
+  id         Int       @id @default(autoincrement())
+  session_id String    @unique
+  user_id    Int
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  expires_at DateTime? @db.Timestamp(6)
+
+  users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }

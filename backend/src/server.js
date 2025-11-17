@@ -18,6 +18,9 @@ fastify.register(sensible);
 //decorators
 fastify.register(require('./decorators/auth'));
 
+//hooks
+fastify.register(require('./hooks/profile-complete'));
+
 //services
 fastify.register(require('./services/auth'));
 
