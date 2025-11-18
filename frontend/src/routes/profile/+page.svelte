@@ -27,7 +27,7 @@
 
     try {
       const response = await fetch('http://localhost:3001/me', {
-          credentials: 'include', 
+        credentials: 'include',
       });
 
       const data = await response.json();
@@ -78,7 +78,9 @@
           throw new Error('Unauthorized or Forbidden. Please log in again.');
         }
         const errData = await response.json();
-        throw new Error(errData.message || `HTTP error! status: ${response.status}`);
+        throw new Error(
+          errData.message || `HTTP error! status: ${response.status}`
+        );
       }
 
       const result = await response.json();
@@ -94,7 +96,6 @@
   onMount(() => {
     fetchProfile();
   });
-
 </script>
 
 <section>
@@ -119,7 +120,6 @@
         <label for="email">Email:</label>
         <input type="email" id="email" bind:value={email} required />
       </div>
-
 
       <button type="submit" disabled={loading}>
         {loading ? 'Saving...' : 'Save Profile'}

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import GoogleOauthButton from '$lib/components/GoogleOauthButton.svelte'
+  import GoogleOauthButton from '$lib/components/GoogleOauthButton.svelte';
 
   let errorMessage = $state('');
 
@@ -19,10 +19,10 @@
 </script>
 
 <div class="google-oauth-container">
-    <GoogleOauthButton />
-    {#if errorMessage != ''}
-        <p>Error: {errorMessage}</p>
-    {/if}
+  <GoogleOauthButton />
+  {#if errorMessage != ''}
+    <p>Error: {errorMessage}</p>
+  {/if}
 </div>
 
 <style>

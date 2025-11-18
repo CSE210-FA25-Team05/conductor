@@ -1,16 +1,16 @@
 <script>
-	let { children } = $props();
+  let { children } = $props();
 </script>
 
 <section class="centered">
-	{@render children()}
+  {@render children()}
 </section>
 
 <style>
-.centered {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
+  .centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
 </style>
