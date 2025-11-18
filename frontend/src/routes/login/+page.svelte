@@ -18,11 +18,15 @@
   });
 </script>
 
-<div class="google-oauth-container">
-  <GoogleOauthButton />
-  {#if errorMessage != ''}
-    <p>Error: {errorMessage}</p>
-  {/if}
+<div class="welcome-box">
+  <h1>Conductor</h1>
+  <p class='subtitle'>Sign In:</p>
+  <div class="google-oauth-container">
+    <GoogleOauthButton />
+    {#if errorMessage != ''}
+      <p>Error: {errorMessage}</p>
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -35,5 +39,25 @@
 
   .error-message {
     width: 100%;
+  }
+
+  .welcome-box {
+    border: 1px solid #ccc;
+    padding: 24px;
+    border-radius: 10px;
+    width: 300px;
+    margin: 40px auto;
+    background: #fafafa;
+    text-align: center;
+  }
+
+  .subtitle {
+    margin: 20px;
+    font-size: 0.9em;
+    color: #555;
+  }
+
+  h1 {
+    margin: 20px;
   }
 </style>
