@@ -18,6 +18,7 @@ fastify.register(require('./decorators/auth'));
 
 //services
 fastify.register(require('./services/auth'));
+fastify.register(require('./services/lectures'));
 
 //health check
 fastify.get('/api/health', async () => {
