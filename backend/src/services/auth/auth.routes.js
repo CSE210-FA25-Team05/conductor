@@ -81,9 +81,16 @@ async function routes(fastify) {
     {
       preHandler: fastify.authenticate,
     },
-    async (req) => {
+    async (req, reply) => {
       const user = req.user;
-      const body = req.body || {};
+      const body = req.body;
+
+      // Validate request body format
+      if (!body || typeof body !== 'object') {
+        return reply.code(400).send({
+          error: 'Invalid request body. Expected JSON object.',
+        });
+      }
 
       const updatedProfile = await authService.updateCurrentUserProfile(
         user,
