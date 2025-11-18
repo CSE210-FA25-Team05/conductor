@@ -17,6 +17,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --check \"**/*.{js,jsx,ts,tsx,css}\"",
+    "test:backend": "cd backend && npm test",
     "test": "cd backend && npm test"
   },
   "devDependencies": {
