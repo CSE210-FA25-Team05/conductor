@@ -10,7 +10,7 @@
 const prisma = require('../../prisma');
 
 /**
- * Insert or update a user record by email.
+ * Upsert (create or update) a user record by email.
  *
  * @param {object} params
  * @param {string} params.email
@@ -19,9 +19,9 @@ const prisma = require('../../prisma');
  * @param {Date} params.last_login
  * @returns {Promise<object>} user - Prisma users record
  */
-async function insertUser({ email, first_name, last_name, last_login }) {
+async function upsertUser({ email, first_name, last_name, last_login }) {
   if (!email) {
-    throw new Error('Email is required for insertUser');
+    throw new Error('Email is required for upsertUser');
   }
 
   const user = await prisma.users.upsert({
@@ -165,7 +165,7 @@ async function updateUserProfile(userId, profileData) {
 }
 
 module.exports = {
-  insertUser,
+  upsertUser,
   createSession,
   getUserByEmail,
   getUserBySessionId,
