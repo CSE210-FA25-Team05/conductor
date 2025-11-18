@@ -299,4 +299,5 @@ module.exports = {
   buildProfileResponse,
   updateCurrentUserProfile,
   enforceEmailRules,
+  oauthClient, // Exposed for unit testing
 };
