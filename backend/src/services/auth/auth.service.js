@@ -87,7 +87,9 @@ async function resolveUserFromGooglePayload(payload) {
     throw new Error('Google payload does not contain an email');
   }
 
-  enforceEmailRules(payload);
+  if (!payload.email_verified) {
+    throw new Error('Google email is not verified');
+  }
 
   // see if a user already exists
   const existing = await authRepo.getUserByEmail(email);
@@ -161,16 +163,6 @@ async function verifyIdToken(idToken) {
     throw new Error('Google ID token payload is empty');
   }
   return payload;
-}
-
-/**
- * Enforce email rules (verified + allowed domains).
- * @param {object} payload
- */
-function enforceEmailRules(payload) {
-  if (!payload.email_verified) {
-    throw new Error('Your Google email is not verified');
-  }
 }
 
 /**
@@ -298,6 +290,5 @@ module.exports = {
   logout,
   buildProfileResponse,
   updateCurrentUserProfile,
-  enforceEmailRules,
   oauthClient, // Exposed for unit testing
 };
