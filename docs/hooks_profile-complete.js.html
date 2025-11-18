@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: services/auth/index.js</title>
+    <title>JSDoc: Source: hooks/profile-complete.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: services/auth/index.js</h1>
+    <h1 class="page-title">Source: hooks/profile-complete.js</h1>
 
     
 
@@ -28,21 +28,58 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
+const fp = require('fastify-plugin');
+
 /**
- * Auth Service Plugin
+ * Profile completion guard.
  *
- * This plugin wires the auth routes into the Fastify instance.
+ * Runs after authentication (so req.user is populated) and enforces that
+ * users with incomplete profiles can only access a small set of allowed routes
+ * (OAuth endpoints, profile setup endpoints, etc.).
  */
+module.exports = fp(async function profileCompleteHook(fastify) {
+  fastify.addHook('preHandler', async (req, reply) => {
+    req.log.info(
+      { url: req.raw.url },
+      'profileCompleteHook: preHandler reached'
+    );
 
-const authRoutes = require('./auth.routes');
+    // If the request is unauthenticated, let other logic handle it (e.g., the auth decorator or route-level auth requirements)
+    const user = req.user;
+    if (!user) {
+      req.log.info('profileCompleteHook: no user, skipping');
+      return;
+    }
 
-module.exports = async function authServicePlugin(fastify) {
-  fastify.register(authRoutes);
-  fastify.get('/me', { preHandler: fastify.authenticate }, async (req) => {
-    // req.user is set in decorators/auth.js based on the sid cookie.
-    return req.user;
+    // Extract the path (ignore querystring)
+    const url = req.raw.url.split('?')[0];
+
+    // Whitelisted routes that incomplete-profile users are allowed to access
+    const allowedPaths = new Set([
+      '/auth/oauth/google',
+      '/auth/oauth/google/callback',
+      '/auth/logout',
+      '/me/profile', // retrieve/submit profile data
+      '/health', // health check endpoint (if your project has one)
+      '/', // root path (optional, keep/remove depending on use case)
+    ]);
+
+    if (allowedPaths.has(url)) {
+      req.log.info(`profileCompleteHook: allowed path: ${url}`);
+      return;
+    }
+
+    // Block all other requests if the user’s profile is incomplete
+    if (!user.is_profile_complete) {
+      req.log.warn(
+        `profileCompleteHook: blocked due to incomplete profile: ${user.email}`
+      );
+      return reply.code(403).send({
+        error: 'PROFILE_INCOMPLETE',
+      });
+    }
   });
-};
+});
 </code></pre>
         </article>
     </section>
