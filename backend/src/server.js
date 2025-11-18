@@ -5,6 +5,26 @@ require('dotenv').config();
 const fastify = require('fastify')({ logger: true });
 const cors = require('@fastify/cors');
 const cookie = require('@fastify/cookie');
+const swagger = require('@fastify/swagger');
+const swaggerUI = require('@fastify/swagger-ui');
+
+// Swagger Documentation
+fastify.register(swagger);
+fastify.register(swaggerUI, {
+  routePrefix: '/docs',
+  uiConfig: {
+    // docExpansion: 'full',
+    deepLinking: true
+  },
+  uiHooks: {
+    onRequest: function (request, reply, next) { next() },
+    preHandler: function (request, reply, next) { next() }
+  },
+  staticCSP: true,
+  transformStaticCSP: (header) => header,
+  transformSpecification: (swaggerObject, request, reply) => { return swaggerObject },
+  transformSpecificationClone: true
+});
 
 //ecosystem plugins
 fastify.register(cors, {
