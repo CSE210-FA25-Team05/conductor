@@ -3,101 +3,172 @@
 /**
  * Auth Repository
  *
- * This module represents the data access layer for authentication:
- * - User storage (currently in-memory; replace with Prisma/DB later)
- * - Session storage (sessionId → userId mapping)
+ * - User storage (Prisma / PostgreSQL)
+ * - Session storage
  */
 
-// In-memory stores (replace with DB when ready)
-const users = new Map(); // email -> user
-const sessions = new Map(); // sessionId -> { userId, createdAt, expiresAt }
+const prisma = require('../../prisma');
 
 /**
- * Upsert a user from a Google ID token payload.
- * @param {object} payload - Google ID token payload
- * @returns {Promise<object>} user - normalized user object
+ * Insert or update a user record by email.
+ *
+ * @param {object} params
+ * @param {string} params.email
+ * @param {string|null} params.first_name
+ * @param {string|null} params.last_name
+ * @param {Date} params.last_login
+ * @returns {Promise<object>} user - Prisma users record
  */
-async function upsertUserFromGooglePayload(payload) {
-  const email = payload.email.toLowerCase();
-  let existing = users.get(email);
-
-  if (!existing) {
-    // In a real DB, use an auto-increment ID or UUID primary key.
-    existing = {
-      id: payload.sub, // use Google sub as temporary user id
-      email,
-      name: payload.name || '',
-      createdAt: new Date(),
-    };
-    users.set(email, existing);
-  } else {
-    // Example of a light "update" when profile changes
-    if (payload.name && payload.name !== existing.name) {
-      existing.name = payload.name;
-    }
+async function insertUser({ email, first_name, last_name, last_login }) {
+  if (!email) {
+    throw new Error('Email is required for insertUser');
   }
 
-  return existing;
+  const user = await prisma.users.upsert({
+    where: { email },
+    create: {
+      email,
+      first_name,
+      last_name,
+      last_login,
+      // global_role and is_profile_complete use DB defaults
+    },
+    update: {
+      first_name,
+      last_name,
+      last_login,
+    },
+  });
+
+  return user;
 }
 
 /**
  * Create a new session for a given user id.
+ * Sessions are stored in the `sessions` table.
+ *
  * @param {string} sessionId - randomly generated UUID
- * @param {string} userId - id of the authenticated user
+ * @param {number} userId - id of the authenticated user (users.id)
  * @param {Date}   expiresAt - session expiration time
- * @returns {Promise<object>} session object
+ * @returns {Promise<object>} session record
  */
 async function createSession(sessionId, userId, expiresAt) {
-  const now = new Date();
-  const session = {
-    id: sessionId,
-    userId,
-    createdAt: now,
-    expiresAt,
-  };
-  sessions.set(sessionId, session);
+  const session = await prisma.sessions.create({
+    data: {
+      session_id: sessionId,
+      user_id: userId,
+      expires_at: expiresAt,
+    },
+  });
   return session;
 }
 
 /**
+ * Get a user by email.
+ *
+ * @param {string} email
+ * @returns {Promise<object|null>} user or null if not found
+ */
+async function getUserByEmail(email) {
+  if (!email) {
+    return null;
+  }
+
+  return await prisma.users.findUnique({
+    where: { email },
+  });
+}
+
+/**
  * Look up the current user by session id.
+ * Returns null if the session is missing, expired, or the user no longer exists.
+ *
  * @param {string} sessionId
  * @returns {Promise<object|null>} user or null if not found/expired
  */
 async function getUserBySessionId(sessionId) {
-  const session = sessions.get(sessionId);
+  const session = await prisma.sessions.findUnique({
+    where: { session_id: sessionId },
+  });
+
   if (!session) {
     return null;
   }
 
   const now = new Date();
-  if (session.expiresAt && session.expiresAt <= now) {
+  if (session.expires_at && session.expires_at <= now) {
     // Session expired, clean it up.
-    sessions.delete(sessionId);
+    await prisma.sessions.delete({
+      where: { session_id: sessionId },
+    });
     return null;
   }
 
-  // Resolve the user associated with this session.
-  for (const user of users.values()) {
-    if (user.id === session.userId) {
-      return user;
-    }
+  // Resolve the user associated with this session from the database.
+  const user = await prisma.users.findUnique({
+    where: { id: session.user_id },
+  });
+
+  if (!user) {
+    // If the user row was deleted, also clean up the session.
+    await prisma.sessions.delete({
+      where: { session_id: sessionId },
+    });
+    return null;
   }
-  return null;
+
+  return user;
 }
 
 /**
- * Optional helper to invalidate a session, e.g. on logout.
+ * Invalidate a session, e.g. on logout.
+ *
  * @param {string} sessionId
  * @returns {Promise<void>}
  */
 async function deleteSession(sessionId) {
-  sessions.delete(sessionId);
+  await prisma.sessions.deleteMany({
+    where: { session_id: sessionId },
+  });
+}
+
+/**
+ * Update user profile fields (partial update supported).
+ * Only updates fields that are explicitly provided (not undefined).
+ *
+ * @param {number} userId
+ * @param {object} profileData - { first_name?, last_name?, pronouns? }
+ * @returns {Promise<object>} updated user
+ */
+async function updateUserProfile(userId, profileData) {
+  const { first_name, last_name, pronouns } = profileData;
+
+  // Build update data object, only including fields that are explicitly provided
+  const updateData = {};
+
+  if (first_name !== undefined) {
+    updateData.first_name = first_name;
+  }
+  if (last_name !== undefined) {
+    updateData.last_name = last_name;
+  }
+  if (pronouns !== undefined) {
+    updateData.pronouns = pronouns;
+  }
+  updateData.is_profile_complete = true;
+  const user = await prisma.users.update({
+    where: { id: userId },
+    data: updateData,
+  });
+
+  return user;
 }
 
 module.exports = {
-  upsertUserFromGooglePayload,
+  insertUser,
   createSession,
+  getUserByEmail,
   getUserBySessionId,
   deleteSession,
+  updateUserProfile,
 };

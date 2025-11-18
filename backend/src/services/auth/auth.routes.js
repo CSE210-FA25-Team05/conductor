@@ -10,7 +10,11 @@
  * - POST /auth/oauth/google/add_token
  *       → Optional SPA/PKCE flow, same behavior as callback
  * - POST /auth/logout
- *       → Clear session cookie
+ *       → Delete session + clear session cookie
+ * - GET  /me/profile
+ *       → Get current user's profile
+ * - POST /me/profile
+ *       → Update current user's profile and mark it complete
  */
 
 const authService = require('./auth.service');
@@ -49,33 +53,49 @@ async function routes(fastify) {
     }
   });
 
-  // Optional: SPA/PKCE-style code exchange
-  fastify.post('/auth/oauth/google/add_token', async (req, reply) => {
-    try {
-      const sessionId = await authService.handleCodeExchangeFromBody(req);
-
-      reply.setCookie('sid', sessionId, {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
-        maxAge: 7 * 24 * 60 * 60,
-      });
-
-      reply.clearCookie('oauth_state', { path: '/' });
-      reply.send({ ok: true });
-    } catch (e) {
-      req.log.error(e);
-      reply.code(400).send({ error: e.message || 'Token exchange failed' });
-    }
-  });
-
-  // Logout: clear session cookie
+  // Logout: delete session + clear cookie
   fastify.post('/auth/logout', async (req, reply) => {
-    // We only clear the cookie here; you can also delete the session in repo if needed.
+    const sessionId = req.cookies?.sid;
+
+    await authService.logout(sessionId, req.log);
+
     reply.clearCookie('sid', { path: '/' });
     reply.send({ ok: true });
   });
+
+  // Get current user's profile
+  fastify.get(
+    '/me/profile',
+    {
+      preHandler: fastify.authenticate,
+    },
+    async (req) => {
+      const profile = authService.buildProfileResponse(req.user);
+      return profile;
+    }
+  );
+
+  // Set current user's profile
+  fastify.post(
+    '/me/profile',
+    {
+      preHandler: fastify.authenticate,
+    },
+    async (req) => {
+      const user = req.user;
+      const body = req.body || {};
+
+      const updatedProfile = await authService.updateCurrentUserProfile(
+        user,
+        body
+      );
+
+      return {
+        ok: true,
+        user: updatedProfile,
+      };
+    }
+  );
 }
 
 module.exports = routes;
