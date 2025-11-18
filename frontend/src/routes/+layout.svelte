@@ -1,6 +1,9 @@
 <script>
   import NavMenu from '$lib/components/NavMenu.svelte';
+  import { page } from '$app/stores';
+
   let { children } = $props();
+  const isNotLoginRoute = $derived($page.url.pathname !== '/login');
 </script>
 
 <svelte:head></svelte:head>
@@ -9,7 +12,7 @@
   <NavMenu />
 </aside>
 
-<main>
+<main class:with-sidebar={isNotLoginRoute}>
   {@render children()}
 </main>
 
@@ -23,7 +26,7 @@
 
   /* otherwise navbar on left */
   @media (min-width: 800px) {
-    main {
+    main.with-sidebar {
       margin-left: 180px;
     }
   }
