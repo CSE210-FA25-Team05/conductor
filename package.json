@@ -14,9 +14,9 @@
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
     "prepare": "if [ \"$CI\" != \"true\" ]; then husky install; fi",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "prettier --check \"**/*.{js,jsx,ts,tsx,css}\"",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.svelte",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.svelte --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,svelte}\"",
     "test": "cd backend && npm test"
   },
   "devDependencies": {
@@ -24,7 +24,9 @@
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-svelte": "^3.13.0",
     "husky": "^9.1.7",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "prettier-plugin-svelte": "^3.4.0"
   }
 }

@@ -6,6 +6,15 @@
     "jest": true
   },
   "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "overrides": [
+    {
+      "files": ["*.svelte"],
+      "parser": "svelte-eslint-parser",
+      "rules": {
+        "no-inner-declarations": "off"
+      }
+    }
+  ],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
