@@ -267,7 +267,24 @@ async function updateCurrentUserProfile(user, body) {
     profileData.pronouns = pronouns;
   }
 
-  const updated = await authRepo.updateUserProfile(user.id, profileData);
+  // Determine whether profile should be marked complete after this update.
+  const finalFirstName =
+    first_name !== undefined ? first_name : user.first_name || '';
+  const finalLastName =
+    last_name !== undefined ? last_name : user.last_name || '';
+
+  const hasFirstName =
+    typeof finalFirstName === 'string' && finalFirstName.trim().length > 0;
+  const hasLastName =
+    typeof finalLastName === 'string' && finalLastName.trim().length > 0;
+
+  const isProfileComplete = hasFirstName && hasLastName;
+
+  const updated = await authRepo.updateUserProfile(
+    user.id,
+    profileData,
+    isProfileComplete
+  );
 
   return buildProfileResponse(updated);
 }

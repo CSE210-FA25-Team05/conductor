@@ -138,9 +138,10 @@ async function deleteSession(sessionId) {
  *
  * @param {number} userId
  * @param {object} profileData - { first_name?, last_name?, pronouns? }
+ * @param {boolean|undefined} isProfileComplete - optional flag to explicitly set profile completion
  * @returns {Promise<object>} updated user
  */
-async function updateUserProfile(userId, profileData) {
+async function updateUserProfile(userId, profileData, isProfileComplete) {
   const { first_name, last_name, pronouns } = profileData;
 
   // Build update data object, only including fields that are explicitly provided
@@ -155,7 +156,9 @@ async function updateUserProfile(userId, profileData) {
   if (pronouns !== undefined) {
     updateData.pronouns = pronouns;
   }
-  updateData.is_profile_complete = true;
+  if (isProfileComplete !== undefined) {
+    updateData.is_profile_complete = isProfileComplete;
+  }
   const user = await prisma.users.update({
     where: { id: userId },
     data: updateData,
