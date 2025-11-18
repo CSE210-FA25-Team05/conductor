@@ -12,3 +12,22 @@
 <main>
   {@render children()}
 </main>
+
+<style>
+  @media (max-width: 799px) {
+    main {
+      margin-left: 0;
+      padding-top: 10px;
+    }
+  }
+
+  /* otherwise navbar on left */
+  @media (min-width: 800px) {
+    main {
+      margin-left: 180px;
+    }
+  }
+  main {
+    padding: 20px;
+  }
+</style>
