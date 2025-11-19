@@ -1,8 +1,12 @@
 {
   "source": {
-    "include": ["backend", "frontend"],
-    "exclude": ["node_modules", "backend/node_modules", "frontend/node_modules", "docs"],
-    "includePattern": ".+\\.jsx?$",
+    "include": ["./"],
+    "exclude": [
+      "docs",
+      "node_modules",
+      "specs"
+    ],
+    "includePattern": ".+\\.(js|jsx|mjs|cjs|ts|tsx)$",
     "excludePattern": "(^|\\/|\\\\)_"
   },
   "opts": {

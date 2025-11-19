@@ -1,3 +1,5 @@
+cd "$(git rev-parse --show-toplevel)"
+
 echo "Generating JSDoc and fixing formatting and style..."
 npx jsdoc -c jsdoc.json
 npm run lint:fix
