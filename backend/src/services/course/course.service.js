@@ -14,8 +14,8 @@ const courseRepo = require('./course.repo');
  * @param {string} joinCode - Join code to verify
  * @returns {Promise<boolean>} True if join code matches, false otherwise
  */
-async function checkCourseJoinCode(fastify, courseId, joinCode) {
-  const storedJoinCode = await courseRepo.getCourseJoinCode(fastify, courseId);
+async function checkCourseJoinCode(db, courseId, joinCode) {
+  const storedJoinCode = await courseRepo.getCourseJoinCode(db, courseId);
   return storedJoinCode === joinCode;
 }
 
