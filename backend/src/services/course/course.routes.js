@@ -31,7 +31,7 @@ module.exports = async function courseRoutes(fastify, options) {
   const courseService = require('./course.service');
   fastify.get('/courses', async (request, reply) => {
     try {
-      const res = await courseRepo.getAllCourse(fastify);
+      const res = await courseRepo.getAllCourse(fastify.db);
       return res;
     } catch (error) {
       console.error(error);
@@ -42,7 +42,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.get('/courses/:course_id', async (request, reply) => {
     try {
       const res = await courseRepo.getCourseById(
-        fastify,
+        fastify.db,
         parseInt(request.params.course_id, 10)
       );
       return res;
@@ -54,7 +54,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.get('/courses/:course_id/users', async (request, reply) => {
     try {
       const res = await courseRepo.getUsersInCourse(
-        fastify,
+        fastify.db,
         parseInt(request.params.course_id, 10)
       );
       return res;
@@ -66,7 +66,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.get('/courses/:course_id/users/:user_id', async (request, reply) => {
     try {
       const res = await courseRepo.getUserDetailsInCourse(
-        fastify,
+        fastify.db,
         parseInt(request.params.course_id, 10),
         parseInt(request.params.user_id, 10)
       );
@@ -78,7 +78,7 @@ module.exports = async function courseRoutes(fastify, options) {
 
   fastify.post('/courses', async (request, reply) => {
     try {
-      const course = await courseRepo.addCourse(fastify, request.body);
+      const course = await courseRepo.addCourse(fastify.db, request.body);
       reply.code(201).header('Location', `/courses/${course.id}`).send();
     } catch (error) {
       return mapAndReply(error, reply);
@@ -88,7 +88,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.patch('/courses/:course_id', async (request, reply) => {
     try {
       await courseRepo.updateCourse(
-        fastify,
+        fastify.db,
         parseInt(request.params.course_id, 10),
         request.body
       );
@@ -100,7 +100,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.delete('/courses/:course_id', async (request, reply) => {
     try {
       await courseRepo.deleteCourse(
-        fastify,
+        fastify.db,
         parseInt(request.params.course_id, 10)
       );
       reply.code(204).send();
@@ -111,7 +111,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.post('/courses/:course_id/users', async (request, reply) => {
     try {
       await courseRepo.addEnrollment(
-        fastify,
+        fastify.db,
         parseInt(request.params.course_id, 10),
         request.body.user_id
       );
@@ -123,7 +123,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.post('/courses/:course_id/join', async (request, reply) => {
     try {
       const isValid = await courseService.checkCourseJoinCode(
-        fastify,
+        fastify.db,
         parseInt(request.params.course_id, 10),
         request.body.join_code
       );
@@ -131,7 +131,7 @@ module.exports = async function courseRoutes(fastify, options) {
         return reply.code(400).send({ error: 'Invalid join code' });
       }
       await courseRepo.addEnrollment(
-        fastify,
+        fastify.db,
         parseInt(request.params.course_id, 10),
         request.body.user_id
       );
@@ -146,7 +146,7 @@ module.exports = async function courseRoutes(fastify, options) {
     async (request, reply) => {
       try {
         await courseRepo.updateEnrollmentRole(
-          fastify,
+          fastify.db,
           parseInt(request.params.course_id, 10),
           parseInt(request.params.user_id, 10),
           request.body.role
@@ -163,7 +163,7 @@ module.exports = async function courseRoutes(fastify, options) {
     async (request, reply) => {
       try {
         await courseRepo.deleteEnrollment(
-          fastify,
+          fastify.db,
           parseInt(request.params.course_id, 10),
           parseInt(request.params.user_id, 10)
         );

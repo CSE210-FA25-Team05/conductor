@@ -441,7 +441,7 @@ This module provides business logic for course-related operations.
     
 
     
-    <h4 class="name" id="addCourse"><span class="type-signature">(async) </span>addCourse<span class="signature">(fastify, courseData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="addCourse"><span class="type-signature">(async) </span>addCourse<span class="signature">(db, courseData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -485,13 +485,13 @@ This module provides business logic for course-related operations.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -501,7 +501,7 @@ This module provides business logic for course-related operations.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -623,7 +623,7 @@ This module provides business logic for course-related operations.
     
 
     
-    <h4 class="name" id="addEnrollment"><span class="type-signature">(async) </span>addEnrollment<span class="signature">(fastify, courseId, userId)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="addEnrollment"><span class="type-signature">(async) </span>addEnrollment<span class="signature">(db, courseId, userId)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -667,13 +667,13 @@ This module provides business logic for course-related operations.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -683,7 +683,7 @@ This module provides business logic for course-related operations.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -1871,7 +1871,7 @@ Sessions are stored in the `sessions` table.
     
 
     
-    <h4 class="name" id="deleteCourse"><span class="type-signature">(async) </span>deleteCourse<span class="signature">(fastify, courseId)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="deleteCourse"><span class="type-signature">(async) </span>deleteCourse<span class="signature">(db, courseId)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -1915,13 +1915,13 @@ Sessions are stored in the `sessions` table.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBlient</span>
 
 
             
@@ -1931,7 +1931,7 @@ Sessions are stored in the `sessions` table.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -2053,7 +2053,7 @@ Sessions are stored in the `sessions` table.
     
 
     
-    <h4 class="name" id="deleteEnrollment"><span class="type-signature">(async) </span>deleteEnrollment<span class="signature">(fastify, courseId, userId)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="deleteEnrollment"><span class="type-signature">(async) </span>deleteEnrollment<span class="signature">(db, courseId, userId)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -2097,13 +2097,13 @@ Sessions are stored in the `sessions` table.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -2113,7 +2113,7 @@ Sessions are stored in the `sessions` table.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -2709,7 +2709,7 @@ Sessions are stored in the `sessions` table.
     
 
     
-    <h4 class="name" id="getAllCourse"><span class="type-signature">(async) </span>getAllCourse<span class="signature">(fastify)</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span></h4>
+    <h4 class="name" id="getAllCourse"><span class="type-signature">(async) </span>getAllCourse<span class="signature">(db)</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span></h4>
     
 
     
@@ -2753,13 +2753,13 @@ Sessions are stored in the `sessions` table.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -2769,7 +2769,7 @@ Sessions are stored in the `sessions` table.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -2868,7 +2868,7 @@ Sessions are stored in the `sessions` table.
     
 
     
-    <h4 class="name" id="getCourseById"><span class="type-signature">(async) </span>getCourseById<span class="signature">(fastify)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="getCourseById"><span class="type-signature">(async) </span>getCourseById<span class="signature">(db)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -2912,13 +2912,13 @@ Sessions are stored in the `sessions` table.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -2928,7 +2928,7 @@ Sessions are stored in the `sessions` table.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -3027,7 +3027,7 @@ Sessions are stored in the `sessions` table.
     
 
     
-    <h4 class="name" id="getCourseJoinCode"><span class="type-signature">(async) </span>getCourseJoinCode<span class="signature">(fastify, courseId)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+    <h4 class="name" id="getCourseJoinCode"><span class="type-signature">(async) </span>getCourseJoinCode<span class="signature">(db, courseId)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
     
 
     
@@ -3071,13 +3071,13 @@ Sessions are stored in the `sessions` table.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -3087,7 +3087,7 @@ Sessions are stored in the `sessions` table.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -3528,7 +3528,7 @@ Returns null if the session is missing, expired, or the user no longer exists.
     
 
     
-    <h4 class="name" id="getUserDetailsInCourse"><span class="type-signature">(async) </span>getUserDetailsInCourse<span class="signature">(fastify)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="getUserDetailsInCourse"><span class="type-signature">(async) </span>getUserDetailsInCourse<span class="signature">(db)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -3572,13 +3572,13 @@ Returns null if the session is missing, expired, or the user no longer exists.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -3588,7 +3588,7 @@ Returns null if the session is missing, expired, or the user no longer exists.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -3687,7 +3687,7 @@ Returns null if the session is missing, expired, or the user no longer exists.
     
 
     
-    <h4 class="name" id="getUsersInCourse"><span class="type-signature">(async) </span>getUsersInCourse<span class="signature">(fastify)</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span></h4>
+    <h4 class="name" id="getUsersInCourse"><span class="type-signature">(async) </span>getUsersInCourse<span class="signature">(db)</span><span class="type-signature"> &rarr; {Promise.&lt;Array>}</span></h4>
     
 
     
@@ -3731,13 +3731,13 @@ Returns null if the session is missing, expired, or the user no longer exists.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -3747,7 +3747,7 @@ Returns null if the session is missing, expired, or the user no longer exists.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -4774,7 +4774,7 @@ Route is responsible for clearing the cookie.
     
 
     
-    <h4 class="name" id="updateCourse"><span class="type-signature">(async) </span>updateCourse<span class="signature">(fastify, courseId, updateData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="updateCourse"><span class="type-signature">(async) </span>updateCourse<span class="signature">(db, courseId, updateData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -4818,13 +4818,13 @@ Route is responsible for clearing the cookie.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -4834,7 +4834,7 @@ Route is responsible for clearing the cookie.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -5162,7 +5162,7 @@ Only fields explicitly provided in the request body will be updated.
     
 
     
-    <h4 class="name" id="updateEnrollmentRole"><span class="type-signature">(async) </span>updateEnrollmentRole<span class="signature">(fastify, courseId, userId, role)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    <h4 class="name" id="updateEnrollmentRole"><span class="type-signature">(async) </span>updateEnrollmentRole<span class="signature">(db, courseId, userId, role)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -5206,13 +5206,13 @@ Only fields explicitly provided in the request body will be updated.
 
         <tr>
             
-                <td class="name"><code>fastify</code></td>
+                <td class="name"><code>db</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">FastifyInstance</span>
+<span class="param-type">PrismaDBClient</span>
 
 
             
@@ -5222,7 +5222,7 @@ Only fields explicitly provided in the request body will be updated.
 
             
 
-            <td class="description last">Fastify instance with Prisma client</td>
+            <td class="description last">Prisma DB client instance</td>
         </tr>
 
     
@@ -5748,7 +5748,7 @@ Only updates fields that are explicitly provided (not undefined).
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Nov 17 2025 01:13:13 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Tue Nov 18 2025 20:26:52 GMT-0800 (Pacific Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
