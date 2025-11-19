@@ -1,6 +1,6 @@
 'use strict';
 
-const { join } = require("@prisma/client/runtime/library");
+const { join } = require('@prisma/client/runtime/library');
 
 /**
  * Course Repository
@@ -81,18 +81,16 @@ async function addCourse(db, courseData) {
   }
 
   // Ensure a unique join code exists on courseData
-  if (join_code == null && !(courseData && courseData.join_code)) {
+  if (join_code == null) {
     // Generate a random 6-character join code
     let uniqueCode;
     do {
       uniqueCode = await generateJoinCode();
-      const existingCourse = await db.courses.findUnique({
+    } while (
+      await db.courses.findUnique({
         where: { join_code: uniqueCode },
-      });
-      if (!existingCourse) {
-        break;
-      }
-    } while (true);
+      })
+    );
     courseData = Object.assign({}, courseData, { join_code: uniqueCode });
   }
 
@@ -203,13 +201,13 @@ async function deleteEnrollment(db, courseId, userId) {
 
 async function generateJoinCode() {
   const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let generatedCode = '';
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      generatedCode += characters.charAt(randomIndex);
-    }
-    return generatedCode;
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let generatedCode = '';
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    generatedCode += characters.charAt(randomIndex);
+  }
+  return generatedCode;
 }
 
 module.exports = {
