@@ -8,7 +8,7 @@
 
 /**
  * Get all courses.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @returns {Promise<Array>} List of all courses
  */
 async function getAllCourse(db) {
@@ -18,7 +18,7 @@ async function getAllCourse(db) {
 
 /**
  * Get a course by ID.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @returns {Promise<Object>} Course object
  */
 async function getCourseById(db, courseId) {
@@ -30,7 +30,7 @@ async function getCourseById(db, courseId) {
 
 /**
  * Get users in a course.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @returns {Promise<Array>} List of users in the course
  */
 async function getUsersInCourse(db, courseId) {
@@ -42,7 +42,7 @@ async function getUsersInCourse(db, courseId) {
 
 /**
  * Get user details in a course.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @returns {Promise<Object>} User object
  */
 async function getUserDetailsInCourse(db, courseId, userId) {
@@ -56,7 +56,7 @@ async function getUserDetailsInCourse(db, courseId, userId) {
 }
 
 /** Add a new course.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @param {Object} courseData - Data for the new course
  * @returns {Promise<Object>} Created course object
  */
@@ -88,7 +88,7 @@ async function addCourse(db, courseData) {
 }
 
 /** Update course details.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @param {number} courseId - ID of the course to update
  * @param {Object} updateData - Data to update
  * @returns {Promise<Object>} Updated course object
@@ -102,7 +102,7 @@ async function updateCourse(db, courseId, updateData) {
 }
 
 /** Delete a course.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBlient} db - Prisma DB client instance
  * @param {number} courseId - ID of the course to delete
  * @returns {Promise<Object>} Deleted course object
  */
@@ -114,7 +114,7 @@ async function deleteCourse(db, courseId) {
 }
 
 /** Get the join code for a course.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @param {number} courseId - ID of the course
  * @returns {Promise<string>} Join code of the course
  */
@@ -127,7 +127,7 @@ async function getCourseJoinCode(db, courseId) {
 }
 
 /** Add an enrollment of a user into a course.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @param {number} courseId - ID of the course
  * @param {number} userId - ID of the user
  * @returns {Promise<Object>} Created enrollment object
@@ -143,7 +143,7 @@ async function addEnrollment(db, courseId, userId) {
 }
 
 /** Update the role of a user in a course enrollment.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @param {number} courseId - ID of the course
  * @param {number} userId - ID of the user
  * @param {string} role - New role to assign
@@ -163,7 +163,7 @@ async function updateEnrollmentRole(db, courseId, userId, role) {
 }
 
 /** Delete an enrollment of a user from a course.
- * @param {Prisma DB Client} db - Prisma DB client instance
+ * @param {PrismaDBClient} db - Prisma DB client instance
  * @param {number} courseId - ID of the course
  * @param {number} userId - ID of the user
  * @returns {Promise<Object>} Deleted enrollment object
