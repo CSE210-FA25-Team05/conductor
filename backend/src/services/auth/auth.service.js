@@ -73,7 +73,7 @@ function buildGoogleLoginUrl(reply) {
  *
  * - UCSD email:
  *    - existing user → return it
- *    - no user       → auto-create via insertUser()
+ *    - no user       → auto-create via upsertUser()
  * - non-UCSD email:
  *    - existing user → return it (allowed to log in)
  *    - no user       → throw error (must be added by professor first)
@@ -87,7 +87,9 @@ async function resolveUserFromGooglePayload(payload) {
     throw new Error('Google payload does not contain an email');
   }
 
-  enforceEmailRules(payload);
+  if (!payload.email_verified) {
+    throw new Error('Google email is not verified');
+  }
 
   // see if a user already exists
   const existing = await authRepo.getUserByEmail(email);
@@ -98,9 +100,9 @@ async function resolveUserFromGooglePayload(payload) {
 
   // decide by UCSD vs non-UCSD
   if (isUcsdEmail(email)) {
-    // ucsd email → auto-create if needed
-    return await authRepo.insertUser(
-      buildInsertUserInputFromGooglePayload(payload)
+    // ucsd email → auto-create if needed (upsert keeps us race-safe)
+    return await authRepo.upsertUser(
+      buildUpsertUserInputFromGooglePayload(payload)
     );
   }
 
@@ -111,12 +113,12 @@ async function resolveUserFromGooglePayload(payload) {
 }
 
 /**
- * Build the input object for insertUser() from a Google ID token payload.
+ * Build the input object for upsertUser() from a Google ID token payload.
  *
  * @param {object} payload - Google ID token payload
- * @returns {object} insertUser params
+ * @returns {object} upsertUser params
  */
-function buildInsertUserInputFromGooglePayload(payload) {
+function buildUpsertUserInputFromGooglePayload(payload) {
   const email = (payload.email || '').toLowerCase();
   if (!email) {
     throw new Error('Google payload does not contain an email');
@@ -161,16 +163,6 @@ async function verifyIdToken(idToken) {
     throw new Error('Google ID token payload is empty');
   }
   return payload;
-}
-
-/**
- * Enforce email rules (verified + allowed domains).
- * @param {object} payload
- */
-function enforceEmailRules(payload) {
-  if (!payload.email_verified) {
-    throw new Error('Your Google email is not verified');
-  }
 }
 
 /**
@@ -275,7 +267,24 @@ async function updateCurrentUserProfile(user, body) {
     profileData.pronouns = pronouns;
   }
 
-  const updated = await authRepo.updateUserProfile(user.id, profileData);
+  // Determine whether profile should be marked complete after this update.
+  const finalFirstName =
+    first_name !== undefined ? first_name : user.first_name || '';
+  const finalLastName =
+    last_name !== undefined ? last_name : user.last_name || '';
+
+  const hasFirstName =
+    typeof finalFirstName === 'string' && finalFirstName.trim().length > 0;
+  const hasLastName =
+    typeof finalLastName === 'string' && finalLastName.trim().length > 0;
+
+  const isProfileComplete = hasFirstName && hasLastName;
+
+  const updated = await authRepo.updateUserProfile(
+    user.id,
+    profileData,
+    isProfileComplete
+  );
 
   return buildProfileResponse(updated);
 }
@@ -298,5 +307,5 @@ module.exports = {
   logout,
   buildProfileResponse,
   updateCurrentUserProfile,
-  enforceEmailRules,
+  oauthClient, // Exposed for unit testing
 };
