@@ -50,3 +50,6 @@ There exist some basic checks for security in the unit tests, but defenses for h
 
 ### Integration Tests
 Similar to end-to-end though easier to implement. We will likely start this once more app functionality is achieved. 
+
+## Feature 3 - AWS Deployment
+We plan to use AWS to deploy a database that is always up later on, instead of running on local. Will likely begin work on this next sprint (Sprint 3)
