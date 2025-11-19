@@ -111,4 +111,3 @@ docker compose down -v
 * **Node.js:** v22.12.0
 * **npm:** 8.19.4
 * **PostgreSQL:** 16
-* **Docker Compose:** v2+
