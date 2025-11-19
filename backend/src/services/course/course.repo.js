@@ -1,5 +1,7 @@
 'use strict';
 
+const { join } = require("@prisma/client/runtime/library");
+
 /**
  * Course Repository
  *
@@ -68,12 +70,32 @@ async function addCourse(db, courseData) {
     section = null,
     start_date = null,
     end_date = null,
+    join_code = null,
   } = courseData || {};
+
+  // Validate required fields first
   if (!course_code || !course_name || !term) {
     const e = new Error('course_code, course_name, term are required');
     e.code = 'BAD_REQUEST';
     throw e;
   }
+
+  // Ensure a unique join code exists on courseData
+  if (join_code == null && !(courseData && courseData.join_code)) {
+    // Generate a random 6-character join code
+    let uniqueCode;
+    do {
+      uniqueCode = await generateJoinCode();
+      const existingCourse = await db.courses.findUnique({
+        where: { join_code: uniqueCode },
+      });
+      if (!existingCourse) {
+        break;
+      }
+    } while (true);
+    courseData = Object.assign({}, courseData, { join_code: uniqueCode });
+  }
+
   const created = await db.courses.create({
     data: {
       course_code,
@@ -82,6 +104,7 @@ async function addCourse(db, courseData) {
       section,
       start_date: start_date ? new Date(start_date) : null,
       end_date: end_date ? new Date(end_date) : null,
+      join_code: (courseData && courseData.join_code) || join_code || null,
     },
   });
   return created;
@@ -176,6 +199,17 @@ async function deleteEnrollment(db, courseId, userId) {
     },
   });
   return deletedEnrollment;
+}
+
+async function generateJoinCode() {
+  const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let generatedCode = '';
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      generatedCode += characters.charAt(randomIndex);
+    }
+    return generatedCode;
 }
 
 module.exports = {
