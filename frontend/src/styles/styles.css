@@ -4,6 +4,8 @@
 * */
 
 :root {
+  view-transition-name: root;
+
   --color-bg: #fffff;
   --color-primary-100: lightblue;
   --color-primary-600: darkblue;
@@ -37,6 +39,10 @@
   --spacing-medium: 1em;
   --spacing-small: 0.5em;
   --spacing-extra-small: 0.25em;
+}
+
+@view-transition {
+  navigation: auto;
 }
 
 @media (max-width: 576px) {
@@ -286,6 +292,8 @@ article {
   font-weight: 400;
   src: url(/src/fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
+
+i,
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -307,4 +315,20 @@ article {
   -moz-osx-font-smoothing: grayscale;
   /* Support for IE. */
   font-feature-settings: 'liga';
+}
+
+.middle {
+  position: fixed;
+  inset: 0px;
+  width: 12rem;
+  height: 5rem;
+  max-width: 100vw;
+  max-height: 100dvh;
+  margin: auto;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
