@@ -70,6 +70,7 @@ async function main() {
       section: 'A00',
       start_date: new Date('2025-09-23'),
       end_date: new Date('2025-12-12'),
+      join_code: 'ABCDEF',
     },
   });
 
@@ -81,6 +82,7 @@ async function main() {
       section: 'A00',
       start_date: new Date('2025-09-23'),
       end_date: new Date('2025-12-12'),
+      join_code: 'HIJKLM',
     },
   });
 

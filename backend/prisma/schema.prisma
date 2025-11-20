@@ -67,6 +67,7 @@ model courses {
   created_at  DateTime?     @default(now()) @map("created_at") @db.Timestamp(6)
   updated_at  DateTime?     @default(now()) @map("updated_at") @db.Timestamp(6)
   deleted_at DateTime?     @map("deleted_at") @db.Timestamp(6)
+  join_code  String      @unique @map("join_code") @db.VarChar
   teams       teams[]
   enrollments enrollments[]
   ta_teams    ta_teams[]
