@@ -18,56 +18,98 @@
  */
 
 const authService = require('./auth.service');
+const authSchemas = require('./auth.schemas');
 
 async function routes(fastify) {
   // Redirect user to Google's consent screen
-  fastify.get('/auth/oauth/google', async (req, reply) => {
-    const url = authService.buildGoogleLoginUrl(reply);
-    req.log.info({ authUrl: url }, 'OAuth authorize URL');
-    return reply.redirect(url);
-  });
+  fastify.get(
+    '/auth/oauth/google',
+    {
+      schema: {
+        description: 'Initiate Google OAuth2 login flow',
+        tags: ['Auth'],
+      },
+    },
+    async (req, reply) => {
+      const url = authService.buildGoogleLoginUrl(reply);
+      req.log.info({ authUrl: url }, 'OAuth authorize URL');
+      return reply.redirect(url);
+    }
+  );
 
   // Google redirect target (server-side exchange with query params)
-  fastify.get('/auth/oauth/google/callback', async (req, reply) => {
-    try {
-      const sessionId = await authService.handleGoogleCallback(req);
+  fastify.get(
+    '/auth/oauth/google/callback',
+    {
+      schema: {
+        description: 'Callback used by Google to complete OAuth2 login flow',
+        tags: ['Auth'],
+      },
+    },
+    async (req, reply) => {
+      try {
+        const sessionId = await authService.handleGoogleCallback(req);
 
-      // Set sid cookie (sessionId → userId is stored in auth.repo)
-      reply.setCookie('sid', sessionId, {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
-        maxAge: 7 * 24 * 60 * 60, // 7 days
-      });
+        // Set sid cookie (sessionId → userId is stored in auth.repo)
+        reply.setCookie('sid', sessionId, {
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV === 'production',
+          path: '/',
+          maxAge: 7 * 24 * 60 * 60, // 7 days
+        });
 
-      reply.clearCookie('oauth_state', { path: '/' });
-      reply.redirect(process.env.FRONTEND_URL || 'http://localhost:3000/');
-    } catch (e) {
-      req.log.error(e);
-      reply.redirect(
-        `${process.env.FRONTEND_URL || 'http://localhost:3000/index.html'}?error=${encodeURIComponent(
-          e.message
-        )}`
-      );
+        reply.clearCookie('oauth_state', { path: '/' });
+        reply.redirect(process.env.FRONTEND_URL || 'http://localhost:3000/');
+      } catch (e) {
+        req.log.error(e);
+        reply.redirect(
+          `${process.env.FRONTEND_URL || 'http://localhost:3000/index.html'}?error=${encodeURIComponent(
+            e.message
+          )}`
+        );
+      }
     }
-  });
+  );
 
   // Logout: delete session + clear cookie
-  fastify.post('/auth/logout', async (req, reply) => {
-    const sessionId = req.cookies?.sid;
+  fastify.post(
+    '/auth/logout',
+    {
+      schema: {
+        description: 'Logout user',
+        tags: ['Auth'],
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              ok: { type: 'boolean' },
+            },
+          },
+        },
+      },
+    },
+    async (req, reply) => {
+      const sessionId = req.cookies?.sid;
 
-    await authService.logout(sessionId, req.log);
+      await authService.logout(sessionId, req.log);
 
-    reply.clearCookie('sid', { path: '/' });
-    reply.send({ ok: true });
-  });
+      reply.clearCookie('sid', { path: '/' });
+      reply.send({ ok: true });
+    }
+  );
 
   // Get current user's profile
   fastify.get(
     '/me/profile',
     {
       preHandler: fastify.authenticate,
+      schema: {
+        tags: ['Profile'],
+        response: {
+          200: authSchemas.UserProfile,
+        },
+      },
     },
     async (req) => {
       const profile = authService.buildProfileResponse(req.user);
@@ -80,6 +122,19 @@ async function routes(fastify) {
     '/me/profile',
     {
       preHandler: fastify.authenticate,
+      schema: {
+        tags: ['Profile'],
+        body: authSchemas.UpdateProfileParams,
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              ok: { type: 'boolean' },
+              user: authSchemas.UserProfile,
+            },
+          },
+        },
+      },
     },
     async (req, reply) => {
       const user = req.user;
@@ -101,6 +156,23 @@ async function routes(fastify) {
         ok: true,
         user: updatedProfile,
       };
+    }
+  );
+
+  fastify.get(
+    '/me',
+    {
+      preHandler: fastify.authenticate,
+      schema: {
+        tags: ['Profile'],
+        response: {
+          200: authSchemas.UserProfile,
+        },
+      },
+    },
+    async (req) => {
+      // req.user is set in decorators/auth.js based on the sid cookie.
+      return req.user;
     }
   );
 }
