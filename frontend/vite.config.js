@@ -27,4 +27,8 @@ export default defineConfig({
     },
   },
 
+  server: {
+    open: '/src/pages/login.html'
+  }
+
 });
