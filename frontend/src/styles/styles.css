@@ -41,6 +41,7 @@
   --spacing-extra-small: 0.25em;
 
   --sidebar-width: 10em;
+  --main-content-padding: 3em;
 }
 
 @view-transition {
@@ -263,6 +264,9 @@ article {
   line-height: 1.6;
   box-shadow: 0.2em 0.3em;
 }
+main {
+  padding: var(--main-content-padding);
+}
 
 /* Classes */
 /* Colors */
@@ -335,20 +339,19 @@ i,
   justify-content: center;
   align-items: center;
 }
-
-body {
+body:has(> aside) {
   display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-columns: auto 1fr;
   grid-template-rows: 1fr;
   height: 100vh;
   overflow: hidden;
 }
-body main {
+body > main {
   grid-column: 2;
   grid-row: 1;
   overflow-y: auto;
 }
-body aside {
+body > aside {
   grid-column: 1;
   grid-row: 1;
   background-color: lightblue; /* This main will have a light green background */
