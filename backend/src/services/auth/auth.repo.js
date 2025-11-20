@@ -7,11 +7,10 @@
  * - Session storage
  */
 
-const prisma = require('../../prisma');
-
 /**
  * Upsert (create or update) a user record by email.
  *
+ * @param {PrismaDBClient} db
  * @param {object} params
  * @param {string} params.email
  * @param {string|null} params.first_name
@@ -19,12 +18,12 @@ const prisma = require('../../prisma');
  * @param {Date} params.last_login
  * @returns {Promise<object>} user - Prisma users record
  */
-async function upsertUser({ email, first_name, last_name, last_login }) {
+async function upsertUser(db, { email, first_name, last_name, last_login }) {
   if (!email) {
     throw new Error('Email is required for upsertUser');
   }
 
-  const user = await prisma.users.upsert({
+  const user = await db.users.upsert({
     where: { email },
     create: {
       email,
@@ -47,13 +46,14 @@ async function upsertUser({ email, first_name, last_name, last_login }) {
  * Create a new session for a given user id.
  * Sessions are stored in the `sessions` table.
  *
+ * @param {PrismaDBClient} db
  * @param {string} sessionId - randomly generated UUID
  * @param {number} userId - id of the authenticated user (users.id)
  * @param {Date}   expiresAt - session expiration time
  * @returns {Promise<object>} session record
  */
-async function createSession(sessionId, userId, expiresAt) {
-  const session = await prisma.sessions.create({
+async function createSession(db, sessionId, userId, expiresAt) {
+  const session = await db.sessions.create({
     data: {
       session_id: sessionId,
       user_id: userId,
@@ -66,15 +66,16 @@ async function createSession(sessionId, userId, expiresAt) {
 /**
  * Get a user by email.
  *
+ * @param {PrismaDBClient} db
  * @param {string} email
  * @returns {Promise<object|null>} user or null if not found
  */
-async function getUserByEmail(email) {
+async function getUserByEmail(db, email) {
   if (!email) {
     return null;
   }
 
-  return await prisma.users.findUnique({
+  return await db.users.findUnique({
     where: { email },
   });
 }
@@ -83,11 +84,12 @@ async function getUserByEmail(email) {
  * Look up the current user by session id.
  * Returns null if the session is missing, expired, or the user no longer exists.
  *
+ * @param {PrismaDBClient} db
  * @param {string} sessionId
  * @returns {Promise<object|null>} user or null if not found/expired
  */
-async function getUserBySessionId(sessionId) {
-  const session = await prisma.sessions.findUnique({
+async function getUserBySessionId(db, sessionId) {
+  const session = await db.sessions.findUnique({
     where: { session_id: sessionId },
   });
 
@@ -98,20 +100,20 @@ async function getUserBySessionId(sessionId) {
   const now = new Date();
   if (session.expires_at && session.expires_at <= now) {
     // Session expired, clean it up.
-    await prisma.sessions.delete({
+    await db.sessions.delete({
       where: { session_id: sessionId },
     });
     return null;
   }
 
   // Resolve the user associated with this session from the database.
-  const user = await prisma.users.findUnique({
+  const user = await db.users.findUnique({
     where: { id: session.user_id },
   });
 
   if (!user) {
     // If the user row was deleted, also clean up the session.
-    await prisma.sessions.delete({
+    await db.sessions.delete({
       where: { session_id: sessionId },
     });
     return null;
@@ -123,11 +125,12 @@ async function getUserBySessionId(sessionId) {
 /**
  * Invalidate a session, e.g. on logout.
  *
+ * @param {PrismaDBClient} db
  * @param {string} sessionId
  * @returns {Promise<void>}
  */
-async function deleteSession(sessionId) {
-  await prisma.sessions.deleteMany({
+async function deleteSession(db, sessionId) {
+  await db.sessions.deleteMany({
     where: { session_id: sessionId },
   });
 }
@@ -136,12 +139,13 @@ async function deleteSession(sessionId) {
  * Update user profile fields (partial update supported).
  * Only updates fields that are explicitly provided (not undefined).
  *
+ * @param {PrismaDBClient} db
  * @param {number} userId
  * @param {object} profileData - { first_name?, last_name?, pronouns? }
  * @param {boolean|undefined} isProfileComplete - optional flag to explicitly set profile completion
  * @returns {Promise<object>} updated user
  */
-async function updateUserProfile(userId, profileData, isProfileComplete) {
+async function updateUserProfile(db, userId, profileData, isProfileComplete) {
   const { first_name, last_name, pronouns } = profileData;
 
   // Build update data object, only including fields that are explicitly provided
@@ -159,7 +163,7 @@ async function updateUserProfile(userId, profileData, isProfileComplete) {
   if (isProfileComplete !== undefined) {
     updateData.is_profile_complete = isProfileComplete;
   }
-  const user = await prisma.users.update({
+  const user = await db.users.update({
     where: { id: userId },
     data: updateData,
   });

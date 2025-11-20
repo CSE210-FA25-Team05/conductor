@@ -78,10 +78,11 @@ function buildGoogleLoginUrl(reply) {
  *    - existing user → return it (allowed to log in)
  *    - no user       → throw error (must be added by professor first)
  *
+ * @param {PrismaDBClient} db
  * @param {object} payload - Google ID token payload
  * @returns {Promise<object>} user
  */
-async function resolveUserFromGooglePayload(payload) {
+async function resolveUserFromGooglePayload(db, payload) {
   const email = (payload.email || '').toLowerCase();
   if (!email) {
     throw new Error('Google payload does not contain an email');
@@ -92,7 +93,7 @@ async function resolveUserFromGooglePayload(payload) {
   }
 
   // see if a user already exists
-  const existing = await authRepo.getUserByEmail(email);
+  const existing = await authRepo.getUserByEmail(db, email);
 
   if (existing) {
     return existing;
@@ -102,6 +103,7 @@ async function resolveUserFromGooglePayload(payload) {
   if (isUcsdEmail(email)) {
     // ucsd email → auto-create if needed (upsert keeps us race-safe)
     return await authRepo.upsertUser(
+      db,
       buildUpsertUserInputFromGooglePayload(payload)
     );
   }
@@ -167,22 +169,24 @@ async function verifyIdToken(idToken) {
 
 /**
  * Create a new session for this user.
+ * @param {PrismaDBClient} db
  * @param {object} user
  * @returns {Promise<string>} sessionId
  */
-async function createSessionForUser(user) {
+async function createSessionForUser(db, user) {
   const sessionId = randomUUID();
   const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
-  await authRepo.createSession(sessionId, user.id, expiresAt);
+  await authRepo.createSession(db, sessionId, user.id, expiresAt);
   return sessionId;
 }
 
 /**
  * Handle the standard OAuth callback flow (query string).
+ * @param {PrismaDBClient} db
  * @param {fastify.FastifyRequest} req
  * @returns {Promise<string>} sessionId to be stored in cookie
  */
-async function handleGoogleCallback(req) {
+async function handleGoogleCallback(db, req) {
   const { code, state } = req.query;
 
   if (!code || typeof code !== 'string') {
@@ -200,8 +204,8 @@ async function handleGoogleCallback(req) {
   const tokens = await exchangeCodeForTokens(code);
   const payload = await verifyIdToken(tokens.id_token);
 
-  const user = await resolveUserFromGooglePayload(payload);
-  const sessionId = await createSessionForUser(user);
+  const user = await resolveUserFromGooglePayload(db, payload);
+  const sessionId = await createSessionForUser(db, user);
 
   return sessionId;
 }
@@ -210,16 +214,17 @@ async function handleGoogleCallback(req) {
  * Logout: delete the session record (if any).
  * Route is responsible for clearing the cookie.
  *
+ * @param {PrismaDBClient} db
  * @param {string | undefined} sessionId
  * @param {object} logger - fastify logger (req.log)
  */
-async function logout(sessionId, logger) {
+async function logout(db, sessionId, logger) {
   if (!sessionId) {
     return;
   }
 
   try {
-    await authRepo.deleteSession(sessionId);
+    await authRepo.deleteSession(db, sessionId);
   } catch (e) {
     // Do not block logout if session deletion fails.
     logger?.error(e, 'Failed to delete session during logout');
@@ -248,11 +253,12 @@ function buildProfileResponse(user) {
 /**
  * Update current user's profile (supports partial updates).
  * Only fields explicitly provided in the request body will be updated.
+ * @param {PrismaDBClient} db
  * @param {object} user - current user (from req.user)
  * @param {object} body - request body with profile fields (first_name?, last_name?, pronouns?)
  * @returns {Promise<object>} normalized profile response
  */
-async function updateCurrentUserProfile(user, body) {
+async function updateCurrentUserProfile(db, user, body) {
   const { first_name, last_name, pronouns } = body || {};
 
   // Build profile data object, only including fields that are explicitly provided
@@ -281,6 +287,7 @@ async function updateCurrentUserProfile(user, body) {
   const isProfileComplete = hasFirstName && hasLastName;
 
   const updated = await authRepo.updateUserProfile(
+    db,
     user.id,
     profileData,
     isProfileComplete

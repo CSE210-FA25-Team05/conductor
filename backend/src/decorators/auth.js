@@ -18,7 +18,7 @@ module.exports = fp(async function authDecorators(fastify, opts) {
       return reply.code(401).send({ error: 'Not authenticated' });
     }
 
-    const user = await authRepo.getUserBySessionId(sessionId);
+    const user = await authRepo.getUserBySessionId(fastify.db, sessionId);
     if (!user) {
       return reply.code(401).send({ error: 'Session expired or invalid' });
     }
