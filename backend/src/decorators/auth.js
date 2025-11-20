@@ -9,16 +9,18 @@
  */
 
 const fp = require('fastify-plugin');
-const authRepo = require('../services/auth/auth.repo');
+const AuthRepo = require('../services/auth/auth.repo');
 
 module.exports = fp(async function authDecorators(fastify, opts) {
+  const authRepo = new AuthRepo(fastify.db);
+
   fastify.decorate('authenticate', async function (req, reply) {
     const sessionId = req.cookies?.sid;
     if (!sessionId) {
       return reply.code(401).send({ error: 'Not authenticated' });
     }
 
-    const user = await authRepo.getUserBySessionId(fastify.db, sessionId);
+    const user = await authRepo.getUserBySessionId(sessionId);
     if (!user) {
       return reply.code(401).send({ error: 'Session expired or invalid' });
     }

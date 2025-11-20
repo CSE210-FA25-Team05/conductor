@@ -7,175 +7,177 @@
  * - Session storage
  */
 
-/**
- * Upsert (create or update) a user record by email.
- *
- * @param {PrismaDBClient} db
- * @param {object} params
- * @param {string} params.email
- * @param {string|null} params.first_name
- * @param {string|null} params.last_name
- * @param {Date} params.last_login
- * @returns {Promise<object>} user - Prisma users record
- */
-async function upsertUser(db, { email, first_name, last_name, last_login }) {
-  if (!email) {
-    throw new Error('Email is required for upsertUser');
+class AuthRepo {
+  constructor(db) {
+    this.db = db;
   }
 
-  const user = await db.users.upsert({
-    where: { email },
-    create: {
-      email,
-      first_name,
-      last_name,
-      last_login,
-      // global_role and is_profile_complete use DB defaults
-    },
-    update: {
-      first_name,
-      last_name,
-      last_login,
-    },
-  });
+  /**
+   * Upsert (create or update) a user record by email.
+   *
+   * @param {object} params
+   * @param {string} params.email
+   * @param {string|null} params.first_name
+   * @param {string|null} params.last_name
+   * @param {Date} params.last_login
+   * @returns {Promise<object>} user - Prisma users record
+   */
+  async upsertUser({ email, first_name, last_name, last_login }) {
+    if (!email) {
+      throw new Error('Email is required for upsertUser');
+    }
 
-  return user;
-}
+    const user = await this.db.users.upsert({
+      where: { email },
+      create: {
+        email,
+        first_name,
+        last_name,
+        last_login,
+        // global_role and is_profile_complete use DB defaults
+      },
+      update: {
+        first_name,
+        last_name,
+        last_login,
+      },
+    });
 
-/**
- * Create a new session for a given user id.
- * Sessions are stored in the `sessions` table.
- *
- * @param {PrismaDBClient} db
- * @param {string} sessionId - randomly generated UUID
- * @param {number} userId - id of the authenticated user (users.id)
- * @param {Date}   expiresAt - session expiration time
- * @returns {Promise<object>} session record
- */
-async function createSession(db, sessionId, userId, expiresAt) {
-  const session = await db.sessions.create({
-    data: {
-      session_id: sessionId,
-      user_id: userId,
-      expires_at: expiresAt,
-    },
-  });
-  return session;
-}
-
-/**
- * Get a user by email.
- *
- * @param {PrismaDBClient} db
- * @param {string} email
- * @returns {Promise<object|null>} user or null if not found
- */
-async function getUserByEmail(db, email) {
-  if (!email) {
-    return null;
+    return user;
   }
 
-  return await db.users.findUnique({
-    where: { email },
-  });
-}
-
-/**
- * Look up the current user by session id.
- * Returns null if the session is missing, expired, or the user no longer exists.
- *
- * @param {PrismaDBClient} db
- * @param {string} sessionId
- * @returns {Promise<object|null>} user or null if not found/expired
- */
-async function getUserBySessionId(db, sessionId) {
-  const session = await db.sessions.findUnique({
-    where: { session_id: sessionId },
-  });
-
-  if (!session) {
-    return null;
+  /**
+   * Create a new session for a given user id.
+   * Sessions are stored in the `sessions` table.
+   *
+   * @param {string} sessionId - randomly generated UUID
+   * @param {number} userId - id of the authenticated user (users.id)
+   * @param {Date}   expiresAt - session expiration time
+   * @returns {Promise<object>} session record
+   */
+  async createSession(sessionId, userId, expiresAt) {
+    const session = await this.db.sessions.create({
+      data: {
+        session_id: sessionId,
+        user_id: userId,
+        expires_at: expiresAt,
+      },
+    });
+    return session;
   }
 
-  const now = new Date();
-  if (session.expires_at && session.expires_at <= now) {
-    // Session expired, clean it up.
-    await db.sessions.delete({
+  /**
+   * Get a user by email.
+   *
+   * @param {string} email
+   * @returns {Promise<object|null>} user or null if not found
+   */
+  async getUserByEmail(email) {
+    if (!email) {
+      return null;
+    }
+
+    return await this.db.users.findUnique({
+      where: { email },
+    });
+  }
+
+  /**
+   * Look up the current user by session id.
+   * Returns null if the session is missing, expired, or the user no longer exists.
+   *
+   * @param {string} sessionId
+   * @returns {Promise<object|null>} user or null if not found/expired
+   */
+  async getUserBySessionId(sessionId) {
+    const session = await this.db.sessions.findUnique({
       where: { session_id: sessionId },
     });
-    return null;
+
+    if (!session) {
+      return null;
+    }
+
+    const now = new Date();
+    if (session.expires_at && session.expires_at <= now) {
+      // Session expired, clean it up.
+      await this.db.sessions.delete({
+        where: { session_id: sessionId },
+      });
+      return null;
+    }
+
+    // Resolve the user associated with this session from the database.
+    const user = await this.db.users.findUnique({
+      where: { id: session.user_id },
+    });
+
+    if (!user) {
+      // If the user row was deleted, also clean up the session.
+      await this.db.sessions.delete({
+        where: { session_id: sessionId },
+      });
+      return null;
+    }
+
+    return user;
   }
 
-  // Resolve the user associated with this session from the database.
-  const user = await db.users.findUnique({
-    where: { id: session.user_id },
-  });
-
-  if (!user) {
-    // If the user row was deleted, also clean up the session.
-    await db.sessions.delete({
+  /**
+   * Invalidate a session, e.g. on logout.
+   *
+   * @param {string} sessionId
+   * @returns {Promise<void>}
+   */
+  async deleteSession(sessionId) {
+    await this.db.sessions.deleteMany({
       where: { session_id: sessionId },
     });
-    return null;
   }
 
-  return user;
+  /**
+   * Update user profile fields (partial update supported).
+   * Only updates fields that are explicitly provided (not undefined).
+   *
+   * @param {number} userId
+   * @param {object} profileData - { first_name?, last_name?, pronouns? }
+   * @param {boolean|undefined} isProfileComplete - optional flag to explicitly set profile completion
+   * @returns {Promise<object>} updated user
+   */
+  async updateUserProfile(userId, profileData, isProfileComplete) {
+    const { first_name, last_name, pronouns } = profileData;
+
+    // Build update data object, only including fields that are explicitly provided
+    const updateData = {};
+
+    if (first_name !== undefined) {
+      updateData.first_name = first_name;
+    }
+    if (last_name !== undefined) {
+      updateData.last_name = last_name;
+    }
+    if (pronouns !== undefined) {
+      updateData.pronouns = pronouns;
+    }
+    if (isProfileComplete !== undefined) {
+      updateData.is_profile_complete = isProfileComplete;
+    }
+    const user = await this.db.users.update({
+      where: { id: userId },
+      data: updateData,
+    });
+
+    return user;
+  }
 }
 
-/**
- * Invalidate a session, e.g. on logout.
- *
- * @param {PrismaDBClient} db
- * @param {string} sessionId
- * @returns {Promise<void>}
- */
-async function deleteSession(db, sessionId) {
-  await db.sessions.deleteMany({
-    where: { session_id: sessionId },
-  });
-}
+// module.exports = {
+//   upsertUser,
+//   createSession,
+//   getUserByEmail,
+//   getUserBySessionId,
+//   deleteSession,
+//   updateUserProfile,
+// };
 
-/**
- * Update user profile fields (partial update supported).
- * Only updates fields that are explicitly provided (not undefined).
- *
- * @param {PrismaDBClient} db
- * @param {number} userId
- * @param {object} profileData - { first_name?, last_name?, pronouns? }
- * @param {boolean|undefined} isProfileComplete - optional flag to explicitly set profile completion
- * @returns {Promise<object>} updated user
- */
-async function updateUserProfile(db, userId, profileData, isProfileComplete) {
-  const { first_name, last_name, pronouns } = profileData;
-
-  // Build update data object, only including fields that are explicitly provided
-  const updateData = {};
-
-  if (first_name !== undefined) {
-    updateData.first_name = first_name;
-  }
-  if (last_name !== undefined) {
-    updateData.last_name = last_name;
-  }
-  if (pronouns !== undefined) {
-    updateData.pronouns = pronouns;
-  }
-  if (isProfileComplete !== undefined) {
-    updateData.is_profile_complete = isProfileComplete;
-  }
-  const user = await db.users.update({
-    where: { id: userId },
-    data: updateData,
-  });
-
-  return user;
-}
-
-module.exports = {
-  upsertUser,
-  createSession,
-  getUserByEmail,
-  getUserBySessionId,
-  deleteSession,
-  updateUserProfile,
-};
+module.exports = AuthRepo;

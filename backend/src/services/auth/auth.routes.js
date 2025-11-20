@@ -17,9 +17,13 @@
  *       → Update current user's profile and mark it complete
  */
 
-const authService = require('./auth.service');
+const AuthRepo = require('./auth.repo');
+const AuthService = require('./auth.service');
 
 async function routes(fastify) {
+  const authRepo = new AuthRepo(fastify.db);
+  const authService = new AuthService(authRepo);
+
   // Redirect user to Google's consent screen
   fastify.get('/auth/oauth/google', async (req, reply) => {
     const url = authService.buildGoogleLoginUrl(reply);
@@ -30,7 +34,7 @@ async function routes(fastify) {
   // Google redirect target (server-side exchange with query params)
   fastify.get('/auth/oauth/google/callback', async (req, reply) => {
     try {
-      const sessionId = await authService.handleGoogleCallback(fastify.db, req);
+      const sessionId = await authService.handleGoogleCallback(req);
 
       // Set sid cookie (sessionId → userId is stored in auth.repo)
       reply.setCookie('sid', sessionId, {
@@ -57,7 +61,7 @@ async function routes(fastify) {
   fastify.post('/auth/logout', async (req, reply) => {
     const sessionId = req.cookies?.sid;
 
-    await authService.logout(fastify.db, sessionId, req.log);
+    await authService.logout(sessionId, req.log);
 
     reply.clearCookie('sid', { path: '/' });
     reply.send({ ok: true });
@@ -93,7 +97,6 @@ async function routes(fastify) {
       }
 
       const updatedProfile = await authService.updateCurrentUserProfile(
-        fastify.db,
         user,
         body
       );
