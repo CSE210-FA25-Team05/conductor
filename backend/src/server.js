@@ -13,17 +13,22 @@ fastify.register(swagger);
 fastify.register(swaggerUI, {
   routePrefix: '/docs',
   uiConfig: {
-    // docExpansion: 'full',
-    deepLinking: true
+    deepLinking: true,
   },
   uiHooks: {
-    onRequest: function (request, reply, next) { next() },
-    preHandler: function (request, reply, next) { next() }
+    onRequest: function (request, reply, next) {
+      next();
+    },
+    preHandler: function (request, reply, next) {
+      next();
+    },
   },
   staticCSP: true,
   transformStaticCSP: (header) => header,
-  transformSpecification: (swaggerObject, request, reply) => { return swaggerObject },
-  transformSpecificationClone: true
+  transformSpecification: (swaggerObject, request, reply) => {
+    return swaggerObject;
+  },
+  transformSpecificationClone: true,
 });
 
 const sensible = require('@fastify/sensible');
