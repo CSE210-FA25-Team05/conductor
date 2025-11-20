@@ -15,6 +15,9 @@ fastify.register(cors, {
 fastify.register(cookie);
 fastify.register(sensible);
 
+//db connection
+fastify.register(require('./prisma'));
+
 //decorators
 fastify.register(require('./decorators/auth'));
 
@@ -23,9 +26,6 @@ fastify.register(require('./hooks/profile-complete'));
 
 //services
 fastify.register(require('./services/auth'));
-
-//db connection
-fastify.register(require('./prisma'));
 
 //course routes
 fastify.register(require('./services/course/course.routes'), {
