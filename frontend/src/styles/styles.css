@@ -39,6 +39,8 @@
   --spacing-medium: 1em;
   --spacing-small: 0.5em;
   --spacing-extra-small: 0.25em;
+
+  --sidebar-width: 10em;
 }
 
 @view-transition {
@@ -317,6 +319,7 @@ i,
   font-feature-settings: 'liga';
 }
 
+/* Format */
 .middle {
   position: fixed;
   inset: 0px;
@@ -331,4 +334,22 @@ i,
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+body {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+body main {
+  grid-column: 2;
+  grid-row: 1;
+  overflow-y: auto;
+}
+body aside {
+  grid-column: 1;
+  grid-row: 1;
+  background-color: lightblue; /* This main will have a light green background */
 }
