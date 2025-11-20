@@ -10,7 +10,7 @@ export default defineConfig({
         atoms: path.resolve(__dirname, "./src/pages/atoms.html"),
         dashboard: path.resolve(__dirname, "./src/pages/dashboard.html"),
         login: path.resolve(__dirname, "./src/pages/login.html"),
-        pulses: path.resolve(__dirname, "./src/pages/pulses.html"),
+        signals: path.resolve(__dirname, "./src/pages/signals.html"),
         interactions: path.resolve(__dirname, "./src/pages/interactions.html"),
       },
     },
