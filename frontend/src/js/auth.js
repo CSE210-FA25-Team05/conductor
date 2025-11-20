@@ -24,5 +24,5 @@ async function authenticate() {
 }
 
 if (!PUBLIC_ROUTES.includes(PATH)) {
-  authenticate();
+  //authenticate();
 }

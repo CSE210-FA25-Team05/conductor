@@ -41,3 +41,5 @@ class LogoutButton extends HTMLElement {
 }
 
 customElements.define('logout-button', LogoutButton);
+
+export default LogoutButton;
