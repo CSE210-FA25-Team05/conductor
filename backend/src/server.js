@@ -26,12 +26,15 @@ fastify.register(swaggerUI, {
   transformSpecificationClone: true
 });
 
+const sensible = require('@fastify/sensible');
+
 //ecosystem plugins
 fastify.register(cors, {
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true,
 });
 fastify.register(cookie);
+fastify.register(sensible);
 
 //decorators
 fastify.register(require('./decorators/auth'));
@@ -41,6 +44,14 @@ fastify.register(require('./hooks/profile-complete'));
 
 //services
 fastify.register(require('./services/auth'));
+
+//db connection
+fastify.register(require('./prisma'));
+
+//course routes
+fastify.register(require('./services/course/course.routes'), {
+  prefix: '/api',
+});
 
 //health check
 fastify.get('/api/health', async () => {
