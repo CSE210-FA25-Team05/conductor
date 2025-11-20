@@ -4,6 +4,8 @@
 * */
 
 :root {
+  view-transition-name: root;
+
   --color-bg: #fffff;
   --color-primary-100: lightblue;
   --color-primary-600: darkblue;
@@ -37,6 +39,13 @@
   --spacing-medium: 1em;
   --spacing-small: 0.5em;
   --spacing-extra-small: 0.25em;
+
+  --sidebar-width: 10em;
+  --main-content-padding: 3em;
+}
+
+@view-transition {
+  navigation: auto;
 }
 
 @media (max-width: 576px) {
@@ -255,6 +264,9 @@ article {
   line-height: 1.6;
   box-shadow: 0.2em 0.3em;
 }
+main {
+  padding: var(--main-content-padding);
+}
 
 /* Classes */
 /* Colors */
@@ -286,6 +298,8 @@ article {
   font-weight: 400;
   src: url(/src/fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
+
+i,
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -307,4 +321,38 @@ article {
   -moz-osx-font-smoothing: grayscale;
   /* Support for IE. */
   font-feature-settings: 'liga';
+}
+
+/* Format */
+.middle {
+  position: fixed;
+  inset: 0px;
+  width: 12rem;
+  height: 5rem;
+  max-width: 100vw;
+  max-height: 100dvh;
+  margin: auto;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body:has(> aside) {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+body > main {
+  grid-column: 2;
+  grid-row: 1;
+  overflow-y: auto;
+}
+body > aside {
+  grid-column: 1;
+  grid-row: 1;
+  background-color: lightblue; /* This main will have a light green background */
 }

@@ -17,10 +17,14 @@
  *       → Update current user's profile and mark it complete
  */
 
-const authService = require('./auth.service');
 const authSchemas = require('./auth.schemas');
+const AuthRepo = require('./auth.repo');
+const AuthService = require('./auth.service');
 
 async function routes(fastify) {
+  const authRepo = new AuthRepo(fastify.db);
+  const authService = new AuthService(authRepo);
+
   // Redirect user to Google's consent screen
   fastify.get(
     '/auth/oauth/google',
