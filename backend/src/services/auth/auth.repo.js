@@ -7,7 +7,7 @@
  * - Session storage
  */
 
-const prisma = require('../../prisma');
+const prisma = require('../../prisma-client');
 
 /**
  * Upsert (create or update) a user record by email.

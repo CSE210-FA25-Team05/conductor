@@ -1,17 +1,10 @@
 'use strict';
 
 const fp = require('fastify-plugin');
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('./prisma-client');
 
 module.exports = fp(async function prismaPlugin(fastify) {
-  const prisma = new PrismaClient({
-    log:
-      process.env.NODE_ENV === 'development'
-        ? ['query', 'error', 'warn']
-        : ['error'],
-  });
-
-  // Establish connection
+  // Establish connection (idempotent if already connected)
   await prisma.$connect();
 
   // Attach to fastify instance
