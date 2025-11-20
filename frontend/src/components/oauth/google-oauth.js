@@ -40,9 +40,14 @@ class GoogleOAuth extends HTMLElement {
       .removeEventListener('click', this.handleClick);
   }
 
-  handleClick() {
-    console.log('Google OAuth button clicked!');
-    // TODO: do something
+  async handleClick(event) {
+    event.preventDefault();
+
+    try {
+      window.location.href = 'http://localhost:3001/auth/oauth/google';
+    } catch (error) {
+      console.error('Failed to start Google OAuth flow', error);
+    }
   }
 }
 
