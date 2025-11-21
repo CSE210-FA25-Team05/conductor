@@ -34,7 +34,7 @@ async function routes(fastify) {
         tags: ['Auth'],
         response: {
           302: { type: 'null' },
-        }
+        },
       },
     },
     async (req, reply) => {
@@ -54,7 +54,7 @@ async function routes(fastify) {
         tags: ['Auth'],
         response: {
           302: { type: 'null' },
-        }
+        },
       },
     },
     async (req, reply) => {
