@@ -49,7 +49,7 @@ class Modal extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     // Only process if the value actually changed
     if (oldValue === newValue) return;
-    
+
     if (name === 'open') {
       // Prevent body scroll when modal is open
       if (this.hasAttribute('open')) {
