@@ -83,7 +83,8 @@ class Modal extends HTMLElement {
 
   updateButtonAlignment() {
     const align = this.getAttribute('button-align') || 'end';
-    this.buttonsSlot.style.justifyContent = align === 'start' ? 'flex-start' : 'flex-end';
+    this.buttonsSlot.style.justifyContent =
+      align === 'start' ? 'flex-start' : 'flex-end';
   }
 
   open() {
@@ -100,7 +101,7 @@ class Modal extends HTMLElement {
     const rect = this.dialog.getBoundingClientRect();
     const clickX = event.clientX;
     const clickY = event.clientY;
-    
+
     // Check if click is outside the dialog bounding box
     if (
       clickX < rect.left ||
