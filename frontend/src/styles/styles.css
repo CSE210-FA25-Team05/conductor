@@ -18,6 +18,7 @@
   --color-border: lightgray;
   --color-neutral-100: #f2f3f5;
   --color-neutral-600: darkgray;
+  --color-state: #000;
   --typography-padding-vertical: 1rem;
   --font-weight-bold: 700;
 
@@ -280,8 +281,7 @@ button {
   font-size: var(--fs-100);
   border-radius: var(--spacing-small);
   border: 1px solid var(--color-border);
-  background-color: var(--color-neutral-100);
-  color: var(--color-neutral-600);
+  background-color: var(--color-primary-100);
   cursor: pointer;
   transition:
     background-color 120ms ease,
@@ -316,18 +316,6 @@ button.icon-only {
   height: var(--icon-button-size);
   border-radius: 999px;
 }
-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-}
-button:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-button:focus-visible {
-  outline: 3px solid rgba(0, 0, 0, 0.08);
-  outline-offset: 2px;
-}
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -340,22 +328,66 @@ button:disabled {
 .neutral {
   background-color: var(--color-neutral-100);
   color: var(--color-neutral-600);
+  --color-state: var(--color-neutral-600);
 }
 .primary {
   background-color: var(--color-primary-100);
   color: var(--color-primary-600);
+  --color-state: var(--color-primary-600);
 }
 .secondary {
   background-color: var(--color-secondary-100);
   color: var(--color-secondary-600);
+  --color-state: var(--color-secondary-600);
 }
 .error {
   background-color: var(--color-error-100);
   color: var(--color-error-600);
+  --color-state: var(--color-error-600);
 }
 .success {
   background-color: var(--color-success-100);
   color: var(--color-success-600);
+  --color-state: var(--color-success-600);
+}
+
+/* State-layer uses ::after. Any element that includes state-layer will automatically
+ * inherit the state layer and have interactivity. 
+ * elements using state layer should not use ::after.
+*/
+
+button:not([disables]),
+.state-layer {
+  position: relative;
+  cursor: pointer;
+}
+
+button:not([disabled]):after,
+.state-layer::after {
+  content: '';
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  background-color: var(--color-state, #000);
+  border-radius: inherit;
+  position: absolute;
+  top: 0%;
+  bottom: 0%;
+  left: 0%;
+  right: 0%;
+  transform: scale(0);
+}
+
+button:not([disabled]):hover:after,
+.state-layer:hover:after {
+  transform: scale(1);
+  opacity: 0.08;
+}
+
+button:not([disabled]):active:after,
+.state-layer:active:after {
+  transform: scale(1);
+  opacity: 0.14;
 }
 
 /* Google Icons from https://developers.google.com/fonts/docs/material_icons#setup_method_2_self_hosting */
