@@ -25,7 +25,7 @@ class Modal extends HTMLElement {
         <article class="modal-content">
           <slot name="content"></slot>
         </article>
-        <footer class="modal-buttons" part="button-footer">
+        <footer class="modal-buttons" id="buttons">
           <slot name="buttons"></slot>
         </footer>
       </dialog>
@@ -35,9 +35,6 @@ class Modal extends HTMLElement {
     this.closeBtn = this.shadowRoot.getElementById('closeBtn');
     this.buttonsSlot = this.shadowRoot.getElementById('buttons');
 
-    this.setAttribute('closed', '');
-    this.updateVisibility();
-
     this.closeBtn.addEventListener('click', this.handleCloseClick);
     this.dialog.addEventListener('click', this.handleBackdropClick);
     this.dialog.addEventListener('cancel', this.handleDialogCancel);
@@ -46,17 +43,25 @@ class Modal extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['open', 'closed', 'button-align'];
+    return ['open', 'button-align'];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'open' || name === 'closed') {
-      this.updateVisibility();
+    // Only process if the value actually changed
+    if (oldValue === newValue) return;
+    
+    if (name === 'open') {
       // Prevent body scroll when modal is open
       if (this.hasAttribute('open')) {
         document.body.style.overflow = 'hidden';
+        if (this.dialog) {
+          this.dialog.showModal();
+        }
       } else {
         document.body.style.overflow = '';
+        if (this.dialog) {
+          this.dialog.close();
+        }
       }
     }
     if (name === 'button-align') {
@@ -71,17 +76,8 @@ class Modal extends HTMLElement {
     this.dialog.removeEventListener('cancel', this.handleDialogCancel);
   }
 
-  updateVisibility() {
-    if (this.hasAttribute('open')) {
-      this.dialog.showModal();
-      this.removeAttribute('closed');
-    } else {
-      this.dialog.close();
-      this.setAttribute('closed', '');
-    }
-  }
-
   updateButtonAlignment() {
+    if (!this.buttonsSlot) return;
     const align = this.getAttribute('button-align') || 'end';
     this.buttonsSlot.style.justifyContent =
       align === 'start' ? 'flex-start' : 'flex-end';
@@ -89,12 +85,10 @@ class Modal extends HTMLElement {
 
   open() {
     this.setAttribute('open', '');
-    this.removeAttribute('closed');
   }
 
   close() {
     this.removeAttribute('open');
-    this.setAttribute('closed', '');
   }
 
   handleBackdropClick(event) {
