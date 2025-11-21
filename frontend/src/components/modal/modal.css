@@ -1,16 +1,16 @@
 dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.95);
   background-color: white;
+
+  /* Center in Middle */
+  position: fixed;
+  inset: 0px;
+  max-width: 100vw;
+  max-height: 100dvh;
+  margin: auto;
+
   border-radius: 8px;
   border: none;
   padding: 0;
-  max-width: 90vw;
-  max-height: 90vh;
-  width: auto;
-  height: auto;
   display: flex;
   flex-direction: column;
   opacity: 0;
@@ -31,7 +31,6 @@ dialog::backdrop {
 dialog[open] {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, -50%) scale(1);
 }
 
 dialog:not([open]) {
@@ -123,4 +122,14 @@ slot[name='content']::slotted(article) {
   box-shadow: none !important;
   border-right: 0 !important;
   border-bottom: 0 !important;
+}
+
+@media (max-width: 500px) {
+
+    dialog {
+        width: 100dvw;
+        height: 90dvh;
+        margin: auto auto 0 auto; /* Anchor to bottom */
+    }
+
 }
