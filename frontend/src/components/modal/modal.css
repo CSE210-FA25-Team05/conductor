@@ -1,0 +1,119 @@
+/* Dialog Element */
+dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  background-color: white;
+  border-radius: 8px;
+  border: none;
+  padding: 0;
+  max-width: 90vw;
+  max-height: 110vh;
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  z-index: 1000;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+dialog[open] {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+dialog:not([open]) {
+  pointer-events: none;
+}
+
+dialog[open]::backdrop {
+  opacity: 1;
+}
+
+header {
+  position: relative;
+  padding: 0;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.modal-close:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.modal-close:active {
+  background-color: #e0e0e0;
+}
+
+.modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Modal Content */
+article.modal-content {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+footer.modal-buttons {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #e0e0e0;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* Style buttons directly in the slot */
+slot[name="buttons"]::slotted(button) {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+slot[name="buttons"]::slotted(button:hover) {
+  background-color: #f0f0f0;
+  border-color: #999;
+}
+
+slot[name="buttons"]::slotted(button:active) {
+  background-color: #e0e0e0;
+}
+
+/* If you need to wrap buttons in a footer, use display: contents to make buttons direct children */
+slot[name="buttons"]::slotted(footer) {
+  display: contents;
+}
