@@ -308,8 +308,9 @@ button .material-icons {
 }
 button.icon-only {
   padding: var(--spacing-small);
-  width: var(--icon-button-size);
-  height: var(--icon-button-size);
+}
+button.icon-round {
+  padding: var(--spacing-small);
   border-radius: 999px;
 }
 button:disabled {
