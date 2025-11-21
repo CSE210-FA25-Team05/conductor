@@ -42,6 +42,8 @@
 
   --sidebar-width: 10em;
   --main-content-padding: 3em;
+
+  --icon-button-size: 2.4rem;
 }
 
 @view-transition {
@@ -268,6 +270,68 @@ main {
   padding: var(--main-content-padding);
 }
 
+/* Buttons */
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-small);
+  padding: var(--spacing-small) var(--spacing-medium);
+  font-size: var(--fs-100);
+  border-radius: var(--spacing-small);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  transition: background-color 120ms ease, transform 60ms ease, box-shadow 120ms ease;
+  -webkit-appearance: none;
+  text-decoration: none;
+}
+button.sm {
+  padding: var(--spacing-extra-small) var(--spacing-small);
+  font-size: var(--fs-50);
+}
+button.md {
+  padding: var(--spacing-small) var(--spacing-medium);
+  font-size: var(--fs-100);
+}
+button.lg {
+  padding: var(--spacing-medium) var(--spacing-large);
+  font-size: var(--fs-200);
+}
+button i,
+button .material-icons {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-100);
+  line-height: 1;
+}
+button.icon-only {
+  padding: var(--spacing-small);
+  width: var(--icon-button-size);
+  height: var(--icon-button-size);
+  border-radius: 999px;
+}
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+button:focus-visible {
+  outline: 3px solid rgba(0,0,0,0.08);
+  outline-offset: 2px;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Classes */
 /* Colors */
 .neutral {
@@ -296,7 +360,7 @@ main {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(/src/fonts/MaterialIcons-Regular.ttf) format('truetype');
+  src: url(/src/assets/fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
 
 i,
