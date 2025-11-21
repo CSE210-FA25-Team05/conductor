@@ -30,8 +30,11 @@ async function routes(fastify) {
     '/auth/oauth/google',
     {
       schema: {
-        description: 'Initiate Google OAuth2 login flow',
+        summary: 'Initiate Google OAuth2 login flow',
         tags: ['Auth'],
+        response: {
+          302: { type: 'null' },
+        }
       },
     },
     async (req, reply) => {
@@ -46,8 +49,12 @@ async function routes(fastify) {
     '/auth/oauth/google/callback',
     {
       schema: {
+        summary: 'OAuth Callback (not to be used directly by client)',
         description: 'Callback used by Google to complete OAuth2 login flow',
         tags: ['Auth'],
+        response: {
+          302: { type: 'null' },
+        }
       },
     },
     async (req, reply) => {
@@ -81,7 +88,7 @@ async function routes(fastify) {
     '/auth/logout',
     {
       schema: {
-        description: 'Logout user',
+        summary: 'Logout user',
         tags: ['Auth'],
         response: {
           200: {
@@ -109,6 +116,7 @@ async function routes(fastify) {
     {
       preHandler: fastify.authenticate,
       schema: {
+        summary: 'Fetch user profile',
         tags: ['Profile'],
         response: {
           200: authSchemas.UserProfile,
@@ -127,6 +135,7 @@ async function routes(fastify) {
     {
       preHandler: fastify.authenticate,
       schema: {
+        summary: 'Update user profile',
         tags: ['Profile'],
         body: authSchemas.UpdateProfileParams,
         response: {
@@ -168,6 +177,7 @@ async function routes(fastify) {
     {
       preHandler: fastify.authenticate,
       schema: {
+        summary: 'Get user info (deprecated, use /me/profile)',
         tags: ['Profile'],
         response: {
           200: authSchemas.UserProfile,
