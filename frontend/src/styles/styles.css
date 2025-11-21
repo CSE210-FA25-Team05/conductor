@@ -283,7 +283,10 @@ button {
   background-color: var(--color-neutral-100);
   color: var(--color-neutral-600);
   cursor: pointer;
-  transition: background-color 120ms ease, transform 60ms ease, box-shadow 120ms ease;
+  transition:
+    background-color 120ms ease,
+    transform 60ms ease,
+    box-shadow 120ms ease;
   -webkit-appearance: none;
   text-decoration: none;
 }
@@ -315,14 +318,14 @@ button.icon-only {
 }
 button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 button:active {
   transform: translateY(0);
   box-shadow: none;
 }
 button:focus-visible {
-  outline: 3px solid rgba(0,0,0,0.08);
+  outline: 3px solid rgba(0, 0, 0, 0.08);
   outline-offset: 2px;
 }
 button:disabled {

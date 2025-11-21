@@ -11,3 +11,5 @@ echo "Fixing formatting and style..."
 npm run lint:fix
 npx prettier --write "**/*.{js,jsx,ts,tsx,css}"
 #git add docs
+
+git add .
