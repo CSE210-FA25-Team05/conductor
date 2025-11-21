@@ -283,10 +283,6 @@ button {
   border: 1px solid var(--color-border);
   background-color: var(--color-primary-100);
   cursor: pointer;
-  transition:
-    background-color 120ms ease,
-    transform 60ms ease,
-    box-shadow 120ms ease;
   -webkit-appearance: none;
   text-decoration: none;
 }
