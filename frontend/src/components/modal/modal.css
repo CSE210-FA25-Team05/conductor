@@ -117,7 +117,7 @@ slot[name='buttons']::slotted(button:active) {
   background-color: #e0e0e0;
 }
 
-slot[name="content"]::slotted(article) {
+slot[name='content']::slotted(article) {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
