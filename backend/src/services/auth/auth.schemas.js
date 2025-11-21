@@ -1,9 +1,9 @@
 export const UpdateProfileParams = {
   type: 'object',
   properties: {
-    email: { type: 'string' },
     first_name: { type: 'string' },
     last_name: { type: 'string' },
+    pronouns: { type: 'string' },
   },
 };
 
