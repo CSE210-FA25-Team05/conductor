@@ -112,11 +112,13 @@ async function routes(fastify) {
       const targetUserId = parseInt(req.params.user_id, 10);
       const actorUserId = req.user.id;
 
-      // Check permission
-      const canView = await authPermissions.canViewUserProfile(
-        actorUserId,
-        targetUserId
-      );
+      // Check permission: users can view their own profile, or professors can view any profile
+      let canView = false;
+      if (actorUserId === targetUserId) {
+        canView = true;
+      } else {
+        canView = await authPermissions.isProfessor(actorUserId);
+      }
 
       if (!canView) {
         return reply.code(403).send({

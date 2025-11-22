@@ -3,61 +3,14 @@
 /**
  * Auth Permissions
  *
- * Permission check helpers for user resource access.
- * Handles authorization for viewing/editing user profiles and related operations.
+ * Provides basic permission check helpers for user resource access.
+ * This module only provides atomic state queries (isProfessor, isStudent, etc.).
+ * Business logic for combining these checks should be handled in the service layer.
  */
 
 class AuthPermissions {
   constructor(authRepo) {
     this.authRepo = authRepo;
-  }
-
-  /**
-   * Check if a user can view another user's profile.
-   *
-   * Rules:
-   * - Users can always view their own profile
-   * - Professors can view any user's profile
-   * - Other users cannot view profiles of other users
-   *
-   * @param {number} actorUserId - ID of the user making the request
-   * @param {number} targetUserId - ID of the user whose profile is being accessed
-   * @returns {Promise<boolean>} true if allowed, false otherwise
-   */
-  async canViewUserProfile(actorUserId, targetUserId) {
-    if (actorUserId === targetUserId) {
-      return true;
-    }
-
-    const actor = await this.authRepo.getUserById(actorUserId, {
-      select: { global_role: true },
-    });
-
-    if (!actor) {
-      return false;
-    }
-
-    // Professors can view any user's profile
-    return actor.global_role === 'professor';
-  }
-
-  /**
-   * Check if a user can edit another user's profile.
-   *
-   * Rules:
-   * - Users can always edit their own profile
-   * - Other users cannot edit profiles of other users
-   *
-   * @param {number} actorUserId - ID of the user making the request
-   * @param {number} targetUserId - ID of the user whose profile is being edited
-   * @returns {Promise<boolean>} true if allowed, false otherwise
-   */
-  async canEditUserProfile(actorUserId, targetUserId) {
-    if (actorUserId === targetUserId) {
-      return true;
-    }
-
-    return false;
   }
 
   /**
@@ -69,7 +22,7 @@ class AuthPermissions {
    */
   async isGlobalRole(userId, role) {
     const user = await this.authRepo.getUserById(userId, {
-      select: ['global_role'],
+      select: { global_role: true },
     });
 
     if (!user) {
