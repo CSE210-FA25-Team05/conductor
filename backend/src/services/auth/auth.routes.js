@@ -29,13 +29,7 @@ async function routes(fastify) {
   fastify.get(
     '/auth/oauth/google',
     {
-      schema: {
-        summary: 'Initiate Google OAuth2 login flow',
-        tags: ['Auth'],
-        response: {
-          302: { type: 'null' },
-        },
-      },
+      schema: authSchemas.GoogleOAuthSchema,
     },
     async (req, reply) => {
       const url = authService.buildGoogleLoginUrl(reply);
@@ -48,14 +42,7 @@ async function routes(fastify) {
   fastify.get(
     '/auth/oauth/google/callback',
     {
-      schema: {
-        summary: 'OAuth Callback (not to be used directly by client)',
-        description: 'Callback used by Google to complete OAuth2 login flow',
-        tags: ['Auth'],
-        response: {
-          302: { type: 'null' },
-        },
-      },
+      schema: authSchemas.GoogleOAuthCallbackSchema,
     },
     async (req, reply) => {
       try {
@@ -87,18 +74,7 @@ async function routes(fastify) {
   fastify.post(
     '/auth/logout',
     {
-      schema: {
-        summary: 'Logout user',
-        tags: ['Auth'],
-        response: {
-          200: {
-            type: 'object',
-            properties: {
-              ok: { type: 'boolean' },
-            },
-          },
-        },
-      },
+      schema: authSchemas.LogoutSchema,
     },
     async (req, reply) => {
       const sessionId = req.cookies?.sid;
@@ -115,13 +91,7 @@ async function routes(fastify) {
     '/me/profile',
     {
       preHandler: fastify.authenticate,
-      schema: {
-        summary: 'Fetch user profile',
-        tags: ['Profile'],
-        response: {
-          200: authSchemas.UserProfile,
-        },
-      },
+      schema: authSchemas.GetUserProfileSchema,
     },
     async (req) => {
       const profile = authService.buildProfileResponse(req.user);
@@ -134,20 +104,7 @@ async function routes(fastify) {
     '/me/profile',
     {
       preHandler: fastify.authenticate,
-      schema: {
-        summary: 'Update user profile',
-        tags: ['Profile'],
-        body: authSchemas.UpdateProfileParams,
-        response: {
-          200: {
-            type: 'object',
-            properties: {
-              ok: { type: 'boolean' },
-              user: authSchemas.UserProfile,
-            },
-          },
-        },
-      },
+      schema: authSchemas.UpdateUserProfileSchema,
     },
     async (req, reply) => {
       const user = req.user;
@@ -169,24 +126,6 @@ async function routes(fastify) {
         ok: true,
         user: updatedProfile,
       };
-    }
-  );
-
-  fastify.get(
-    '/me',
-    {
-      preHandler: fastify.authenticate,
-      schema: {
-        summary: 'Get user info (deprecated, use /me/profile)',
-        tags: ['Profile'],
-        response: {
-          200: authSchemas.UserProfile,
-        },
-      },
-    },
-    async (req) => {
-      // req.user is set in decorators/auth.js based on the sid cookie.
-      return req.user;
     }
   );
 }

@@ -34,16 +34,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.get(
     '/courses',
     {
-      schema: {
-        summary: 'Get all courses',
-        tags: ['Courses'],
-        response: {
-          200: {
-            type: 'array',
-            items: courseSchemas.CourseInfo,
-          },
-        },
-      },
+      schema: courseSchemas.GetAllCoursesSchema,
     },
     async (request, reply) => {
       try {
@@ -59,19 +50,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.get(
     '/courses/:course_id',
     {
-      schema: {
-        summary: 'Get a course with id',
-        tags: ['Courses'],
-        params: {
-          type: 'object',
-          properties: {
-            course_id: { type: 'number' },
-          },
-        },
-        response: {
-          200: courseSchemas.CourseInfo,
-        },
-      },
+      schema: courseSchemas.GetCourseSchema,
     },
     async (request, reply) => {
       try {
@@ -89,22 +68,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.get(
     '/courses/:course_id/users',
     {
-      schema: {
-        summary: 'Get a list of users in a course',
-        tags: ['Courses'],
-        params: {
-          type: 'object',
-          properties: {
-            course_id: { type: 'number' },
-          },
-        },
-        response: {
-          200: {
-            type: 'array',
-            items: courseSchemas.EnrollmentInfo,
-          },
-        },
-      },
+      schema: courseSchemas.GetCourseUsersSchema,
     },
     async (request, reply) => {
       try {
@@ -122,20 +86,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.get(
     '/courses/:course_id/users/:user_id',
     {
-      schema: {
-        summary: 'Get a user in a course',
-        tags: ['Courses'],
-        params: {
-          type: 'object',
-          properties: {
-            course_id: { type: 'number' },
-            user_id: { type: 'number' },
-          },
-        },
-        response: {
-          200: courseSchemas.EnrollmentInfo,
-        },
-      },
+      schema: courseSchemas.GetCourseUserSchema,
     },
     async (request, reply) => {
       try {
@@ -154,14 +105,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.post(
     '/courses',
     {
-      schema: {
-        summary: 'Create a course',
-        tags: ['Courses'],
-        body: courseSchemas.CreateCourseParams,
-        response: {
-          201: courseSchemas.CourseInfo,
-        },
-      },
+      schema: courseSchemas.CreateCourseSchema,
     },
     async (request, reply) => {
       try {
@@ -176,20 +120,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.patch(
     '/courses/:course_id',
     {
-      schema: {
-        summary: 'Update a course with id',
-        tags: ['Courses'],
-        params: {
-          type: 'object',
-          properties: {
-            course_id: { type: 'number' },
-          },
-        },
-        body: courseSchemas.UpdateCourseParams,
-        response: {
-          200: courseSchemas.CourseInfo,
-        },
-      },
+      schema: courseSchemas.UpdateCourseSchema,
     },
     async (request, reply) => {
       try {
@@ -208,19 +139,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.delete(
     '/courses/:course_id',
     {
-      schema: {
-        summary: 'Delete a course with id',
-        tags: ['Courses'],
-        params: {
-          type: 'object',
-          properties: {
-            course_id: { type: 'number' },
-          },
-        },
-        response: {
-          204: { type: 'null' },
-        },
-      },
+      schema: courseSchemas.DeleteCourseSchema,
     },
     async (request, reply) => {
       try {
@@ -238,26 +157,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.post(
     '/courses/:course_id/users',
     {
-      schema: {
-        summary: 'Add a user in a course',
-        tags: ['Courses'],
-        params: {
-          type: 'object',
-          properties: {
-            course_id: { type: 'number' },
-          },
-        },
-        body: {
-          type: 'object',
-          properties: {
-            user_id: { type: 'number' },
-          },
-          required: ['user_id'],
-        },
-        response: {
-          201: courseSchemas.EnrollmentInfo,
-        },
-      },
+      schema: courseSchemas.AddUserInCourseSchema,
     },
     async (request, reply) => {
       try {
@@ -276,33 +176,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.post(
     '/courses/:course_id/join',
     {
-      schema: {
-        summary: 'Enroll in a course using the course code',
-        tags: ['Courses'],
-        params: {
-          type: 'object',
-          properties: {
-            course_id: { type: 'number' },
-          },
-        },
-        body: {
-          type: 'object',
-          properties: {
-            join_code: courseSchemas.JoinCodeType,
-            user_id: { type: 'number' },
-          },
-          required: ['join_code'],
-        },
-        response: {
-          200: courseSchemas.EnrollmentInfo,
-          400: {
-            type: 'object',
-            properties: {
-              error: { type: 'string' },
-            },
-          },
-        },
-      },
+      schema: courseSchemas.JoinCourseSchema,
     },
     async (request, reply) => {
       try {
@@ -329,21 +203,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.patch(
     '/courses/:course_id/users/:user_id',
     {
-      schema: {
-        summary: 'Update user enrollment in a course',
-        tags: ['Courses'],
-        params: {
-          type: 'object',
-          properties: {
-            course_id: { type: 'number' },
-            user_id: { type: 'number' },
-          },
-        },
-        body: courseSchemas.UpdateEnrollmentParams,
-        response: {
-          200: courseSchemas.EnrollmentInfo,
-        },
-      },
+      schema: courseSchemas.UpdateUserInCourseSchema,
     },
     async (request, reply) => {
       try {
@@ -363,20 +223,7 @@ module.exports = async function courseRoutes(fastify, options) {
   fastify.delete(
     '/courses/:course_id/users/:user_id',
     {
-      schema: {
-        summary: 'Remove a user from a course',
-        tags: ['Courses'],
-        params: {
-          type: 'object',
-          properties: {
-            course_id: { type: 'number' },
-            user_id: { type: 'number' },
-          },
-        },
-        response: {
-          204: courseSchemas.EnrollmentInfo,
-        },
-      },
+      schema: courseSchemas.RemoveUserFromCourseSchema,
     },
     async (request, reply) => {
       try {

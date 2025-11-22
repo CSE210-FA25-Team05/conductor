@@ -1,3 +1,5 @@
+import { ErrorSchema } from '../shared/shared.schemas.js';
+
 export const UpdateProfileParams = {
   type: 'object',
   properties: {
@@ -27,4 +29,60 @@ export const UserProfile = {
     'global_role',
     'is_profile_complete',
   ],
+};
+
+export const GoogleOAuthSchema = {
+  summary: 'Initiate Google OAuth2 login flow',
+  tags: ['Auth'],
+  response: {
+    302: { type: 'null' },
+  },
+};
+
+export const GoogleOAuthCallbackSchema = {
+  summary: 'OAuth Callback (not to be used directly by client)',
+  description: 'Callback used by Google to complete OAuth2 login flow',
+  tags: ['Auth'],
+  response: {
+    302: { type: 'null' },
+  },
+};
+
+export const LogoutSchema = {
+  summary: 'Logout user',
+  tags: ['Auth'],
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        ok: { type: 'boolean' },
+      },
+    },
+  },
+};
+
+export const GetUserProfileSchema = {
+  summary: 'Fetch user profile',
+  tags: ['Profile'],
+  response: {
+    200: UserProfile,
+    401: ErrorSchema,
+  },
+};
+
+export const UpdateUserProfileSchema = {
+  summary: 'Update user profile',
+  tags: ['Profile'],
+  body: UpdateProfileParams,
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        ok: { type: 'boolean' },
+        user: UserProfile,
+      },
+    },
+    400: ErrorSchema,
+    401: ErrorSchema,
+  },
 };
