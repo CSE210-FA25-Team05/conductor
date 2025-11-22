@@ -63,7 +63,6 @@ export const AddEnrollmentParams = {
   properties: {
     user_id: { type: 'number' },
     team_id: { type: 'number', nullable: true },
-    created_date: DateTimeType,
     role: { type: 'string', default: 'student' },
   },
   required: ['user_id'],
@@ -84,10 +83,10 @@ export const EnrollmentInfo = {
     user_id: { type: 'number' },
     course_id: { type: 'number' },
     team_id: { type: 'number' },
-    created_date: DateTimeType,
     role: { type: 'string' },
+    created_at: DateTimeType,
   },
-  required: ['id', 'user_id', 'course_id', 'team_id', 'created_date', 'role'],
+  required: ['id', 'user_id', 'course_id', 'team_id', 'created_at', 'role'],
 };
 
 export const GetAllCoursesSchema = {
