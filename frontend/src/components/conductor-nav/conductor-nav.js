@@ -37,6 +37,17 @@ class ConductorNav extends HTMLElement {
       ul.appendChild(li);
     }
 
+    // modal trigger button
+    const modalButton = document.createElement('button');
+    modalButton.textContent = 'Add Signal';
+    modalButton.addEventListener('click', () => {
+      const modal = document.getElementById('navModal');
+      if (modal) {
+        modal.open();
+      }
+    });
+
+    nav.appendChild(modalButton);
     bottom.appendChild(logoutButtonInstance);
 
     nav.appendChild(ul);
