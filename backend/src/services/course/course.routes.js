@@ -40,14 +40,15 @@ module.exports = async function courseRoutes(fastify, options) {
       schema: courseSchemas.GetAllCoursesSchema,
     },
     async (request, reply) => {
-    try {
-      const res = await courseRepo.getAllCourse();
-      return res;
-    } catch (error) {
-      console.error(error);
-      return mapAndReply(error, reply);
+      try {
+        const res = await courseRepo.getAllCourse();
+        return res;
+      } catch (error) {
+        console.error(error);
+        return mapAndReply(error, reply);
+      }
     }
-  });
+  );
 
   fastify.get(
     '/courses/:course_id',
@@ -55,15 +56,16 @@ module.exports = async function courseRoutes(fastify, options) {
       schema: courseSchemas.GetCourseSchema,
     },
     async (request, reply) => {
-    try {
-      const res = await courseRepo.getCourseById(
-        parseInt(request.params.course_id, 10)
-      );
-      return res;
-    } catch (error) {
-      return mapAndReply(error, reply);
+      try {
+        const res = await courseRepo.getCourseById(
+          parseInt(request.params.course_id, 10)
+        );
+        return res;
+      } catch (error) {
+        return mapAndReply(error, reply);
+      }
     }
-  });
+  );
 
   fastify.get(
     '/courses/:course_id/users',
@@ -71,15 +73,16 @@ module.exports = async function courseRoutes(fastify, options) {
       schema: courseSchemas.GetCourseUsersSchema,
     },
     async (request, reply) => {
-    try {
-      const res = await courseRepo.getUsersInCourse(
-        parseInt(request.params.course_id, 10)
-      );
-      return res;
-    } catch (error) {
-      return mapAndReply(error, reply);
+      try {
+        const res = await courseRepo.getUsersInCourse(
+          parseInt(request.params.course_id, 10)
+        );
+        return res;
+      } catch (error) {
+        return mapAndReply(error, reply);
+      }
     }
-  });
+  );
 
   fastify.get(
     '/courses/:course_id/users/:user_id',
@@ -87,16 +90,17 @@ module.exports = async function courseRoutes(fastify, options) {
       schema: courseSchemas.GetCourseUserSchema,
     },
     async (request, reply) => {
-    try {
-      const res = await courseRepo.getUserDetailsInCourse(
-        parseInt(request.params.course_id, 10),
-        parseInt(request.params.user_id, 10)
-      );
-      return res;
-    } catch (error) {
-      return mapAndReply(error, reply);
+      try {
+        const res = await courseRepo.getUserDetailsInCourse(
+          parseInt(request.params.course_id, 10),
+          parseInt(request.params.user_id, 10)
+        );
+        return res;
+      } catch (error) {
+        return mapAndReply(error, reply);
+      }
     }
-  });
+  );
 
   fastify.post(
     '/courses',
@@ -104,13 +108,14 @@ module.exports = async function courseRoutes(fastify, options) {
       schema: courseSchemas.CreateCourseSchema,
     },
     async (request, reply) => {
-    try {
-      const course = await courseRepo.addCourse(request.body);
-      reply.code(201).send(course);
-    } catch (error) {
-      return mapAndReply(error, reply);
+      try {
+        const course = await courseRepo.addCourse(request.body);
+        reply.code(201).send(course);
+      } catch (error) {
+        return mapAndReply(error, reply);
+      }
     }
-  });
+  );
 
   fastify.patch(
     '/courses/:course_id',
@@ -118,16 +123,17 @@ module.exports = async function courseRoutes(fastify, options) {
       schema: courseSchemas.UpdateCourseSchema,
     },
     async (request, reply) => {
-    try {
-      await courseRepo.updateCourse(
-        parseInt(request.params.course_id, 10),
-        request.body
-      );
-      reply.send();
-    } catch (error) {
-      return mapAndReply(error, reply);
+      try {
+        await courseRepo.updateCourse(
+          parseInt(request.params.course_id, 10),
+          request.body
+        );
+        reply.send();
+      } catch (error) {
+        return mapAndReply(error, reply);
+      }
     }
-  });
+  );
 
   fastify.delete(
     '/courses/:course_id',
@@ -135,13 +141,14 @@ module.exports = async function courseRoutes(fastify, options) {
       schema: courseSchemas.DeleteCourseSchema,
     },
     async (request, reply) => {
-    try {
-      await courseRepo.deleteCourse(parseInt(request.params.course_id, 10));
-      reply.code(204).send();
-    } catch (error) {
-      return mapAndReply(error, reply);
+      try {
+        await courseRepo.deleteCourse(parseInt(request.params.course_id, 10));
+        reply.code(204).send();
+      } catch (error) {
+        return mapAndReply(error, reply);
+      }
     }
-  });
+  );
 
   fastify.post(
     '/courses/:course_id/users',
@@ -149,16 +156,17 @@ module.exports = async function courseRoutes(fastify, options) {
       schema: courseSchemas.AddUserInCourseSchema,
     },
     async (request, reply) => {
-    try {
-      await courseRepo.addEnrollment(
-        parseInt(request.params.course_id, 10),
-        request.body.user_id
-      );
-      reply.code(201).send();
-    } catch (error) {
-      return mapAndReply(error, reply);
+      try {
+        await courseRepo.addEnrollment(
+          parseInt(request.params.course_id, 10),
+          request.body.user_id
+        );
+        reply.code(201).send();
+      } catch (error) {
+        return mapAndReply(error, reply);
+      }
     }
-  });
+  );
 
   fastify.post(
     '/courses/:course_id/join',
@@ -166,23 +174,24 @@ module.exports = async function courseRoutes(fastify, options) {
       schema: courseSchemas.JoinCourseSchema,
     },
     async (request, reply) => {
-    try {
-      const isValid = await courseService.checkCourseJoinCode(
-        parseInt(request.params.course_id, 10),
-        request.body.join_code
-      );
-      if (!isValid) {
-        return reply.code(400).send({ error: 'Invalid join code' });
+      try {
+        const isValid = await courseService.checkCourseJoinCode(
+          parseInt(request.params.course_id, 10),
+          request.body.join_code
+        );
+        if (!isValid) {
+          return reply.code(400).send({ error: 'Invalid join code' });
+        }
+        await courseRepo.addEnrollment(
+          parseInt(request.params.course_id, 10),
+          request.body.user_id
+        );
+        reply.code(201).send();
+      } catch (error) {
+        return mapAndReply(error, reply);
       }
-      await courseRepo.addEnrollment(
-        parseInt(request.params.course_id, 10),
-        request.body.user_id
-      );
-      reply.code(201).send();
-    } catch (error) {
-      return mapAndReply(error, reply);
     }
-  });
+  );
 
   fastify.patch(
     '/courses/:course_id/users/:user_id',
