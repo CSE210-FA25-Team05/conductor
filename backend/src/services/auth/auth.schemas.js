@@ -94,7 +94,8 @@ export const GetUserProfileByIdSchema = {
   },
   required: ['user_id'],
   summary: 'Get another user profile by ID',
-  description: 'Fetch a user profile by user ID. Requires appropriate permissions.',
+  description:
+    'Fetch a user profile by user ID. Requires appropriate permissions.',
   tags: ['Profile'],
   response: {
     200: UserProfile,
