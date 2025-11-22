@@ -94,4 +94,3 @@ module.exports = fp(async function coursePermissionDecorators(fastify, opts) {
     }
   });
 });
-
