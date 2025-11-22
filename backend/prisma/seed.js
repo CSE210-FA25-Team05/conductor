@@ -12,6 +12,8 @@ async function main() {
   await prisma.lectures.deleteMany();
   await prisma.ta_teams.deleteMany();
   await prisma.enrollments.deleteMany();
+  // remove journals before deleting courses/users to avoid FK constraint issues
+  await prisma.journals.deleteMany();
   await prisma.teams.deleteMany();
   await prisma.courses.deleteMany();
   await prisma.credentials.deleteMany();
@@ -301,6 +303,120 @@ async function main() {
       update_reason: 'First lab session',
     },
   });
+
+  console.log('Creating journals...');
+  await prisma.journals.create({
+    data: {
+      course_id: cse210.id,
+      student_id: john.id,
+      title: 'Reflection on Lecture 1',
+      content: 'Today we covered the project structure and responsibilities. I need to finish the README and set up CI.',
+      is_private: false,
+    },
+  });
+
+  await prisma.journals.create({
+    data: {
+      course_id: cse210.id,
+      student_id: john.id,
+      title: 'Project brainstorming',
+      content: 'Thinking about using a microservice architecture for the project; need to evaluate complexity.',
+      is_private: false,
+      created_at: new Date('2025-10-01T12:00:00Z'),
+      updated_at: new Date('2025-10-06T16:20:00Z'), // edited later
+    },
+  });
+
+  await prisma.journals.create({
+    data: {
+      course_id: cse110.id,
+      student_id: john.id,
+      title: 'Extra lab observations',
+      content: 'Encountered a bug in exercise 2; solved by adjusting index logic.',
+      is_private: true,
+      created_at: new Date('2025-10-02T15:00:00Z'),
+      updated_at: new Date('2025-10-02T18:30:00Z'), // edited same day
+    },
+  });
+
+  await prisma.journals.create({
+    data: {
+      course_id: cse110.id,
+      student_id: john.id,
+      title: 'Lab thoughts',
+      content: 'Lab 1 was straightforward. Need to review arrays and loops for next lab.',
+      is_private: false,
+    },
+  });
+
+  await prisma.journals.create({
+    data: {
+      course_id: cse210.id,
+      student_id: jane.id,
+      title: 'Notes about teammates',
+      content: 'Team 2 agreed on weekly meetings. I will own the documentation.',
+      is_private: true,
+      created_at: new Date('2025-10-03T10:45:00Z'),
+      updated_at: new Date('2025-10-03T10:45:00Z'),
+    },
+  });
+  await prisma.journals.create({
+    data: {
+      course_id: cse110.id,
+      student_id: jane.id,
+      title: 'Lab tips',
+      content: 'Remember to run tests after each change; the CI pipeline flags style issues.',
+      is_private: false,
+      created_at: new Date('2025-10-02T11:20:00Z'),
+      updated_at: new Date('2025-10-02T11:20:00Z'),
+    },
+  });
+
+  await prisma.journals.create({
+    data: {
+      course_id: cse210.id,
+      student_id: jane.id,
+      title: 'Team formation notes',
+      content: 'Met with Team 2; we will use GitHub Projects to track tasks and meet twice a week.',
+      is_private: true,
+    },
+  });
+
+  // Example instructor note (attached to course but authored by professor)
+  await prisma.journals.create({
+    data: {
+      course_id: cse210.id,
+      student_id: professor.id,
+      title: 'Course announcement draft',
+      content: 'Reminder: project proposals due next Friday. Office hours moved to Wednesday.',
+      is_private: true,
+    },
+  });
+
+  await prisma.journals.create({
+    data: {
+      course_id: cse210.id,
+      student_id: ta.id,
+      title: 'TA notes on lab grading',
+      content: 'Grading rubric seems fair. I will prepare solutions and gradebook entries this weekend.',
+      is_private: false,
+      created_at: new Date('2025-10-04T09:00:00Z'),
+      updated_at: new Date('2025-10-04T09:00:00Z'),
+    },
+  });
+
+  await prisma.journals.create({
+    data: {
+      course_id: cse210.id,
+      student_id: ta.id,
+      title: 'TA private reminder',
+      content: 'Remember to finalize office hours and announce in Slack.',
+      is_private: true,
+      created_at: new Date('2025-10-05T08:30:00Z'),
+      updated_at: new Date('2025-10-07T14:15:00Z'), // edited later
+    },
+  });
+
 
   console.log('Seeding completed!');
 }
