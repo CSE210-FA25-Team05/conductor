@@ -17,6 +17,8 @@
     "seed": "node prisma/seed.js"
   },
   "devDependencies": {
+    "@fastify/swagger": "^9.6.1",
+    "@fastify/swagger-ui": "^5.2.3",
     "jest": "^30.2.0",
     "nodemon": "^3.0.1",
     "prisma": "^6.19.0"
