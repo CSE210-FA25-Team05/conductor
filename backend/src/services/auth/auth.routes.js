@@ -106,6 +106,7 @@ async function routes(fastify) {
     '/users/:user_id/profile',
     {
       preHandler: fastify.authenticate,
+      schema: authSchemas.GetUserProfileByIdSchema,
     },
     async (req, reply) => {
       const targetUserId = parseInt(req.params.user_id, 10);
