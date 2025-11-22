@@ -52,6 +52,7 @@ fastify.register(require('./hooks/profile-complete'));
 
 //services
 fastify.register(require('./services/auth'));
+fastify.register(require('./services/lectures'));
 
 //course routes
 fastify.register(require('./services/course/course.routes'), {
