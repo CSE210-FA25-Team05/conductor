@@ -419,39 +419,7 @@
                         return;
                     }
 
-                    const textToCopy = copyContentDiv.innerHTML.trim();
-                    const lines = textToCopy.split('\n');
-
-                    // Find the minimum common leading whitespace (excluding empty lines)
-                    let minIndent = Infinity;
-                    lines.forEach(line => {
-                        if (line.trim().length > 0) { // Only consider non-empty lines
-                            const leadingWhitespaceMatch = line.match(/^(\s*)/);
-                            if (leadingWhitespaceMatch) {
-                                const currentIndent = leadingWhitespaceMatch[1].length;
-                                minIndent = Math.min(minIndent, currentIndent);
-                            }
-                        }
-                    });
-
-                    // If no non-empty lines or no common indent was found, just use the original content
-                    if (minIndent === Infinity) {
-                        minIndent = 0;
-                    }
-                    console.log("MIN INDENT: ", minIndent);
-
-                    // Remove the common leading whitespace from each line
-                    const cleanedLines = lines.map(line => {
-                        // For empty lines or lines with less than minIndent, just return them as is
-                        console.log("LINE LENG: ", line.length)
-                        if (line.length < minIndent) {
-                            return line;
-                        }
-                        return line.substring(minIndent);
-                    });
-
-                    // Join the lines back together
-                    const cleanedHtmlContent = cleanedLines.join('\n');
+                    let textToCopy = copyContentDiv.innerHTML.trim();
 
                     // Copy to clipboard
                     if (navigator.clipboard && navigator.clipboard.writeText) {
