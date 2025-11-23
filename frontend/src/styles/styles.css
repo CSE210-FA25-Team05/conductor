@@ -439,6 +439,7 @@ i,
   justify-content: center;
   align-items: center;
 }
+/* Sidebar Format */
 body:has(> aside) {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -454,5 +455,5 @@ body > main {
 body > aside {
   grid-column: 1;
   grid-row: 1;
-  background-color: lightblue; /* This main will have a light green background */
+  background-color: lightblue;
 }
