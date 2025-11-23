@@ -195,7 +195,7 @@ section {
   display: block;
 }
 body {
-  line-height: 1;
+  line-height: 1.6;
 }
 ol,
 ul {
@@ -267,7 +267,6 @@ small {
 article {
   padding: var(--spacing-medium);
   border-radius: 0.5em;
-  line-height: 1.6;
   background-color: var(--card-background-color);
 
   margin-bottom: var(--spacing-medium);
