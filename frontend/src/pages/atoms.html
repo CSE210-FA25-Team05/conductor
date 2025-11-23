@@ -34,9 +34,6 @@
         gap: 10px;
 
         margin-bottom: 2em;
-
-        margin-left: auto;
-        margin-right: auto;
     }
 
     .copy-content {
@@ -61,7 +58,7 @@
     }
 
     article {
-        max-width: 20em;
+        max-width: 50dvw;
     }
 
     main {
@@ -90,6 +87,18 @@
     #toc>nav>ul>li{
         padding: 0.5em 0;
 
+    }
+
+    .color-article {
+    }
+    .color-container {
+        display: flex; 
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .color-item {
+        padding: 1em;
+        text-align: center;
     }
 
 
@@ -193,16 +202,98 @@
 
                 <header>
                 <h2 id="colors">Colors</h2>
+                <p>Colors are named --color-type-x (i.e. --color-primary-100)</p>
                 </header>
 
 
-                <article class="copy-container">
-                    <div class="copy-content">
-                        <article>
-                        </article>
+                <article>
+                    <header>
+                        <h3>Primary</h3>
+                        <p>--color-primary-x</p>
+                    </header>
+                    <div class="color-container">
+                        <div class="color-item" style="background-color: var(--color-primary-100)">100</div>
+                        <div class="color-item" style="background-color: var(--color-primary-200)">200</div>
+                        <div class="color-item" style="background-color: var(--color-primary-300)">300</div>
+                        <div class="color-item" style="background-color: var(--color-primary-400)">400</div>
+                        <div class="color-item" style="background-color: var(--color-primary-500)">500</div>
+                        <div class="color-item" style="background-color: var(--color-primary-600)">600</div>
+                        <div class="color-item" style="background-color: var(--color-primary-700)">700</div>
+                        <div class="color-item" style="background-color: var(--color-primary-800)">800</div>
+                        <div class="color-item" style="background-color: var(--color-primary-900)">900</div>
                     </div>
-                    <button class="copy-button icon-only"><i>content_copy</i></button>
-                    <span class="copy-status"></span>
+                </article>
+
+                <article>
+                    <header>
+                        <h3>Secondary</h3>
+                        <p>--color-secondary-x</p>
+                    </header>
+                    <div class="color-container">
+                        <div class="color-item" style="background-color: var(--color-secondary-100)">100</div>
+                        <div class="color-item" style="background-color: var(--color-secondary-200)">200</div>
+                        <div class="color-item" style="background-color: var(--color-secondary-300)">300</div>
+                        <div class="color-item" style="background-color: var(--color-secondary-400)">400</div>
+                        <div class="color-item" style="background-color: var(--color-secondary-500)">500</div>
+                        <div class="color-item" style="background-color: var(--color-secondary-600)">600</div>
+                        <div class="color-item" style="background-color: var(--color-secondary-700)">700</div>
+                        <div class="color-item" style="background-color: var(--color-secondary-800)">800</div>
+                        <div class="color-item" style="background-color: var(--color-secondary-900)">900</div>
+                    </div>
+                </article>
+
+                <article>
+                    <header>
+                        <h3>Error</h3>
+                        <p>--color-error-x</p>
+                    </header>
+                    <div class="color-container">
+                        <div class="color-item" style="background-color: var(--color-error-100)">100</div>
+                        <div class="color-item" style="background-color: var(--color-error-200)">200</div>
+                        <div class="color-item" style="background-color: var(--color-error-300)">300</div>
+                        <div class="color-item" style="background-color: var(--color-error-400)">400</div>
+                        <div class="color-item" style="background-color: var(--color-error-500)">500</div>
+                        <div class="color-item" style="background-color: var(--color-error-600)">600</div>
+                        <div class="color-item" style="background-color: var(--color-error-700)">700</div>
+                        <div class="color-item" style="background-color: var(--color-error-800)">800</div>
+                        <div class="color-item" style="background-color: var(--color-error-900)">900</div>
+                    </div>
+                </article>
+
+                <article>
+                    <header>
+                        <h3>Success</h3>
+                        <p>--color-success-x</p>
+                    </header>
+                    <div class="color-container">
+                        <div class="color-item" style="background-color: var(--color-success-100)">100</div>
+                        <div class="color-item" style="background-color: var(--color-success-200)">200</div>
+                        <div class="color-item" style="background-color: var(--color-success-300)">300</div>
+                        <div class="color-item" style="background-color: var(--color-success-400)">400</div>
+                        <div class="color-item" style="background-color: var(--color-success-500)">500</div>
+                        <div class="color-item" style="background-color: var(--color-success-600)">600</div>
+                        <div class="color-item" style="background-color: var(--color-success-700)">700</div>
+                        <div class="color-item" style="background-color: var(--color-success-800)">800</div>
+                        <div class="color-item" style="background-color: var(--color-success-900)">900</div>
+                    </div>
+                </article>
+
+                <article>
+                    <header>
+                        <h3>Neutral</h3>
+                        <p>--color-neutral-x</p>
+                    </header>
+                    <div class="color-container">
+                        <div class="color-item" style="background-color: var(--color-neutral-100)">100</div>
+                        <div class="color-item" style="background-color: var(--color-neutral-200)">200</div>
+                        <div class="color-item" style="background-color: var(--color-neutral-300)">300</div>
+                        <div class="color-item" style="background-color: var(--color-neutral-400)">400</div>
+                        <div class="color-item" style="background-color: var(--color-neutral-500)">500</div>
+                        <div class="color-item" style="background-color: var(--color-neutral-600)">600</div>
+                        <div class="color-item" style="background-color: var(--color-neutral-700)">700</div>
+                        <div class="color-item" style="background-color: var(--color-neutral-800)">800</div>
+                        <div class="color-item" style="background-color: var(--color-neutral-900)">900</div>
+                    </div>
                 </article>
 
             </section>
