@@ -64,6 +64,34 @@
         max-width: 20em;
     }
 
+    main {
+        display: grid;
+        grid-template-cols: 1fr auto;
+        padding-right: 0;
+        margin-right: 0;
+    }
+
+    main > * {
+        grid-column: 1;
+    }
+
+    #toc {
+        padding: 0;
+        margin: 0;
+        max-width: 8em;
+        grid-column: 2;
+        grid-row: 1;
+
+        position: sticky;
+        top: 0;
+        align-self: start;
+    }
+
+    #toc>nav>ul>li{
+        padding: 0.5em 0;
+
+    }
+
 
     </style>
     <body>
@@ -361,6 +389,17 @@
                 </article>
 
             </section>
+
+            <aside id="toc">
+                <nav>
+                    <ul>
+                        <li><a href="#typography">Typography</a></li>
+                        <li><a href="#colors">Colors</a></li>
+                        <li><a href="#cards">Cards</a></li>
+                        <li><a href="#buttons">Buttons</a></li>
+                    </ul>
+                </nav>
+            </aside>
         </main>
         <aside>
             <conductor-nav></conductor-nav>
