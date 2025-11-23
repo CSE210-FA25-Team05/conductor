@@ -481,6 +481,39 @@
 
             </section>
 
+            <section>
+
+                <header>
+                <h2 id="components">Components</h2>
+                </header>
+
+                <article class="copy-container">
+                    <div style="">
+                        <h3>Modal</h3>
+                        <p>*Make sure to add script tag to src/components/modal.js.</p>
+                        <p>.open() to open</p>
+                        <p>.close() to close</p>
+
+                        <button slot="buttons" onclick="document.getElementById('navModal').open()">Open Modal</button>
+                    </div>
+
+                    <div class="copy-content">
+
+                        <modal-component id="navModal">
+                            <article slot="content">
+                                <h2>Add Signal</h2>
+                                <p>This modal was opened from the nav bar.</p>
+                            </article>
+                            <button slot="buttons" onclick="document.getElementById('navModal').close()">Submit</button>
+                        </modal-component>
+
+                    </div>
+                    <button class="copy-button icon-only"><i>content_copy</i></button>
+                    <span class="copy-status"></span>
+                </article>
+
+
+            </section>
             <aside id="toc">
                 <nav>
                     <ul>
@@ -488,6 +521,7 @@
                         <li><a href="#colors">Colors</a></li>
                         <li><a href="#cards">Cards</a></li>
                         <li><a href="#buttons">Buttons</a></li>
+                        <li><a href="#components">Components</a></li>
                     </ul>
                 </nav>
             </aside>
@@ -559,5 +593,6 @@
         });
         </script>
         <script type="module" src="../components/conductor-nav/conductor-nav.js"></script>
+        <script type="module" src="../components/modal/modal.js"></script>
     </body>
 </html>
